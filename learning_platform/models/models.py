@@ -142,7 +142,23 @@ class TimeTask(db.Model):
     usertask = db.Column(db.String(80), nullable=True)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    
+
+
+class Video(db.Model):
+    '''
+    this is the model to allow videos to be 
+    added and approved
+    '''
+    __tablename__ = "video"
+    id = db.Column(db.Integer, primary_key=True)
+    video_id = db.Column(db.String(255))
+    video_path = db.Column(db.String(255))
+    course = db.Column(db.String(20))
+    topic = db.Column(db.String(20))
+    status = db.Column(db.String(20), default='pending')
+
+    def __repr__(self):
+        return f"<Video {self.topic}>"
 
 
 with app.app_context():

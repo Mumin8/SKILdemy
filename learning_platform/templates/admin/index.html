@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% extends "base.html" %}
+    <title>{% block title %}Moderator Home{% endblock %}</title>
+</head>
+<body>
+    {% block main %}
+
+    <div class="container text-center text-light">
+        <div class="row bg-dark p-3">
+            {% if cst %}
+            {% for _item in cst|sort(attribute='name') %}
+            <p class="fs-3 text-start text-light">{{ _item.name }}</p>
+            {% endfor %}
+            {% else %}
+
+            <div class="col">
+                <div class="row align-items-start">
+                    <a href="{{ url_for('admin.cs_avail')}}" class="btn btn-primary" id="admin">
+                        Available Courses
+                    </a>
+                </div>
+
+                <div class="col">
+                    <div class="row align-items-start">
+                        <a href="{{ url_for('admin.ss_avail')}}" class="btn btn-primary" id="admin">
+                            Available Subjects
+                        </a>
+                    </div>
+                </div>
+           
+            
+             </div>
+             <div class="row" style="display: flex; flex-direction: row;
+                                 justify-content: space-between;
+                                 background-color: rgb(245, 253, 206);">
+             <div class="fs-2 text-dark">Basic Content</div>
+             <div class="col-3 btn btn-outline-success fs-4">
+                 <a class="text-info ml-2" href="">
+                    Preview Free Content
+                </a> 
+            </div>
+          
+           <div class="col-3 btn btn-outline-success fs-4">
+            <a class="text-info mr-2" href="{{url_for('home.home')}}">
+               Preview Displayed Courses
+           </a> 
+         </div>
+         </div>
+         <div class="row">
+            <div class="col bg-dark">
+                <p class="fs-3 text-center text-success">
+                    Course, Subject and Topic management
+                </p>
+                <div style="display: flex; flex-direction: column;">
+                <div class="row align-items-start btn btn-outline-primary fs-5">
+                    <a href="{{ url_for('admin.register_course')}}" class="" id="admin">
+                        Register new course
+                    </a>
+                </div>
+                <div class="row align-items-start btn btn-outline-primary fs-5">
+                    <a href="{{ url_for('admin.add_subject')}}" class="" id="admin">
+                        Register new subject or language
+                    </a>
+                </div>
+               
+                
+        
+            </div>
+         </div>
+              <div class="col bg-dark-subtle">
+                <p class="fs-3 text-center text-success">
+                    Categorize Topics and Subject under a Course
+                </p>
+                <div style="display: flex; flex-direction: column;">
+                    
+                    
+    
+                    
+                    
+                </div>
+                
+              </div>
+        </div>
+
+        <div class="row bg-secondary-subtle">
+
+            <div class="col">
+             <p class="fs-3 text-center text-success">Video management</p>
+             <div style="display: flex; flex-direction: column; background-color: rgb(227, 248, 189);">
+                <div class="row align-items-start btn btn-outline-primary fs-5">
+                    <a href="{{ url_for('admin.admin_add_vid')}}" class="" id="admin">
+                        Post Video
+                    </a>
+                </div>
+                 
+            
+             </div>
+             
+            </div>
+            <div class="col">
+              <p class="fs-3 text-center text-success">
+                AI content management
+            </p>
+            <div style="display: flex; flex-direction: column; background-color: rgb(27, 44, 39);"> 
+                
+                  
+            </div>
+              
+            </div>
+            <div class="col">
+              <p class="fs-3 text-center text-success">
+                Text content management
+            </p>
+            <div style="display: flex; flex-direction: column; background-color: rgb(129, 122, 122);">
+                
+                 
+                  
+
+            </div>
+              
+            </div>
+           
+          </div>
+
+          {% endif %}   
+    </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

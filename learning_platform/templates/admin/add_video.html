@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% extends "base.html" %}
+    <title>{% block title %} Add Video {% endblock %}</title>
+</head>
+
+<body>
+    {% block body %}
+    <div class="container">
+        <div class="row">
+            <form method="post" action="">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="col">
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Select Course
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                            {% for c in courses %}
+                            <li><a class="dropdown-item" href="#" onclick="setCourseId('{{ c.name }}')">{{ c.name }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="dropdown">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink2"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Select topic
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink2">
+                            {% for t in topics %}
+                            <li><a class="dropdown-item" href="#" onclick="setSubjectId('{{ t.name}}')">{{ t.name }}</a></li>
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+                <input type="hidden" name="course" id="course" value="">
+                <input type="hidden" name="topic" id="topic" value="">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        function setCourseId(id) {
+            document.getElementById('course').value = id;
+        }
+
+        function setSubjectId(id) {
+            document.getElementById('topic').value = id;
+        }
+    </script>
+    {% endblock body %}
+</body>
+
+</html>

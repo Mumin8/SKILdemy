@@ -1,4 +1,230 @@
-/* style the body */
+#editor {
+    height: 400px; 
+}
+
+/* this is the home page */
 body{
-    background-color: rgb(37, 36, 46);
+    background-color: rgb(240, 247, 241);
+}
+header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+header h1{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: lighter;
+    font-style: normal;
+    background-color: #f1f4f5;
+}
+.auths{
+    background-color: #c8cec7;
+    height: fit-content;
+}
+.auths div a{
+    text-decoration: none;
+    color: rgb(194, 189, 160);
+}
+.nav{
+    background-color: rgb(189, 197, 169);
+    height: fit-content;
+}
+/* main{
+    height: 70vh; 
+    background-image: url('/static/images/mass@chu.jpg'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+} */
+.home{
+    background-color: beige;
+}
+.home main{
+    display: flex;
+    flex-direction: row;
+     justify-content: space-between; 
+}
+
+.home main .div{
+    width: auto;
+    height: 30px;
+    border-radius: 4px;
+    padding: 7px;
+    margin: 14px;
+    font-size: 28px;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    background-color: rgb(71, 12, 233);
+    margin-top: 0%;
+}
+.menu{
+    display: none;
+}
+
+.home main .auths{
+    display: flex;
+    justify-content: flex-start;
+}
+.home main .auths #register{
+    border-right: solid;
+    margin-right: 30px;
+}
+.home main .auths #sign-in{
+    border-left: solid;
+    margin-left: 30px;
+}
+
+.fa{
+    width: 76px;
+}
+
+footer{
+    background-color: rgb(39, 32, 32);
+}
+
+/* css style for the profile page */
+
+.prog-text{
+    color: rgb(192, 192, 226);
+    font-weight: bolder;
+    font-size: larger;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.container{
+    background-color: rgb(70, 48, 48);
+}
+
+.btn a{
+    text-decoration: none;
+    color: black;
+}
+
+.progress{
+    width: 95%;
+    margin-left: 24px;
+    margin-bottom: 24px;
+    height: 36px;
+    border-radius: 18px;
+    font-size: 20px;
+}
+.progress-bar{
+    color: rgb(255, 255, 255);
+    font-weight: bolder;
+}
+.span {
+    text-align: center;
+    color: rgb(87, 41, 43);
+    /* padding: 12px; */
+    margin-left: 48px;
+    font-weight: bolder;
+}
+
+.row {
+    margin: 12px;
+}
+
+#user-details{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+    height: auto;
+    width: auto;
+}
+
+.profile-pic{
+    margin: 5px;
+    width: 120px;
+    height: 120px;
+    border: 1px solid black;
+    background-color: rgb(128, 125, 123);
+    border-radius: 50%;
+    align-content: center;
+}
+   
+
+
+.profile-info{
+    border: 0px solid blue;
+    margin: 5px;
+}
+
+.pro-pic{
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+}
+
+.logout{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    padding-right: 26px;
+    padding-top: 10px;
+}
+
+
+
+
+/* style the course page */
+.ul li{
+    list-style: none;
+}
+
+.ul li a{
+    text-decoration: none;
+}
+
+/* style video rules */
+
+#vid-rules{
+    color: rgb(211, 209, 188);
+    font-size: larger;
+    font-weight: bolder;
+    font-variant: normal;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.progress-width {
+    width: calc(((vids-1)/4)*100%);
+}
+
+
+/* admin home page */
+#admin{
+    width: auto;
+    /* background-color: black; */
+}
+
+/* course design */
+
+.enrol{
+    border: 0px solid rgb(13, 13, 58);
+    margin: 37px;
+    background-color: rgb(13, 13, 14);
+}
+
+.enrol{
+    display: flex;
+    flex-direction: column;
+}
+#enrol{
+    width: fit-content;
+}
+
+#aid{
+    min-width: 200px;
+    padding: 5px;
+    background-color: rgb(12, 12, 12);
+}
+
+
+#prev{
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% extends "base.html" %}
+    <title>{% block title %} Create Course {% endblock %}</title>
+</head>
+<body>
+    {% block main %}
+    <div class="container text-center">
+    <div class="row align-items-start">
+        <div class="col-2"></div>
+      <div class="col-8">
+        {% from "_formhelpers.html" import render_field %}
+    <form method="POST" action="/add_topic">
+        {{ form.hidden_tag() }}
+        {{ form.csrf_token }}
+        <div class="bg-dark-subtle p-4 mt-5"> 
+        {{ render_field(form.name, class="form-control fs-4") }}
+    </div>
+        <div>
+            <input type="submit" value="Add Topic">
+        </div>
+        
+    </form>
+</div>
+<div class="col-2"></div>
+</div>
+</div>
+{% endblock %}
+</body>
+</html>

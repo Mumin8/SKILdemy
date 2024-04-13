@@ -1,5 +1,25 @@
 
 import secrets
+from werkzeug.local import LocalProxy
+from flask import g, session
+from learning_platform import mongo
+
+
+
+def get_db():
+    db = getattr(g, "_database", None)
+
+    if db is None:
+        db = g._database = mongo.db
+    return db
+db = LocalProxy(get_db)
+
+
+ALLOWED_EXTENSIONS = {'mp4'}
+def acceptable(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 def find_missing_vid(vid_list):
     set_values = {1,2,3,4}
@@ -20,3 +40,27 @@ def hash_filename(filename):
     return f'{random_name}{file_ext}'
 
 
+def all_vids():
+    '''
+    This will get all videos from mongodb
+    Return:
+            the vidoes object in a list
+    '''
+    course = session.get('course')
+    topic = session.get('topic')
+    print(f'lan {course} and top {topic}')
+
+    # clear_all_vids_list()
+    video_ = db.python_videos.find(
+        {
+        "$and": [
+            {"course": course},
+             {"topic": topic}
+        ]
+        }
+    )
+    return list(video_)
+
+
+def insertone(_dict):
+    db.student_shared_videos.insert_one(_dict)

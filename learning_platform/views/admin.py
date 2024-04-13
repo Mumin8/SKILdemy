@@ -1,14 +1,25 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session, jsonify
 from flask_login import login_required, current_user, logout_user, login_user
 from learning_platform import bcrypt, db
+from werkzeug.utils import secure_filename
 from learning_platform.forms.form import (
     Registration, LoginForm, CourseForm, TopicForm, SubjectForm, SubTopicForm)
-from learning_platform.models.models import User, Video, Course, SubTopic, Subject
-from learning_platform._helpers import hash_filename, find_missing_vid
+from learning_platform.models.models import User, Video, Course, SubTopic, Subject, Topic
+from learning_platform._helpers import hash_filename, find_missing_vid, all_vids, acceptable, insertone
 
 admin_bp = Blueprint(
     'admin', __name__, static_folder='static', template_folder='templates')
 
+
+
+v_id = []
+
+def validate_list():
+    '''
+    this will prepare the list for new  values
+    '''
+    if len(v_id) > 0:
+        v_id.pop()
 
 @admin_bp.route('/index')
 def index():
@@ -82,12 +93,13 @@ def upload():
             if file.filename == '':
                 flash('No selected file')
                 return redirect(request.url)
-            if file and allowed_file(file.filename):
+            if file and acceptable(file.filename):
                 filename = secure_filename(file.filename)
                 name = hash_filename(filename)
                 _vid = find_missing_vid(v_id[0])
-                # file_details = {"video_id": str(_vid), "name": name, "course": course, "topic": topic}
+                file_details = {"video_id": str(_vid), "name": name, "course": course, "topic": topic}
                 # file.save(os.path.join(app.config['UPLOAD_FOLDER'], name))
+                insertone(file_details)
                 # online_users = db.python_videos.insert_one(file_details)
                 # all_vids()
                 return 'it worked'
@@ -145,6 +157,58 @@ def ss_avail():
         this will get all available subjects
     '''
     cst = Subject.query.all()
+    return render_template('admin/index.html', cst=cst)
+
+
+@admin_bp.route('/add_topic', methods=['GET', 'POST'])
+def add_topic():
+    '''
+    add_topic:
+        this will add a topic to the topic table
+    '''
+    form = TopicForm(request.form)
+    if form.validate_on_submit():
+        topic = form.name.data
+        new_topic = Topic(name=topic)
+        db.session.add(new_topic)
+        db.session.commit()
+        flash('added to the subjects', category='info')
+    return render_template('content_management/add_topic.html', form=form)
+
+@admin_bp.route('/ts_avail', methods=['GET'])
+def ts_avail():
+    '''
+    ts_avail:
+        this will get all the available topics
+    '''
+    cst = Topic.query.all()
+    return render_template('admin/index.html', cst=cst)
+
+
+@admin_bp.route('/add_subtopic', methods=['GET', 'POST'])
+def add_sub_topic():
+    '''
+    add_sub_topic:
+        this will add a topic to the topic table
+    '''
+    form = SubTopicForm(request.form)
+    if form.validate_on_submit():
+        subtopic = form.name.data
+        new_subtopic = SubTopic(name=subtopic)
+        db.session.add(new_subtopic)
+        db.session.commit()
+        print('it worked')
+        flash(f'{subtopic} successfully added to the topics', category='info')
+    return render_template('content_management/add_subtopic.html', form=form)
+
+
+@admin_bp.route('/sts_avail', methods=['GET', 'POST'])
+def sts_avail():
+    '''
+    ts_avail:
+        this will get all the available sub topics
+    '''
+    cst = SubTopic.query.all()
     return render_template('admin/index.html', cst=cst)
 
 

@@ -31,6 +31,20 @@
                         </a>
                     </div>
                 </div>
+                <div class="col">
+                    <div class="row align-items-start">
+                        <a href="{{ url_for('admin.ts_avail')}}" class="btn btn-primary" id="admin">
+                            Available Topics
+                        </a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row align-items-start">
+                        <a href="{{ url_for('admin.sts_avail')}}" class="btn btn-primary" id="admin">
+                            Available sub topics
+                        </a>
+                    </div>
+                </div>
            
             
              </div>
@@ -66,7 +80,16 @@
                         Register new subject or language
                     </a>
                 </div>
-               
+                <div class="row align-items-start btn btn-outline-primary fs-5">
+                    <a href="{{ url_for('admin.add_topic')}}" class="" id="admin">
+                        Register new topic
+                    </a>
+                </div>
+                <div class="row align-items-start btn btn-outline-primary fs-5">
+                    <a href="{{ url_for('admin.add_sub_topic')}}" class="" id="admin">
+                        Register new sub topic
+                    </a>
+                </div>
                 
         
             </div>

@@ -5,8 +5,7 @@ from werkzeug.utils import secure_filename
 from learning_platform.forms.form import (
     Registration, LoginForm, CourseForm, TopicForm, SubjectForm, SubTopicForm)
 from learning_platform.models.models import User, Video, Course, SubTopic, Subject, Topic
-from learning_platform._helpers import hash_filename, find_missing_vid, all_vids, acceptable, insertone
-
+from learning_platform._helpers import hash_filename, find_missing_vid, all_vids, acceptable, insertone, upload_s3vid
 admin_bp = Blueprint(
     'admin', __name__, static_folder='static', template_folder='templates')
 
@@ -98,11 +97,12 @@ def upload():
                 name = hash_filename(filename)
                 _vid = find_missing_vid(v_id[0])
                 file_details = {"video_id": str(_vid), "name": name, "course": course, "topic": topic}
+                upload_s3vid(file, name)
                 # file.save(os.path.join(app.config['UPLOAD_FOLDER'], name))
                 insertone(file_details)
                 # online_users = db.python_videos.insert_one(file_details)
                 # all_vids()
-                return 'it worked'
+                flash('successfully added the video', category='success')
         return render_template('admin/upload_vid.html')
 
 

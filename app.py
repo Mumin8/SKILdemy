@@ -1,8 +1,11 @@
+import os
+from dotenv import load_dotenv
 from learning_platform import app
 from learning_platform.views.home import home_bp
 from learning_platform.views.users import user_bp
 from learning_platform.views.admin import admin_bp
 
+load_dotenv()
 
 app.register_blueprint(admin_bp)
 app.register_blueprint(home_bp)

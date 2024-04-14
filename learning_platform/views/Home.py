@@ -10,6 +10,7 @@ def home():
     home:
         the page visited when the site is visited 
     '''
+    # print(f'the environment variable: {type(os.getenv("AWS_ACCESS_KEY_ID"))}')
     courses = Course.query.all()
     return render_template('home/home.html', courses=courses)
 

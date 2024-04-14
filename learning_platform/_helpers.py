@@ -1,4 +1,5 @@
-
+import os
+import boto3
 import secrets
 from werkzeug.local import LocalProxy
 from flask import g, session
@@ -64,3 +65,14 @@ def all_vids():
 
 def insertone(_dict):
     db.student_shared_videos.insert_one(_dict)
+
+def upload_s3vid(uploaded_file, filename):
+    s3_client = boto3.client("s3",
+                              aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+                              aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+                              region_name='us-east-1'
+                              )
+    s3_client.upload_fileobj(uploaded_file, os.getenv("AWS_STORAGE_BUCKET_NAME"), filename)
+
+    return 'it worked'
+

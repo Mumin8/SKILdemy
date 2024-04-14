@@ -10,8 +10,8 @@ admin_bp = Blueprint(
     'admin', __name__, static_folder='static', template_folder='templates')
 
 
-
 v_id = []
+
 
 def validate_list():
     '''
@@ -19,6 +19,7 @@ def validate_list():
     '''
     if len(v_id) > 0:
         v_id.pop()
+
 
 @admin_bp.route('/index')
 def index():
@@ -51,7 +52,6 @@ def admin_login():
     return render_template('user/login.html', form=form)
 
 
-
 @admin_bp.route('/admin_av', methods=['GET', 'POST'])
 def admin_add_vid():
     '''
@@ -67,7 +67,6 @@ def admin_add_vid():
             f'course {request.form.get("course")} topic {request.form.get("topic")}')
         return redirect(url_for('admin.upload'))
     return render_template('admin/add_video.html', courses=courses, topics=topics)
-
 
 
 @admin_bp.route('/upload', methods=['GET', 'POST'])
@@ -96,7 +95,8 @@ def upload():
                 filename = secure_filename(file.filename)
                 name = hash_filename(filename)
                 _vid = find_missing_vid(v_id[0])
-                file_details = {"video_id": str(_vid), "name": name, "course": course, "topic": topic}
+                file_details = {"video_id": str(
+                    _vid), "name": name, "course": course, "topic": topic}
                 upload_s3vid(file, name)
                 # file.save(os.path.join(app.config['UPLOAD_FOLDER'], name))
                 insertone(file_details)
@@ -150,6 +150,7 @@ def add_subject():
         flash(f'{name} added to the subjects', category='info')
     return render_template('content_management/add_subject.html', form=form)
 
+
 @admin_bp.route('/ss_avail', methods=['GET'])
 def ss_avail():
     '''
@@ -174,6 +175,7 @@ def add_topic():
         db.session.commit()
         flash('added to the subjects', category='info')
     return render_template('content_management/add_topic.html', form=form)
+
 
 @admin_bp.route('/ts_avail', methods=['GET'])
 def ts_avail():
@@ -210,6 +212,3 @@ def sts_avail():
     '''
     cst = SubTopic.query.all()
     return render_template('admin/index.html', cst=cst)
-
-
-

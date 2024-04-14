@@ -4,7 +4,9 @@ from learning_platform import bcrypt, db
 from learning_platform.forms.form import Registration, LoginForm, ResetForm
 from learning_platform.models.models import User
 
-user_bp = Blueprint('users', __name__, static_folder='static', template_folder='templates')
+user_bp = Blueprint('users', __name__, static_folder='static',
+                    template_folder='templates')
+
 
 @user_bp.route("/auth")
 def register_auth():

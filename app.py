@@ -1,4 +1,3 @@
-import os
 from dotenv import load_dotenv
 from learning_platform import app
 from learning_platform.views.home import home_bp

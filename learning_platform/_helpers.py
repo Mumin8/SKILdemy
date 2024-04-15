@@ -12,17 +12,21 @@ def get_db():
     if db is None:
         db = g._database = mongo.db
     return db
+
+
 db = LocalProxy(get_db)
 
 
 ALLOWED_EXTENSIONS = {'mp4'}
+
+
 def acceptable(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def find_missing_vid(vid_list):
-    set_values = {1,2,3,4}
+    set_values = {1, 2, 3, 4}
     print('did you get called')
     my_list = []
     for v_item in vid_list:
@@ -35,7 +39,7 @@ def find_missing_vid(vid_list):
 
 
 def hash_filename(filename):
-    file_ext = '.' +  filename.rsplit('.', 1)[1].lower()
+    file_ext = '.' + filename.rsplit('.', 1)[1].lower()
     random_name = secrets.token_hex(16)
     return f'{random_name}{file_ext}'
 
@@ -53,10 +57,10 @@ def all_vids():
     # clear_all_vids_list()
     video_ = db.python_videos.find(
         {
-        "$and": [
-            {"course": course},
-             {"topic": topic}
-        ]
+            "$and": [
+                {"course": course},
+                {"topic": topic}
+            ]
         }
     )
     return list(video_)
@@ -65,13 +69,16 @@ def all_vids():
 def insertone(_dict):
     db.student_shared_videos.insert_one(_dict)
 
+
 def upload_s3vid(uploaded_file, filename):
     s3_client = boto3.client("s3",
-                              aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-                              aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
-                              region_name='us-east-1'
-                              )
-    s3_client.upload_fileobj(uploaded_file, os.getenv("AWS_STORAGE_BUCKET_NAME"), filename)
+                             aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+                             aws_secret_access_key=os.getenv(
+                                 "AWS_SECRET_ACCESS_KEY"),
+                             region_name='us-east-1'
+                             )
+    s3_client.upload_fileobj(uploaded_file, os.getenv(
+        "AWS_STORAGE_BUCKET_NAME"), filename)
 
     return 'it worked'
 
@@ -88,8 +95,8 @@ def course_topic(course):
 
     c_dict = {}
     c_dict[course.name] = [[t.name, course.id, t.id]
-                                   for topics in course.topics for t in topics.sub_topics]
-            
+                           for topics in course.topics for t in topics.sub_topics]
+
     return c_dict
 
 
@@ -98,18 +105,14 @@ def read_content(course, topic):
     text_data:
         the approved videos will be handled by this
     '''
-    
+
     content_ = db.text_display.find(
         {
-        "$and": [
-            {"course": "python Complete Beginners"},
-             {"topic": "Basic operators"}
-        ]
+            "$and": [
+                {"course": course},
+                {"topic": topic}
+            ]
         }
     )
-    
+
     return list(content_)[0]['desc']
-    # else:
-    #     return 'Nothing published for this topic'
-
-

@@ -13,6 +13,54 @@ admin_bp = Blueprint(
 v_id = []
 
 
+def validate_topic_for_subject(subject_id, topic_id):
+    subject = Subject.query.get(subject_id)
+    for t in subject.topics:
+        if t.id == int(topic_id):
+            return False
+    return True
+
+
+def validate_subtopic_for_topic(course_id, topic_id):
+    '''
+    validate_topic:
+        this ensures there is no topic with the same name
+    '''
+
+    topics = Topic.query.get(course_id)
+    for t in topics.sub_topics:
+        if t.id == int(topic_id):
+            return False
+    return True
+
+
+def validate_topic_for_course(course_id, topic_id):
+    '''
+    validate_topic:
+        this ensures there is no topic with the same name
+    '''
+
+    course = Course.query.get(course_id)
+    for t in course.topics:
+        if t.id == int(topic_id):
+            return False
+    return True
+
+def validate_subject(course_id, subject_id):
+    '''
+    validate_subject:
+        this ensures there is no subject with the same name
+
+    return
+            True if no such subject exists and False otherwise
+    '''
+    course = Course.query.get(course_id)
+    for s in course.subjects:
+        if s.id == int(subject_id):
+            return False
+    return True
+
+
 def validate_list():
     '''
     this will prepare the list for new  values
@@ -212,3 +260,115 @@ def sts_avail():
     '''
     cst = SubTopic.query.all()
     return render_template('admin/index.html', cst=cst)
+
+@admin_bp.route('/add_tc', methods=['GET', 'POST'])
+def add_tc():
+    '''
+    add_tc:
+        this will add a particular topic to a particular course
+    '''
+    courses = Course.query.all()
+    topics = Topic.query.all()
+    if request.method == "POST":
+        course_id = request.form.get('course_id')
+        topic_id = request.form.get('topic_id')
+        topic = Topic.query.get(topic_id)
+        status = validate_topic_for_course(course_id, topic_id)
+        if status:
+            course = Course.query.get(course_id)
+            course.topics.append(topic)
+            db.session.commit()
+            flash(f'added {topic} to {course}', category='success')
+            return render_template('content_management/topic_to_course.html', courses=courses, topics=topics)
+        else:
+            flash('the topic is associated with this course', category='info')
+            return render_template('content_management/topic_to_course.html', courses=courses, topics=topics)
+
+    return render_template('content_management/topic_to_course.html', courses=courses, topics=topics)
+
+
+
+
+@admin_bp.route('/add_sc', methods=['GET', 'POST'])
+def add_sc():
+    '''
+    add_sc:
+        this will add a particular subject to a particular course
+    '''
+    courses = Course.query.all()
+    subjects = Subject.query.all()
+    if request.method == "POST":
+        course_id = request.form.get('course_id')
+        subject_id = request.form.get('subject_id')
+        subject = Subject.query.get(subject_id)
+        course = Course.query.get(course_id)
+        status = validate_subject(course_id, subject_id)
+        if status:
+            course = Course.query.get(course_id)
+            course.subjects.append(subject)
+            db.session.commit()
+            flash(f'successfully added {subject} to {course}', category='success')
+            return render_template('content_management/subject_to_course.html', courses=courses, subjects=subjects)
+        else:
+            flash('this subject is associated with this course already',
+                  category='info')
+            return render_template('content_management/subject_to_course.html', courses=courses, subjects=subjects)
+
+    return render_template('content_management/subject_to_course.html', courses=courses, subjects=subjects)
+
+
+
+@admin_bp.route('/add_subtt', methods=['GET', 'POST'])
+def add_subtt():
+    '''
+    add_tc:
+        this will add a particular subtopic to a particular topi
+    '''
+
+    topics = Topic.query.all()
+    subtopics = SubTopic.query.all()
+    if request.method == "POST":
+        topic_id = request.form.get('topic_id')
+        subtopic_id = request.form.get('subtopic_id')
+        subtopic = SubTopic.query.get(subtopic_id)
+        status = validate_subtopic_for_topic(topic_id, subtopic_id)
+        if status:
+            topic = Topic.query.get(topic_id)
+            topic.sub_topics.append(subtopic)
+            db.session.commit()
+            flash(f'successfully added {subtopic} to {topic}')
+            return render_template('content_management/subtopic_to_topic.html', subtopics=subtopics, topics=topics)
+        else:
+            flash(f'the topic is associated with this course', category='warning')
+            return render_template('content_management/subtopic_to_topic.html', subtopics=subtopics, topics=topics)
+
+    return render_template('content_management/subtopic_to_topic.html', subtopics=subtopics, topics=topics)
+
+
+
+@admin_bp.route('/add_ts', methods=['GET', 'POST'])
+def add_topic_to_subject():
+    '''
+    add_tc:
+        this will add a particular topic to a particular subject
+    '''
+    subjects = Subject.query.all()
+    topics = Topic.query.all()
+    if request.method == "POST":
+        subject_id = request.form.get('subject_id')
+        topic_id = request.form.get('topic_id')
+
+        topic = Topic.query.get(topic_id)
+
+        status = validate_topic_for_subject(subject_id, topic_id)
+        if status:
+            subject = Subject.query.get(subject_id)
+            subject.topics.append(topic)
+            db.session.commit()
+            flash(f'successfully added {topic} to {subject}', category='success')
+            return render_template('content_management/topic_to_subject.html', subjects=subjects, topics=topics)
+        else:
+            flash('the topic is associated with this course', category='info')
+            return render_template('content_management/topic_to_subject.html', subjects=subjects, topics=topics)
+
+    return render_template('content_management/topic_to_subject.html', subjects=subjects, topics=topics)

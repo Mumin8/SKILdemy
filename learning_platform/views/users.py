@@ -5,7 +5,8 @@ from learning_platform.forms.form import Registration, LoginForm, ResetForm
 from learning_platform.models.models import User, Course, SubTopic
 from learning_platform._helpers import course_topic, read_content
 
-user_bp = Blueprint('users', __name__, static_folder='static', template_folder='templates')
+user_bp = Blueprint('users', __name__, static_folder='static',
+                    template_folder='templates')
 
 
 def user_enrolled_courses(course_id):
@@ -140,6 +141,9 @@ def userprofile():
 @user_bp.route('/learns/<int:c_id>/', methods=['GET', 'POST'])
 @login_required
 def learn_skills(c_id):
+    '''
+    the course and topics will be displayed for the
+    '''
     user_c = Course.query.get(c_id)
     if user_c:
         c_and_t = course_topic(user_c)
@@ -150,9 +154,11 @@ def learn_skills(c_id):
 
 @user_bp.route('/mat/<int:course_id>/<int:topic_id>', methods=['GET', 'POST'])
 def topic_by_course(course_id, topic_id):
+    '''
+    gets and displays the reading content for the user
+    '''
     course = Course.query.get(course_id).name
     topic = SubTopic.query.get(topic_id).name
     if course:
-        print('yeap')
         mat = read_content(course, topic)
     return render_template('user/learn_page.html', mat=mat, c_id=course_id)

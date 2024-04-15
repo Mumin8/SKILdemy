@@ -99,9 +99,29 @@
                     Categorize Topics and Subject under a Course
                 </p>
                 <div style="display: flex; flex-direction: column;">
-                    
-                    
-    
+                    <div class="row align-items-start btn btn-outline-primary fs-5">
+                        <a href="{{ url_for('admin.add_sc')}}" class="" id="admin">
+                            Add Subject to Course
+                        </a>
+                    </div>
+
+                    <div class="row align-items-start btn btn-outline-primary fs-5">
+                        <a href="{{ url_for('admin.add_tc')}}" class="" id="admin">
+                            Add Topic to Course
+                        </a>
+                    </div>
+
+                    <div class="row align-items-start btn btn-outline-primary fs-5">
+                        <a href="{{ url_for('admin.add_subtt')}}" class="" id="admin">
+                            Add sub topic to Topic
+                        </a>
+                    </div>
+
+                    <div class="row align-items-start btn btn-outline-primary fs-5">
+                        <a href="{{ url_for('admin.add_topic_to_subject')}}" class="" id="admin">
+                            Add Topic to Subject
+                        </a>
+                    </div>
                     
                     
                 </div>

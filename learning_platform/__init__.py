@@ -10,10 +10,12 @@ from flask_wtf.csrf import CSRFProtect
 import os
 
 
+
+
 db = SQLAlchemy()
 app = Flask(__name__)
 
-app.config["MONGO_URI"] = os.getenv("MONGODB_URI")
+app.config["MONGO_URI"] = 'mongodb+srv://alhassanmumin8:Mumin2121@cluster0.tmjnuoz.mongodb.net/video_names?retryWrites=true&w=majority'
 mongo = PyMongo(app)
 
 
@@ -33,7 +35,7 @@ csrf = CSRFProtect(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view='login'
 # login_manager.needs_refresh_message = 'Please log in again.'
-login_manager.needs_refresh_message_category = 'danger'
+login_manager.needs_refresh_message_category='danger'
 login_manager.login_message = u'please login first'

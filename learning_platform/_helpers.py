@@ -6,7 +6,6 @@ from flask import g, session
 from learning_platform import mongo
 
 
-
 def get_db():
     db = getattr(g, "_database", None)
 
@@ -75,4 +74,42 @@ def upload_s3vid(uploaded_file, filename):
     s3_client.upload_fileobj(uploaded_file, os.getenv("AWS_STORAGE_BUCKET_NAME"), filename)
 
     return 'it worked'
+
+
+def course_topic(course):
+    """
+    validate_topic: 
+        this ensures there is no topic with the same name
+    arg:    
+        course_list: the list of all the courses
+    return: 
+        True if no such topic exists and False otherwise
+    """
+
+    c_dict = {}
+    c_dict[course.name] = [[t.name, course.id, t.id]
+                                   for topics in course.topics for t in topics.sub_topics]
+            
+    return c_dict
+
+
+def read_content(course, topic):
+    ''' 
+    text_data:
+        the approved videos will be handled by this
+    '''
+    
+    content_ = db.text_display.find(
+        {
+        "$and": [
+            {"course": "python Complete Beginners"},
+             {"topic": "Basic operators"}
+        ]
+        }
+    )
+    
+    return list(content_)[0]['desc']
+    # else:
+    #     return 'Nothing published for this topic'
+
 

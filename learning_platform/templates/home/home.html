@@ -67,7 +67,7 @@
                                     height: auto; background-color: rgb(240, 240, 241);
                                     border: 2px solid green;">
         <div class="d-flex justify-content-end">
-            <a class="btn btn-info" id="enrol" href="" >
+            <a class="btn btn-info" id="enrol" href="{{ url_for('users.enroll_course', course_id=course.id) }}" >
                 Enroll now
             </a>
         </div>
@@ -98,8 +98,6 @@
     {% endif %}
        </div>
       </div>
-
-     
 
     {% endblock %}
     

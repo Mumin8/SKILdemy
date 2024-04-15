@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% extends "base.html" %}
+    <title>{% block title %} My Page {% endblock %}</title>
+    
+</head>
+    
+<body>
+  {% block main %}
+  <div class="container-fluid">
+
+    <nav class="text-info fs-3 text-center">Dashboard</nav>
+    <div class="row">
+        <div class="col bg-secondary" >
+            <p class="text-light fs-2">My courses</p>
+            {% for c in user %}
+            <div class="profile-info"><button class="btn btn-info">
+                <a href="{{ url_for('users.learn_skills', c_id=c.id) }}"> {{ c.name }} </a>
+            </button></div>
+            {% endfor %}
+
+        </div>
+    </div>
+  </div>
+    {% endblock %}
+</body>
+
+</html>

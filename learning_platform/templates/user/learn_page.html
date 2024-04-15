@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% extends "base.html" %}
+    <title>{% block title %} learn {% endblock %}</title>
+</head>
+<body>
+  {% block main %}
+  <nav><a class="btn btn-primary" href="{{url_for('users.userprofile')}}">Home</a></nav>
+        <div class="container-fluid">
+            <div class="row">
+                {%if fk %}
+                        
+                <div class="col">
+                    <p class=""><h1 class="btn btn-secondary fs-2 ">{{fk}}</h1></p>
+                    <a href="{{ url_for('users.topic_by_course', course_id=1, topic_id=2) }}">try</a>
+                    
+                    <ul>
+ 
+                        {% for t in fv %}
+                        <li>
+                            <a href="{{ url_for('users.topic_by_course', course_id=t[1], topic_id=t[2]) }}">{{ t[0] }}</a>
+                        </li>
+                        {% endfor %}
+                        
+                    </ul>
+                    
+                </div>
+
+
+                {% elif mat %}
+                <div class="col-9 fs-3" style="background-color: rgb(226, 233, 235);">
+                    <a class="btn btn-primary" href="{{ url_for('users.learn_skills', c_id=c_id) }}">Back</a>
+                    <div class="row">
+                       <div class="bg-dark">
+                        <div class="col text-success">AI Tutorial</div>
+                        <div class="col text-success">Video ON Demand</div>
+                       </div>  
+                    <div>
+                {% for line in mat.split('\n') %}
+
+                {% if line.startswith('http') %}
+                  <a href="{{line}}">
+                    {{line}}
+                  </a>
+                {% else %}
+                  {{ line }}
+
+                {% endif %}
+               <br>
+               {% endfor %}
+                </div>
+                    </div>
+                </div>
+                {% else %}
+
+                {% endif %}
+            </div>
+        </div>
+  
+{% endblock %}
+</body>
+</html>

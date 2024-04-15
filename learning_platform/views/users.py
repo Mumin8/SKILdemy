@@ -2,10 +2,20 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user, logout_user, login_user
 from learning_platform import bcrypt, db
 from learning_platform.forms.form import Registration, LoginForm, ResetForm
-from learning_platform.models.models import User
+from learning_platform.models.models import User, Course, SubTopic
+from learning_platform._helpers import course_topic, read_content
 
-user_bp = Blueprint('users', __name__, static_folder='static',
-                    template_folder='templates')
+user_bp = Blueprint('users', __name__, static_folder='static', template_folder='templates')
+
+
+def user_enrolled_courses(course_id):
+    try:
+        user = User.query.get(current_user.id)
+        for c in current_user.enrolling:
+            if c.id == course_id:
+                return True
+    except AttributeError:
+        return {"error": "please login"}
 
 
 @user_bp.route("/auth")
@@ -43,8 +53,23 @@ def login():
             flash('Happy Coding!  😊', category='success')
             return redirect(url_for('users.userprofile'))
         flash("Invalid Credentials", category='warning')
-        return redirect(url_for('users.login', user_id=user.id))
+        return redirect(url_for('users.login'))
     return render_template('user/login.html', form=form)
+
+
+@user_bp.route("/logout", methods=['GET', 'POST'])
+@login_required
+def user_logout():
+    '''
+    user_logout:
+        the user will log out from here
+    '''
+    user = current_user
+    user.authenticated = False
+    db.session.add(user)
+    db.session.commit()
+    logout_user()
+    return redirect(url_for('users.register_auth'))
 
 
 @user_bp.route('/forgot_password', methods=['GET', 'POST'])
@@ -73,3 +98,61 @@ def forgot_password():
             flash('Email not found', category='danger')
             return redirect(url_for('users.login'))
     return render_template('user/reset_password.html', form=form, title='Reset Password')
+
+
+@user_bp.route('/enrol/<int:course_id>/', methods=['GET', 'POST'])
+@login_required
+def enroll_course(course_id):
+    '''
+    the student will enroll in the course
+    '''
+    # this will be used in admin to know the number of users for a particular course
+    # course_enrollers(course_id)
+    if user_enrolled_courses(course_id):
+        flash('Already enrolled, login and start learning')
+        return redirect(url_for('users.login'))
+    user = User.query.get(current_user.id)
+
+    course = Course.query.get(course_id)
+    current_user.enrolling.append(course)
+    db.session.commit()
+
+    flash(f'You have successfully enrolled in {course.name}')
+    return "well done"
+
+
+@user_bp.route("/userprofile", methods=['GET', 'POST'])
+@login_required
+def userprofile():
+    '''
+    userprofile:
+        this will initiate the user profile setting
+    '''
+
+    try:
+        user = User.query.filter_by(id=current_user.id).first()
+        return render_template('user/profile.html', user=user.enrolling)
+    except Exception as e:
+        flash('please login')
+        return redirect(url_for('users.login'))
+
+
+@user_bp.route('/learns/<int:c_id>/', methods=['GET', 'POST'])
+@login_required
+def learn_skills(c_id):
+    user_c = Course.query.get(c_id)
+    if user_c:
+        c_and_t = course_topic(user_c)
+        first_key, first_value = next(iter(c_and_t.items()))
+        return render_template('user/learn_page.html', fk=first_key, fv=first_value)
+    return render_template('user/learn_page.html')
+
+
+@user_bp.route('/mat/<int:course_id>/<int:topic_id>', methods=['GET', 'POST'])
+def topic_by_course(course_id, topic_id):
+    course = Course.query.get(course_id).name
+    topic = SubTopic.query.get(topic_id).name
+    if course:
+        print('yeap')
+        mat = read_content(course, topic)
+    return render_template('user/learn_page.html', mat=mat, c_id=course_id)

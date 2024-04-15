@@ -46,6 +46,7 @@ def validate_topic_for_course(course_id, topic_id):
             return False
     return True
 
+
 def validate_subject(course_id, subject_id):
     '''
     validate_subject:
@@ -261,6 +262,7 @@ def sts_avail():
     cst = SubTopic.query.all()
     return render_template('admin/index.html', cst=cst)
 
+
 @admin_bp.route('/add_tc', methods=['GET', 'POST'])
 def add_tc():
     '''
@@ -287,8 +289,6 @@ def add_tc():
     return render_template('content_management/topic_to_course.html', courses=courses, topics=topics)
 
 
-
-
 @admin_bp.route('/add_sc', methods=['GET', 'POST'])
 def add_sc():
     '''
@@ -307,7 +307,8 @@ def add_sc():
             course = Course.query.get(course_id)
             course.subjects.append(subject)
             db.session.commit()
-            flash(f'successfully added {subject} to {course}', category='success')
+            flash(
+                f'successfully added {subject} to {course}', category='success')
             return render_template('content_management/subject_to_course.html', courses=courses, subjects=subjects)
         else:
             flash('this subject is associated with this course already',
@@ -315,7 +316,6 @@ def add_sc():
             return render_template('content_management/subject_to_course.html', courses=courses, subjects=subjects)
 
     return render_template('content_management/subject_to_course.html', courses=courses, subjects=subjects)
-
 
 
 @admin_bp.route('/add_subtt', methods=['GET', 'POST'])
@@ -345,7 +345,6 @@ def add_subtt():
     return render_template('content_management/subtopic_to_topic.html', subtopics=subtopics, topics=topics)
 
 
-
 @admin_bp.route('/add_ts', methods=['GET', 'POST'])
 def add_topic_to_subject():
     '''
@@ -365,7 +364,8 @@ def add_topic_to_subject():
             subject = Subject.query.get(subject_id)
             subject.topics.append(topic)
             db.session.commit()
-            flash(f'successfully added {topic} to {subject}', category='success')
+            flash(
+                f'successfully added {topic} to {subject}', category='success')
             return render_template('content_management/topic_to_subject.html', subjects=subjects, topics=topics)
         else:
             flash('the topic is associated with this course', category='info')

@@ -93,7 +93,6 @@ def presigned_url(video_name):
         Params={"Bucket": os.getenv(
             "AWS_STORAGE_BUCKET_NAME"), "Key": video_name},
         ExpiresIn=3600)
-    print(url)
     return url
 
 

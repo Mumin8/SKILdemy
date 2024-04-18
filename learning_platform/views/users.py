@@ -46,15 +46,19 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            user.authenticated = True
-            db.session.add(user)
-            db.session.commit()
-            login_user(user)
-            flash('Happy Coding!  😊', category='success')
-            return redirect(url_for('users.userprofile'))
-        flash("Invalid Credentials", category='warning')
-        return redirect(url_for('users.login'))
+        try:
+            if user and bcrypt.check_password_hash(user.password, form.password.data):
+                user.authenticated = True
+                db.session.add(user)
+                db.session.commit()
+                login_user(user)
+                flash('Happy Coding!  😊', category='success')
+                return redirect(url_for('users.userprofile'))
+            flash("Invalid Credentials", category='warning')
+            return redirect(url_for('users.login'))
+        except:
+            return redirect(url_for('users.login'))
+
     return render_template('user/login.html', form=form)
 
 

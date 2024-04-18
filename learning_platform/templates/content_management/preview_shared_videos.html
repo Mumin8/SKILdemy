@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% extends "base.html" %}
+    <title>
+        {% block title %} Video on Demand {% endblock %}
+    </title>
+</head>
+<body>
+    {% block main %}
+    <div class="container" style="background-color: rgb(61, 75, 67);">
+        <div class="row">
+            <div class="col m-5">
+                <div class="fs-3 text-light">
+                </div>
+                <video width="640" controls>
+                    <source src="{{ url }}" type="video/mp4">
+                  </video>
+                  <div class="fs-3 text-light">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

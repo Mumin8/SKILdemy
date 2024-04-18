@@ -44,6 +44,12 @@ def hash_filename(filename):
     return f'{random_name}{file_ext}'
 
 
+def _json(l):
+    for i, o in enumerate(l):
+        l[i]['_id'] = str(o['_id'])
+    return l
+
+
 def all_vids():
     '''
     This will get all videos from mongodb
@@ -55,7 +61,7 @@ def all_vids():
     print(f'lan {course} and top {topic}')
 
     # clear_all_vids_list()
-    video_ = db.python_videos.find(
+    video_ = db.student_shared_videos.find(
         {
             "$and": [
                 {"course": course},
@@ -70,17 +76,31 @@ def insertone(_dict):
     db.student_shared_videos.insert_one(_dict)
 
 
-def upload_s3vid(uploaded_file, filename):
+def s3_client():
     s3_client = boto3.client("s3",
                              aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
                              aws_secret_access_key=os.getenv(
                                  "AWS_SECRET_ACCESS_KEY"),
-                             region_name='us-east-1'
-                             )
-    s3_client.upload_fileobj(uploaded_file, os.getenv(
-        "AWS_STORAGE_BUCKET_NAME"), filename)
+                             region_name='us-east-1')
 
-    return 'it worked'
+    return s3_client
+
+
+def presigned_url(video_name):
+    client = s3_client()
+    url = client.generate_presigned_url(
+        ClientMethod="get_object",
+        Params={"Bucket": os.getenv(
+            "AWS_STORAGE_BUCKET_NAME"), "Key": video_name},
+        ExpiresIn=3600)
+    print(url)
+    return url
+
+
+def upload_s3vid(uploaded_file, filename):
+    client = s3_client()
+    client.upload_fileobj(uploaded_file, os.getenv(
+        "AWS_STORAGE_BUCKET_NAME"), filename)
 
 
 def course_topic(course):
@@ -116,3 +136,28 @@ def read_content(course, topic):
     )
 
     return list(content_)[0]['desc']
+
+
+def insert_text(code='f.PNG', desc=''):
+    '''
+    insert_text:
+        this will insert text to a collection
+    '''
+    course = session.get('course')
+    subject = session.get('subject')
+    topic_name = session.get('subtopic')
+    text_details = {
+        "code": code, "desc": desc, "course": course,
+        "subject": subject, "topic": topic_name
+    }
+
+    # collection name will change
+    online_users = db.python_text_processing.insert_one(text_details)
+
+
+def live_vid_content():
+    all_videos = []
+    col_content = db.student_shared_videos.find()
+    all_videos.append(list(col_content))
+    _list = _json(all_videos[0])
+    return _list

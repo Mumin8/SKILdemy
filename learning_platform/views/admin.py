@@ -5,7 +5,9 @@ from werkzeug.utils import secure_filename
 from learning_platform.forms.form import (
     Registration, LoginForm, CourseForm, TopicForm, SubjectForm, SubTopicForm)
 from learning_platform.models.models import User, Video, Course, SubTopic, Subject, Topic
-from learning_platform._helpers import hash_filename, find_missing_vid, all_vids, acceptable, insertone, upload_s3vid
+from learning_platform._helpers import (
+    hash_filename, live_vid_content, find_missing_vid, all_vids, acceptable, insertone,
+    upload_s3vid, insert_text, presigned_url)
 admin_bp = Blueprint(
     'admin', __name__, static_folder='static', template_folder='templates')
 
@@ -318,6 +320,7 @@ def add_sc():
     return render_template('content_management/subject_to_course.html', courses=courses, subjects=subjects)
 
 
+
 @admin_bp.route('/add_subtt', methods=['GET', 'POST'])
 def add_subtt():
     '''
@@ -372,3 +375,53 @@ def add_topic_to_subject():
             return render_template('content_management/topic_to_subject.html', subjects=subjects, topics=topics)
 
     return render_template('content_management/topic_to_subject.html', subjects=subjects, topics=topics)
+
+
+@admin_bp.route('/c_s_st', methods=['GET', 'POST'])
+def add_c_s_st():
+    ''' this will add course, subject and sub topic to online ai content'''
+    course = Course.query.all()
+    subject = Subject.query.all()
+    subtopic = SubTopic.query.all()
+    if request.method == "POST":
+        session['course'] = request.form.get("course")
+        session['subject'] = request.form.get("subject")
+        session['subtopic'] = request.form.get("subtopic")
+        insert_text()
+    return render_template('content_management/course_subject_subtopic.html', course=course, subject=subject, subtopic=subtopic)
+
+
+
+
+@admin_bp.route('/reading_text', methods=['GET', 'POST'])
+def add_reading_text():
+    '''
+    add_reading_text:
+        this will add the skeleton of the reading text
+    '''
+    courses = Course.query.all()
+    subjects = Subject.query.all()
+    topics = SubTopic.query.all()
+
+    if request.method == "POST":
+        c_name = Course.query.get(request.form.get('course_id')).name
+        s_name = Subject.query.get(request.form.get('subject_id')).name
+        t_name = SubTopic.query.get(request.form.get('topic_id')).name
+        text_data(c_name, s_name, t_name)
+        return 'cool chop'
+
+    return render_template('content_management/reading_text.html',
+                           courses=courses, subjects=subjects, topics=topics)
+
+
+
+@admin_bp.route('/gpvid', methods=['GET'])
+def get_published_Video():
+    '''
+    get_published_video:
+        this will get all the published videos for visual display
+    '''
+    vid_content = live_vid_content()
+    url = presigned_url('3957dc2fc92e347daa1d388e5b9b71eb.mp4')
+    # print(f'the url {vid_content}')
+    return render_template('content_management/preview_shared_videos.html', url=url)

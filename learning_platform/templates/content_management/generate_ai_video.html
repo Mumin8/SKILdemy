@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% extends "base.html" %}
+    <title>{% block title %} learn {% endblock %}</title>
+</head>
+<body>
+  {% block main %}
+  <div class="container">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  AI Assistant
+                </button>
+                <ul class="dropdown-menu">
+                    <div class="col-3" id="aid">
+                        {% for k, v in dict_v.items() %}
+                        <p class="btn btn-secondary m-4">{{k}}</p>
+                        {% for _t in v %}
+                <li>
+                  <a class="fs-3 btn btn-primary" href="{{ url_for('admin.gptplus', course_id=_t[1], topic_id=_t[2]) }}">
+                    {{ _t[0] }}
+                  </a>
+                </li>
+            {% endfor %}
+                 
+            {% endfor %}
+                    </div>
+                </ul>
+               
+              </div>
+           
+            
+        </div>
+      </nav>
+       
+  </div>
+{% endblock %}
+</body>
+</html>

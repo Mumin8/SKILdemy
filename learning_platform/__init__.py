@@ -10,10 +10,13 @@ from flask_wtf.csrf import CSRFProtect
 import os
 
 
-
+basedir = os.path.abspath(os.path.dirname(__file__))
+UPLOAD_CODE_FOLDER = os.path.join(basedir, 'static/default/code')
 
 db = SQLAlchemy()
 app = Flask(__name__)
+
+app.config['UPLOAD_CODE_FOLDER'] = UPLOAD_CODE_FOLDER
 
 app.config["MONGO_URI"] = 'mongodb+srv://alhassanmumin8:Mumin2121@cluster0.tmjnuoz.mongodb.net/video_names?retryWrites=true&w=majority'
 mongo = PyMongo(app)
@@ -32,6 +35,15 @@ db.init_app(app)
 app.config['SECRET_KEY'] = os.urandom(24)
 csrf = CSRFProtect(app)
 
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'masschusse@gmail.com'
+app.config['MAIL_PASSWORD'] = 'wgnmflqcikprmseo'
+
+mail = Mail(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)

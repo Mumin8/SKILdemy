@@ -3,8 +3,14 @@ import boto3
 import secrets
 from werkzeug.local import LocalProxy
 from flask import g, session
-from learning_platform import mongo
+from flask_login import current_user
+import pyttsx3
+from learning_platform import mongo, app
+from moviepy.editor import ( AudioFileClip, concatenate_videoclips,
+                                        VideoFileClip, ImageClip )
+from learning_platform.models.models import Course
 
+my_audio_video = 'output_folder/'
 
 def get_db():
     db = getattr(g, "_database", None)
@@ -17,17 +23,58 @@ def get_db():
 db = LocalProxy(get_db)
 
 
-ALLOWED_EXTENSIONS = {'mp4'}
+
 
 
 def acceptable(filename):
+    ALLOWED_EXT = {'mp4'}
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
+
+
+
+def allowed_file(filename):
+    '''
+    allowed_file:
+        this will validate the allowed files
+    '''
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+def _file(files, _dir):
+    '''
+    _file:
+        this will save file
+    '''
+    if 'file' not in files:
+        flash('No file part')
+        return redirect(request.url)
+    file = files['file']
+    if file.filename == '':
+        flash('No selected file')
+        return redirect(request.url)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        name = hash_filename(filename)
+        file.save(os.path.join(app.config[_dir], name))
+
+    return name
+
+
+def unlink_file(name, _dir):
+    '''
+    unlink_file:
+        this will delete the unneeded files from the directory
+    args:
+        name: this is the name of the file
+        _dir: this is the directory in which the file is 
+    '''
+    os.unlink(os.path.join(app.config[_dir], name))
+
 def find_missing_vid(vid_list):
     set_values = {1, 2, 3, 4}
-    print('did you get called')
     my_list = []
     for v_item in vid_list:
         # print(v_item)
@@ -60,7 +107,7 @@ def all_vids():
     topic = session.get('topic')
     print(f'lan {course} and top {topic}')
 
-    # clear_all_vids_list()
+    
     video_ = db.student_shared_videos.find(
         {
             "$and": [
@@ -102,6 +149,24 @@ def upload_s3vid(uploaded_file, filename):
         "AWS_STORAGE_BUCKET_NAME"), filename)
 
 
+def get_byID(_id):
+    video_ = db.python_text_processing.find_one({'_id':_id})
+    return video_
+
+def update_by_id(_id, code, desc):
+    update_fields = {}
+    if desc is not None:
+        update_fields['desc'] = desc
+    if code is not '':
+        update_fields['code'] = code
+
+    result = db.python_text_processing.update_one(
+        {'_id': _id},
+        {'$set': update_fields}
+    )
+    
+    return result
+
 def course_topic(course):
     """
     validate_topic: 
@@ -111,9 +176,11 @@ def course_topic(course):
     return: 
         True if no such topic exists and False otherwise
     """
-
+   
     c_dict = {}
-    c_dict[course.name] = [[t.name, course.id, t.id]
+    for idx, cl in enumerate(course):
+        course = Course.query.get(cl[-1])
+        c_dict[course.name] = [[t.name, course.id, t.id]
                            for topics in course.topics for t in topics.sub_topics]
 
     return c_dict
@@ -150,8 +217,27 @@ def insert_text(code='f.PNG', desc=''):
         "subject": subject, "topic": topic_name
     }
 
-    # collection name will change
     online_users = db.python_text_processing.insert_one(text_details)
+
+
+def get_text_desc():
+    '''
+    get_text_desc:
+        this will query the mongodb collection for a match
+    '''
+    course = session.get('course')
+    topic = session.get('topic')
+    print(f'the course name {course} and the topic name {topic}')
+    # the collection will change
+    video_ = db.python_text_processing.find(
+        {
+        "$and": [
+            {"course": course},
+             {"topic": topic}
+        ]
+        }
+    )
+    return _json(list(video_))
 
 
 def live_vid_content():
@@ -160,3 +246,156 @@ def live_vid_content():
     all_videos.append(list(col_content))
     _list = _json(all_videos[0])
     return _list
+
+
+def create_audio_clip(text, output_path):
+    '''
+    create_audio_clip:
+        this will read the text
+    args:
+        text:   the string of text to read
+        output_path: the path to the synthesized audio
+    '''
+    tts(text, output_path)
+
+
+def create_video_clip(text, output_path, duration, folder):
+    '''
+    create_video_clip:
+        this will create the video clip
+    '''
+
+    # video_duration = duration
+    audio_clip_path = str(current_user.id) + "_"'temp_audio.mp3'
+    
+    
+    path_aud = os.path.join(folder, audio_clip_path)
+
+    create_audio_clip(text, path_aud)
+    
+    video_clip = ImageClip(text, duration=duration)
+
+
+    video_clip = video_clip.set_audio(AudioFileClip(path_aud))
+
+    # Write the final video clip to the specified output path
+    video_clip.write_videofile( output_path, codec='libx264', audio_codec='aac', fps=24 )
+
+    os.remove(path_aud)
+
+
+def join_clips(user_id, res_clips):
+    '''
+    join_clips:
+        this will join all the clips together
+    return:
+        the final output path
+    '''
+    root_path = app.root_path
+    comp_file = f'{session.get("course")}_{session.get("topic")}.mp4'
+    output_p = os.path.join(root_path, 'static', 'myvideo', comp_file)
+
+    clips_list = []
+
+    for _clip in res_clips:
+        clips_list.append(VideoFileClip(_clip))
+    
+    final_c = concatenate_videoclips(clips_list, method="compose")
+    final_c.write_videofile(output_p)
+
+    return output_p
+
+
+
+def tts(text, output_path):
+    '''
+    tts:
+        this will instance text to speech and set the properties
+    '''
+    engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    # Change the voice index as needed
+    engine.setProperty('rate', 150)
+    engine.setProperty('volume', 0.9)
+    engine.setProperty('voice', 'english+f3')
+    engine.setProperty('pitch', 50)
+    engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    engine.save_to_file(text, output_path)
+    engine.runAndWait()
+
+
+def recieve_displayed_text(user_id, vid_list):
+    '''
+    recieve_displayed_text:
+        It will read the text from Mongodb
+    arg:
+        vid_list: the list of videos
+    '''
+    
+    res_clips = []
+    root_path = app.root_path
+
+    for i, _d in enumerate(vid_list):
+        audio_file = f'temp_slide_audio_{i}.mp3'
+        video_file = f'temp_slide_video_{i}.mp4'
+
+        audio_path = os.path.join(my_audio_video, audio_file)
+        video_path = os.path.join(my_audio_video, video_file)
+
+        create_audio_clip(_d["desc"], audio_path)
+        slide_audio_clip = AudioFileClip(audio_path)
+
+        final_clip_duration = slide_audio_clip.duration
+        create_video_clip(
+                        f'{root_path}/static/default/code/{vid_list[i]["code"]}',
+                        video_path, final_clip_duration, my_audio_video
+                        )
+        slide_video_clip = VideoFileClip(video_path)
+
+        video_audio[0].append(video_path)
+        video_audio[1].append(audio_path)
+
+        slide_audio_clip = slide_audio_clip.set_duration(final_clip_duration)
+
+        slide_video_clip = slide_video_clip.set_duration(final_clip_duration)
+        cl = slide_video_clip.set_audio(slide_audio_clip)
+       
+
+        output_p = os.path.join(root_path, 'static', 'video_lists', video_file)
+        res_clips.append(output_p)
+        cl.write_videofile(output_p)
+
+    final_output_path = join_clips(user_id, res_clips)
+    
+    return final_output_path
+
+
+
+def live_text_Display_AI_content():
+    all_videos = []
+    col_content = db.python_text_processing.find()
+    all_videos.append(list(col_content))
+    
+    _list = _json(all_videos[0])
+    return _list
+
+
+
+def user_courses(id=None):
+    course_list = []
+    if id:
+        courses = current_user.enrolling
+    else:
+        courses = Course.query.all()
+    try:
+        # print(f'all courses {course} and user enrolling {current_user.enrolling}')
+        for c in courses:
+            course_list.append([])
+            course_list[-1].append(c.name)
+            course_list[-1].append(c.id)
+
+        return course_list
+    except AttributeError:
+        flash('Please login to access this page', category='success')
+        return redirect(url_for('login'))

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% extends "base.html" %}
+    <title>{% block title %} preview AI content {% endblock %}</title>
+</head>
+<body>
+    {% block main %}
+    
+    
+        <div class="container">
+            <div class="row">
+                
+                <div class="col bg-dark">
+                    {% for content in contents %}
+                    <div class="mb-5" style="background-color: #080808;">
+                    <div class="btn btn-outline-success m-1">{{content['course']}}</div>
+                    <br>
+                    <div class="btn btn-outline-success m-1">{{content['topic']}}</div>
+                    <br>
+                    
+                    {% if content['code'] %}
+
+                    
+                        <p class="text-light">{{ content['code'] }}</p>
+                    <img src="{{ url_for('static', filename='default/code/' + content['code']) }}" alt="">
+    
+                    {% endif %}
+
+                    {% if content['desc'] %}
+                    <p class="text-light fs-3"> {{ content['desc'] }}</p>
+                    {% endif %}
+                    <div  class="" style="display: flex; flex-direction: row;
+                                         justify-content: space-between;">
+                        <a href="{{ url_for('admin.update_published_AI', img_id = content['_id'])}}" class="btn btn-info ">Edit</a>
+                        
+                        <div class="btn btn-danger ">Delete</div>
+                    </div>
+
+                    </div>
+                    
+                    {% endfor %}
+                </div>
+                
+               
+            </div>
+        </div>
+
+    {% endblock %}
+</body>
+</html>

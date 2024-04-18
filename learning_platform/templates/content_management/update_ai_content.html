@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% extends "base.html" %}
+    <title>{% block title %} Text Editor {% endblock %}</title>
+</head>
+<body>
+    {% block main %}
+    <div class="container text-center">
+        <div class="row align-items-start text-center text-light">
+            <form method="post" enctype=multipart/form-data>
+                <input  type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              
+          <div class="col-4 fs-5 bg-info">
+            <label for="file">Snippet:</label><br>
+            <input type="file" id="file" name="file">
+          </div>
+          <div class="col-8 fs-3 bg-primary">
+            <label for="description">Description:</label><br>
+            <textarea id="desc" name="desc" rows="4" cols="50">{{vid['desc']}}</textarea>
+          </div>
+          <input type="submit" value="Submit">
+        </form>
+        </div>
+      </div>
+    {% endblock %}  
+</body>
+</html>

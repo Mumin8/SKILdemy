@@ -7,7 +7,8 @@ from learning_platform.forms.form import (
 from learning_platform.models.models import User, Video, Course, SubTopic, Subject, Topic
 from learning_platform._helpers import (
     hash_filename, live_vid_content, find_missing_vid, all_vids, acceptable, insertone,
-    upload_s3vid, insert_text, presigned_url)
+    upload_s3vid, insert_text, presigned_url, course_topic, _file, unlink_file, update_by_id, 
+    live_text_Display_AI_content, user_courses, get_text_desc, recieve_displayed_text)
 admin_bp = Blueprint(
     'admin', __name__, static_folder='static', template_folder='templates')
 
@@ -388,6 +389,7 @@ def add_c_s_st():
         session['subject'] = request.form.get("subject")
         session['subtopic'] = request.form.get("subtopic")
         insert_text()
+        flash('successfully added content for ai video')
     return render_template('content_management/course_subject_subtopic.html', course=course, subject=subject, subtopic=subtopic)
 
 
@@ -425,3 +427,80 @@ def get_published_Video():
     url = presigned_url('3957dc2fc92e347daa1d388e5b9b71eb.mp4')
     # print(f'the url {vid_content}')
     return render_template('content_management/preview_shared_videos.html', url=url)
+
+
+
+@admin_bp.route('/gtv', methods=['GET','POST'])
+@login_required
+def aud_vid():
+    '''
+    aud_vid:
+        this is where the audio video clip thing starts
+    '''
+    
+       
+    v = get_text_desc()
+    
+    acc_v = recieve_displayed_text(str(current_user.id), v)
+        
+    return acc_v
+    
+
+
+@admin_bp.route('/gptplus/<int:course_id>/<int:topic_id>', methods=['GET', 'POST'])
+@login_required
+def gptplus(course_id, topic_id):
+    '''
+    gptplus:
+        this is where the ai video is processed
+    '''
+    user_c = sorted(user_courses(current_user.id))
+    c_and_t = course_topic(user_c)
+    session['course'] = Course.query.get(course_id).name
+    session['topic'] = SubTopic.query.get(topic_id).name
+    print(f'{Course.query.get(course_id).name} and {SubTopic.query.get(topic_id).name}')
+    path = aud_vid()
+    paths = path.split('myvideo')
+
+    return "video is ready"
+
+    #     return render_template('Learn/learn_page.html', dict_v=c_and_t, path=paths[-1][1::])
+    # except ValueError as e:
+    #     print(str(e))
+    #     flash('there is no content here ', category='danger')
+    #     return render_template('Learn/learn_page.html', dict_v=c_and_t)
+
+
+@admin_bp.route('/admin_courses', methods=['GET', 'POST'])
+def admin_all_course():
+    user_c = user_courses()
+    c_and_t = course_topic(user_c)
+    return render_template('content_management/generate_ai_video.html', dict_v=c_and_t)
+
+@admin_bp.route('/gpai', methods=['GET'])
+def get_published_AI():
+    '''
+    get_published_AI:
+        this will get the AI content for analysis
+    '''
+    contents = live_text_Display_AI_content()
+    
+    return render_template('content_management/preview_ai_content.html', contents=contents)
+
+
+
+@admin_bp.route('/updatePAI/<string:img_id>', methods=['GET', 'POST'])
+def update_published_AI(img_id):
+    '''
+    update_published_AI:
+        the text and code snippet will be updated here
+    '''
+    vid = get_byID(ObjectId(img_id))
+    if request.method == 'POST':
+        desc = request.form.get('desc')
+        name = None
+        if request.files['file']:
+            name = _file(request.files, 'UPLOAD_CODE_FOLDER' )
+            unlink_file(vid['code'], 'UPLOAD_CODE_FOLDER' )
+        update_by_id(ObjectId(img_id), name, desc)
+    return render_template('content_management/update_ai_content.html', vid=vid)

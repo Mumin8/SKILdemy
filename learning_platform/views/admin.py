@@ -459,17 +459,11 @@ def gptplus(course_id, topic_id):
     c_and_t = course_topic(user_c)
     session['course'] = Course.query.get(course_id).name
     session['topic'] = SubTopic.query.get(topic_id).name
-    print(f'{Course.query.get(course_id).name} and {SubTopic.query.get(topic_id).name}')
     path = aud_vid()
     paths = path.split('myvideo')
+    flash('video generated successfully', category='success')
 
-    return "video is ready"
-
-    #     return render_template('Learn/learn_page.html', dict_v=c_and_t, path=paths[-1][1::])
-    # except ValueError as e:
-    #     print(str(e))
-    #     flash('there is no content here ', category='danger')
-    #     return render_template('Learn/learn_page.html', dict_v=c_and_t)
+    return render_template('admin/index.html')
 
 
 @admin_bp.route('/admin_courses', methods=['GET', 'POST'])

@@ -1,17 +1,21 @@
-import os, boto3, secrets, shutil
+import os
+import boto3
+import secrets
+import shutil
 from werkzeug.local import LocalProxy
 from flask import g, session
 from flask_login import current_user
 import pyttsx3
 from learning_platform import mongo, app
 from datetime import datetime, timedelta
-from moviepy.editor import ( AudioFileClip, concatenate_videoclips,
-                                        VideoFileClip, ImageClip )
-from werkzeug.utils import secure_filename                           
+from moviepy.editor import (AudioFileClip, concatenate_videoclips,
+                            VideoFileClip, ImageClip)
+from werkzeug.utils import secure_filename
 from learning_platform.models.models import Course, TimeTask
 
 my_audio_video = 'output_folder/'
 video_audio = [[], []]
+
 
 def get_db():
     db = getattr(g, "_database", None)
@@ -24,14 +28,10 @@ def get_db():
 db = LocalProxy(get_db)
 
 
-
-
-
 def acceptable(filename):
     ALLOWED_EXT = {'mp4'}
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
-
 
 
 def allowed_file(filename):
@@ -74,6 +74,7 @@ def unlink_file(name, _dir):
     '''
     os.unlink(os.path.join(app.config[_dir], name))
 
+
 def find_missing_vid(vid_list):
     set_values = {1, 2, 3, 4}
     my_list = []
@@ -108,7 +109,6 @@ def all_vids():
     topic = session.get('topic')
     print(f'lan {course} and top {topic}')
 
-    
     video_ = db.student_shared_videos.find(
         {
             "$and": [
@@ -134,7 +134,6 @@ def s3_client():
     return s3_client
 
 
-
 def presigned_url(video_name):
     client = s3_client()
     url = client.generate_presigned_url(
@@ -152,8 +151,9 @@ def upload_s3vid(uploaded_file, filename):
 
 
 def get_byID(_id):
-    video_ = db.python_text_processing.find_one({'_id':_id})
+    video_ = db.python_text_processing.find_one({'_id': _id})
     return video_
+
 
 def update_by_id(_id, code, desc):
     update_fields = {}
@@ -166,8 +166,9 @@ def update_by_id(_id, code, desc):
         {'_id': _id},
         {'$set': update_fields}
     )
-    
+
     return result
+
 
 def course_topic(course):
     """
@@ -178,14 +179,16 @@ def course_topic(course):
     return: 
         True if no such topic exists and False otherwise
     """
-   
+
     c_dict = {}
 
     for idx, cl in enumerate(course):
         course = Course.query.get(cl[-1])
-        c_dict[course.name] = [[t.name, course.id, t.id] for topics in course.topics for t in topics.sub_topics]
+        c_dict[course.name] = [[t.name, course.id, t.id]
+                               for topics in course.topics for t in topics.sub_topics]
 
     return c_dict
+
 
 def c_and_topics(course):
     c_dict = {}
@@ -193,6 +196,7 @@ def c_and_topics(course):
                            for topics in course.topics for t in topics.sub_topics]
 
     return c_dict
+
 
 def read_content(course, topic):
     ''' 
@@ -242,10 +246,10 @@ def get_text_desc():
     # the collection will change
     video_ = db.python_text_processing.find(
         {
-        "$and": [
-            {"course": course},
-             {"topic": topic}
-        ]
+            "$and": [
+                {"course": course},
+                {"topic": topic}
+            ]
         }
     )
     return _json(list(video_))
@@ -278,19 +282,18 @@ def create_video_clip(text, output_path, duration, folder):
 
     # video_duration = duration
     audio_clip_path = str(current_user.id) + "_"'temp_audio.mp3'
-    
-    
+
     path_aud = os.path.join(folder, audio_clip_path)
 
     create_audio_clip(text, path_aud)
-    
-    video_clip = ImageClip(text, duration=duration)
 
+    video_clip = ImageClip(text, duration=duration)
 
     video_clip = video_clip.set_audio(AudioFileClip(path_aud))
 
     # Write the final video clip to the specified output path
-    video_clip.write_videofile( output_path, codec='libx264', audio_codec='aac', fps=24 )
+    video_clip.write_videofile(
+        output_path, codec='libx264', audio_codec='aac', fps=24)
 
     os.remove(path_aud)
 
@@ -310,12 +313,11 @@ def join_clips(user_id, res_clips):
 
     for _clip in res_clips:
         clips_list.append(VideoFileClip(_clip))
-    
+
     final_c = concatenate_videoclips(clips_list, method="compose")
     final_c.write_videofile(output_p)
 
     return output_p
-
 
 
 def tts(text, output_path):
@@ -343,7 +345,7 @@ def recieve_displayed_text(user_id, vid_list):
     arg:
         vid_list: the list of videos
     '''
-    
+
     res_clips = []
     root_path = app.root_path
 
@@ -359,9 +361,9 @@ def recieve_displayed_text(user_id, vid_list):
 
         final_clip_duration = slide_audio_clip.duration
         create_video_clip(
-                        f'{root_path}/static/default/code/{vid_list[i]["code"]}',
-                        video_path, final_clip_duration, my_audio_video
-                        )
+            f'{root_path}/static/default/code/{vid_list[i]["code"]}',
+            video_path, final_clip_duration, my_audio_video
+        )
         slide_video_clip = VideoFileClip(video_path)
 
         video_audio[0].append(video_path)
@@ -371,26 +373,23 @@ def recieve_displayed_text(user_id, vid_list):
 
         slide_video_clip = slide_video_clip.set_duration(final_clip_duration)
         cl = slide_video_clip.set_audio(slide_audio_clip)
-       
 
         output_p = os.path.join(root_path, 'static', 'video_lists', video_file)
         res_clips.append(output_p)
         cl.write_videofile(output_p)
 
     final_output_path = join_clips(user_id, res_clips)
-    
-    return final_output_path
 
+    return final_output_path
 
 
 def live_text_Display_AI_content():
     all_videos = []
     col_content = db.python_text_processing.find()
     all_videos.append(list(col_content))
-    
+
     _list = _json(all_videos[0])
     return _list
-
 
 
 def user_courses(id=None):
@@ -413,9 +412,10 @@ def user_courses(id=None):
 
 
 def copy_ai_video(vid_path, dest_path):
-    name =  f'{current_user.id}_video_file.mp4'
+    name = f'{current_user.id}_video_file.mp4'
     shutil.copyfile(vid_path, os.path.join(dest_path, name))
     return name
+
 
 def validate_time_task(user_id, task_id, task_name):
     timely_task = TimeTask.query.filter_by(usertask=task_name).first()
@@ -433,9 +433,10 @@ def validate_time_task(user_id, task_id, task_name):
                 # the time for the solution has elapsed so the solution will be available
                 return True
             else:
-                # the time for the solution is not yet up so solution will not be ready 
+                # the time for the solution is not yet up so solution will not be ready
                 print(f'{timedelta(days=1) - elapsed_time} more to go')
-                flash(f'solution will be available in {timedelta(days=1) - elapsed_time}')
+                flash(
+                    f'solution will be available in {timedelta(days=1) - elapsed_time}')
                 return False
         else:
             flash('please request for the solution')

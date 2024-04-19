@@ -4,8 +4,8 @@ from flask_login import login_required, current_user, logout_user, login_user
 from learning_platform import bcrypt, db, app
 from learning_platform.forms.form import Registration, LoginForm, ResetForm
 from learning_platform.models.models import User, Course, SubTopic
-from learning_platform._helpers import (c_and_topics, read_content, copy_ai_video, validate_time_task,
-                                        user_courses)
+from learning_platform._helpers import (c_and_topics, read_content, copy_ai_video,
+                                        validate_time_task, user_courses)
 
 user_bp = Blueprint('users', __name__, static_folder='static',
                     template_folder='templates')

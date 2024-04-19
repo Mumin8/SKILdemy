@@ -1,3 +1,4 @@
+from bson import ObjectId
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session, jsonify
 from flask_login import login_required, current_user, logout_user, login_user
 from learning_platform import bcrypt, db
@@ -7,9 +8,10 @@ from learning_platform.forms.form import (
 from learning_platform.models.models import User, Video, Course, SubTopic, Subject, Topic
 from learning_platform._helpers import (
     hash_filename, live_vid_content, find_missing_vid, all_vids, acceptable, insertone,
-    upload_s3vid, insert_text, presigned_url, course_topic, _file, unlink_file, update_by_id, 
+    upload_s3vid, insert_text, presigned_url, course_topic, _file, unlink_file, update_by_id,
     live_text_Display_AI_content, user_courses, get_text_desc, recieve_displayed_text, get_byID)
-from bson import ObjectId
+
+
 admin_bp = Blueprint(
     'admin', __name__, static_folder='static', template_folder='templates')
 
@@ -322,7 +324,6 @@ def add_sc():
     return render_template('content_management/subject_to_course.html', courses=courses, subjects=subjects)
 
 
-
 @admin_bp.route('/add_subtt', methods=['GET', 'POST'])
 def add_subtt():
     '''
@@ -394,8 +395,6 @@ def add_c_s_st():
     return render_template('content_management/course_subject_subtopic.html', course=course, subject=subject, subtopic=subtopic)
 
 
-
-
 @admin_bp.route('/reading_text', methods=['GET', 'POST'])
 def add_reading_text():
     '''
@@ -417,7 +416,6 @@ def add_reading_text():
                            courses=courses, subjects=subjects, topics=topics)
 
 
-
 @admin_bp.route('/gpvid', methods=['GET'])
 def get_published_Video():
     '''
@@ -430,22 +428,19 @@ def get_published_Video():
     return render_template('content_management/preview_shared_videos.html', url=url)
 
 
-
-@admin_bp.route('/gtv', methods=['GET','POST'])
+@admin_bp.route('/gtv', methods=['GET', 'POST'])
 @login_required
 def aud_vid():
     '''
     aud_vid:
         this is where the audio video clip thing starts
     '''
-    
-       
+
     v = get_text_desc()
-    
+
     acc_v = recieve_displayed_text(str(current_user.id), v)
-        
+
     return acc_v
-    
 
 
 @admin_bp.route('/gptplus/<int:course_id>/<int:topic_id>', methods=['GET', 'POST'])
@@ -472,6 +467,7 @@ def admin_all_course():
     c_and_t = course_topic(user_c)
     return render_template('content_management/generate_ai_video.html', dict_v=c_and_t)
 
+
 @admin_bp.route('/gpai', methods=['GET'])
 def get_published_AI():
     '''
@@ -479,9 +475,8 @@ def get_published_AI():
         this will get the AI content for analysis
     '''
     contents = live_text_Display_AI_content()
-    
-    return render_template('content_management/preview_ai_content.html', contents=contents)
 
+    return render_template('content_management/preview_ai_content.html', contents=contents)
 
 
 @admin_bp.route('/updatePAI/<string:img_id>', methods=['GET', 'POST'])
@@ -495,9 +490,9 @@ def update_published_AI(img_id):
         desc = request.form.get('desc')
         name = None
         if request.files['file']:
-            name = _file(request.files, 'UPLOAD_CODE_FOLDER' )
+            name = _file(request.files, 'UPLOAD_CODE_FOLDER')
             try:
-                unlink_file(vid['code'], 'UPLOAD_CODE_FOLDER' )
+                unlink_file(vid['code'], 'UPLOAD_CODE_FOLDER')
                 update_by_id(ObjectId(img_id), name, desc)
             except FileNotFoundError:
                 update_by_id(ObjectId(img_id), name, desc)

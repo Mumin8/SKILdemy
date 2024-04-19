@@ -1,9 +1,11 @@
+import os
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user, logout_user, login_user
-from learning_platform import bcrypt, db
+from learning_platform import bcrypt, db, app
 from learning_platform.forms.form import Registration, LoginForm, ResetForm
 from learning_platform.models.models import User, Course, SubTopic
-from learning_platform._helpers import course_topic, read_content
+from learning_platform._helpers import (c_and_topics, read_content, copy_ai_video, validate_time_task,
+                                        user_courses)
 
 user_bp = Blueprint('users', __name__, static_folder='static',
                     template_folder='templates')
@@ -142,15 +144,15 @@ def userprofile():
         return redirect(url_for('users.login'))
 
 
-@user_bp.route('/learns/<int:c_id>/', methods=['GET', 'POST'])
+@user_bp.route('/learns/<int:course_id>/', methods=['GET', 'POST'])
 @login_required
-def learn_skills(c_id):
+def learn_skills(course_id):
     '''
     the course and topics will be displayed for the
     '''
-    user_c = Course.query.get(c_id)
+    user_c = Course.query.get(course_id)
     if user_c:
-        c_and_t = course_topic(user_c)
+        c_and_t = c_and_topics(user_c)
         first_key, first_value = next(iter(c_and_t.items()))
         return render_template('user/learn_page.html', fk=first_key, fv=first_value)
     return render_template('user/learn_page.html')
@@ -165,4 +167,27 @@ def topic_by_course(course_id, topic_id):
     topic = SubTopic.query.get(topic_id).name
     if course:
         mat = read_content(course, topic)
-    return render_template('user/learn_page.html', mat=mat, c_id=course_id)
+    return render_template('user/learn_page.html', mat=mat, course_id=course_id, topic_id=topic_id)
+
+
+@user_bp.route('/gptplus_vid/<int:course_id>/<int:topic_id>', methods=['GET', 'POST'])
+@login_required
+def gptplus_vid(course_id, topic_id):
+    '''
+    gptplus_vid:
+        this will get the video here straight away
+    '''
+    course = Course.query.get(course_id).name
+    topic = SubTopic.query.get(topic_id).name
+    file = f'{course}_{topic}.mp4'
+
+    status = validate_time_task(current_user.id, topic_id, topic)
+    if status:
+        vid_path = os.path.join(app.static_folder, 'myvideo', file)
+        dest_path = os.path.join(app.static_folder, 'user_output')
+
+        name = copy_ai_video(vid_path, dest_path)
+
+        return render_template('user/learn_page.html', path=name, course_id=course_id)
+    else:
+        return 'take time for now'

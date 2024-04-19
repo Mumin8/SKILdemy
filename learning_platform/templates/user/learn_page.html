@@ -11,7 +11,7 @@
   <nav><a class="btn btn-primary" href="{{url_for('users.userprofile')}}">Home</a></nav>
         <div class="container-fluid">
             <div class="row">
-                {%if fk %}
+                {% if fk %}
                         
                 <div class="col">
                     <p class=""><h1 class="btn btn-secondary fs-2 ">{{fk}}</h1></p>
@@ -31,11 +31,14 @@
 
                 {% elif mat %}
                 <div class="col-9 fs-3" style="background-color: rgb(226, 233, 235);">
-                    <a class="btn btn-primary" href="{{ url_for('users.learn_skills', c_id=c_id) }}">Back</a>
+                    <a class="btn btn-primary" href="{{ url_for('users.learn_skills', course_id=course_id) }}">Back</a>
                     <div class="row">
                        <div class="bg-dark">
-                        <div class="col text-success">AI Tutorial</div>
-                        <div class="col text-success">Video ON Demand</div>
+                        <div class="col text-success">
+                          <p>AI Tutorial</p>
+                          <a class="btn btn-primary" href="{{ url_for('users.gptplus_vid', course_id=course_id, topic_id=topic_id) }}">ai Tutorial</a>
+                        </div>
+                        <div class="col text-success">Related video</div>
                        </div>  
                     <div>
                 {% for line in mat.split('\n') %}
@@ -53,7 +56,12 @@
                 </div>
                     </div>
                 </div>
-                {% else %}
+                {% elif path %}
+                <div class="col-md-9 bg-secondary">
+                  <video controls>
+                    <source src="{{ url_for('static', filename='user_output/' + path ) }}" type="video/mp4">
+                  </video>
+                </div>
 
                 {% endif %}
             </div>

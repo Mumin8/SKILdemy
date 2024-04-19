@@ -8,7 +8,8 @@ from learning_platform.models.models import User, Video, Course, SubTopic, Subje
 from learning_platform._helpers import (
     hash_filename, live_vid_content, find_missing_vid, all_vids, acceptable, insertone,
     upload_s3vid, insert_text, presigned_url, course_topic, _file, unlink_file, update_by_id, 
-    live_text_Display_AI_content, user_courses, get_text_desc, recieve_displayed_text)
+    live_text_Display_AI_content, user_courses, get_text_desc, recieve_displayed_text, get_byID)
+from bson import ObjectId
 admin_bp = Blueprint(
     'admin', __name__, static_folder='static', template_folder='templates')
 
@@ -501,6 +502,9 @@ def update_published_AI(img_id):
         name = None
         if request.files['file']:
             name = _file(request.files, 'UPLOAD_CODE_FOLDER' )
-            unlink_file(vid['code'], 'UPLOAD_CODE_FOLDER' )
-        update_by_id(ObjectId(img_id), name, desc)
+            try:
+                unlink_file(vid['code'], 'UPLOAD_CODE_FOLDER' )
+                update_by_id(ObjectId(img_id), name, desc)
+            except FileNotFoundError:
+                update_by_id(ObjectId(img_id), name, desc)
     return render_template('content_management/update_ai_content.html', vid=vid)

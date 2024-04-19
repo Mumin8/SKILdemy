@@ -19,7 +19,7 @@
             <p class="text-light fs-2">My courses</p>
             {% for c in user %}
             <div class="profile-info"><button class="btn btn-info">
-                <a href="{{ url_for('users.learn_skills', c_id=c.id) }}"> {{ c.name }} </a>
+                <a href="{{ url_for('users.learn_skills', course_id=c.id) }}"> {{ c.name }} </a>
             </button></div>
             {% endfor %}
 

@@ -1,16 +1,17 @@
-import os
-import boto3
-import secrets
+import os, boto3, secrets, shutil
 from werkzeug.local import LocalProxy
 from flask import g, session
 from flask_login import current_user
 import pyttsx3
 from learning_platform import mongo, app
+from datetime import datetime, timedelta
 from moviepy.editor import ( AudioFileClip, concatenate_videoclips,
                                         VideoFileClip, ImageClip )
-from learning_platform.models.models import Course
+from werkzeug.utils import secure_filename                           
+from learning_platform.models.models import Course, TimeTask
 
 my_audio_video = 'output_folder/'
+video_audio = [[], []]
 
 def get_db():
     db = getattr(g, "_database", None)
@@ -133,6 +134,7 @@ def s3_client():
     return s3_client
 
 
+
 def presigned_url(video_name):
     client = s3_client()
     url = client.generate_presigned_url(
@@ -155,9 +157,9 @@ def get_byID(_id):
 
 def update_by_id(_id, code, desc):
     update_fields = {}
-    if desc is not None:
+    if desc != None:
         update_fields['desc'] = desc
-    if code is not '':
+    if code != '':
         update_fields['code'] = code
 
     result = db.python_text_processing.update_one(
@@ -178,20 +180,26 @@ def course_topic(course):
     """
    
     c_dict = {}
+
     for idx, cl in enumerate(course):
         course = Course.query.get(cl[-1])
-        c_dict[course.name] = [[t.name, course.id, t.id]
-                           for topics in course.topics for t in topics.sub_topics]
+        c_dict[course.name] = [[t.name, course.id, t.id] for topics in course.topics for t in topics.sub_topics]
 
     return c_dict
 
+def c_and_topics(course):
+    c_dict = {}
+    c_dict[course.name] = [[t.name, course.id, t.id]
+                           for topics in course.topics for t in topics.sub_topics]
+
+    return c_dict
 
 def read_content(course, topic):
     ''' 
     text_data:
         the approved videos will be handled by this
     '''
-
+    my_list = []
     content_ = db.text_display.find(
         {
             "$and": [
@@ -200,8 +208,11 @@ def read_content(course, topic):
             ]
         }
     )
-
-    return list(content_)[0]['desc']
+    my_list.append(list(content_))
+    print(my_list)
+    if my_list[0]:
+        return my_list[0][0]['desc']
+    return 'Nothing published. stay tuned'
 
 
 def insert_text(code='f.PNG', desc=''):
@@ -399,3 +410,33 @@ def user_courses(id=None):
     except AttributeError:
         flash('Please login to access this page', category='success')
         return redirect(url_for('login'))
+
+
+def copy_ai_video(vid_path, dest_path):
+    name =  f'{current_user.id}_video_file.mp4'
+    shutil.copyfile(vid_path, os.path.join(dest_path, name))
+    return name
+
+def validate_time_task(user_id, task_id, task_name):
+    timely_task = TimeTask.query.filter_by(usertask=task_name).first()
+    if timely_task is None:
+        # solution to this task is readily available and so no need to wait
+        return True
+    else:
+        # this task is timely bound
+        task = TimeTask.query.filter_by(user_id=user_id, id=task_id).first()
+        if task:
+            # user has requested for solution already
+            elapsed_time = datetime.now() - task.updated_at
+            waiting_period = timedelta(days=1)
+            if elapsed_time >= waiting_period:
+                # the time for the solution has elapsed so the solution will be available
+                return True
+            else:
+                # the time for the solution is not yet up so solution will not be ready 
+                print(f'{timedelta(days=1) - elapsed_time} more to go')
+                flash(f'solution will be available in {timedelta(days=1) - elapsed_time}')
+                return False
+        else:
+            flash('please request for the solution')
+            return False

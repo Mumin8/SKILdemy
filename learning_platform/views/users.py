@@ -2,8 +2,8 @@ import os
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user, logout_user, login_user
 from learning_platform import bcrypt, db, app
-from learning_platform.forms.form import Registration, LoginForm, ResetForm
-from learning_platform.models.models import User, Course, SubTopic
+from learning_platform.forms.form import Registration, LoginForm, ResetForm, NewPasswordForm
+from learning_platform.models.models import User, Course, SubTopic, TimeTask
 from learning_platform._helpers import (c_and_topics, read_content, copy_ai_video,
                                         validate_time_task, user_courses)
 
@@ -91,11 +91,10 @@ def forgot_password():
             user.reset_token = token
             db.session.commit()
             msg = Message('Password Reset Request',
-                          sender='masschusse@gmail.com',
-                          recipients=[email])
+                          'masschusse@gmail.com', recipients=[email])
             msg.body = f'''
             Click this link to reset your password:
-            {url_for('reset_password', token=token, _external=True)}
+            {url_for('users.reset_password', token=token, _external=True)}
             '''
             mail.send(msg)
 
@@ -105,6 +104,21 @@ def forgot_password():
             flash('Email not found', category='danger')
             return redirect(url_for('users.login'))
     return render_template('user/reset_password.html', form=form, title='Reset Password')
+
+
+@user_bp.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    form = NewPasswordForm()
+    user = User.query.filter_by(reset_token=token).first()
+    if user:
+        if request.method == 'POST':
+            new_password = request.form['password']
+            user.set_password(new_password)
+            user.reset_token = None
+            db.session.commit()
+            flash('successfully reset password')
+            return redirect(url_for('users.login'))
+    return render_template('user/reset_password_confirm.html', form=form)
 
 
 @user_bp.route('/enrol/<int:course_id>/', methods=['GET', 'POST'])
@@ -158,6 +172,31 @@ def learn_skills(course_id):
     return render_template('user/learn_page.html')
 
 
+
+@user_bp.route('/request/<int:topic_id>', methods=['GET', 'POST'])
+def request_task_solution(topic_id):
+    usertask = TimeTask.query.get(topic_id)
+    user = User.query.get(current_user.id)
+    user.time_task.append(usertask)
+    db.session.commit()
+    flash('successfully associate timely task for your request')
+
+    return 'added to time tasks'
+    
+
+# @user_bp.route('/request', methods=['GET', 'POST'])
+# def request_task_solution():
+#     if request.method == "POST":
+#         task_id = request.form.get('topic_id')
+#         usertask = TimeTask.query.get(task_id)
+#         user = User.query.get(current_user.id)
+#         user.time_task.append(usertask)
+#         db.session.commit()
+#         flash('successfully associate timely task for your request')
+#     avail_tasks = SubTopic.query.all()
+#     return render_template('content_management/timely_task.html', avail_tasks=avail_tasks)
+
+
 @user_bp.route('/mat/<int:course_id>/<int:topic_id>', methods=['GET', 'POST'])
 def topic_by_course(course_id, topic_id):
     '''
@@ -181,13 +220,21 @@ def gptplus_vid(course_id, topic_id):
     topic = SubTopic.query.get(topic_id).name
     file = f'{course}_{topic}.mp4'
 
-    status = validate_time_task(current_user.id, topic_id, topic)
-    if status:
+    status, state = validate_time_task(current_user.id, topic_id, topic)
+    if status and state == "Not timely":
         vid_path = os.path.join(app.static_folder, 'myvideo', file)
         dest_path = os.path.join(app.static_folder, 'user_output')
 
         name = copy_ai_video(vid_path, dest_path)
+        not_time = state
+        return render_template('user/learn_page.html', path=name, course_id=course_id, not_time=not_time)
 
-        return render_template('user/learn_page.html', path=name, course_id=course_id)
-    else:
-        return 'take time for now'
+    elif not status and state == "pending":
+        name = "not yet ready"
+        pending = state
+        return render_template('user/learn_page.html', path=name, course_id=course_id, topic_id=topic_id, pending=pending)
+    elif not status and state == 'request':
+        name = "make request"
+        ask = state
+        flash('You can request for the solution')
+        return render_template('user/learn_page.html', path=name, course_id=course_id, topic_id=topic_id, ask=ask)

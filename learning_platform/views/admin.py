@@ -5,7 +5,7 @@ from learning_platform import bcrypt, db
 from werkzeug.utils import secure_filename
 from learning_platform.forms.form import (
     Registration, LoginForm, CourseForm, TopicForm, SubjectForm, SubTopicForm)
-from learning_platform.models.models import User, Video, Course, SubTopic, Subject, Topic
+from learning_platform.models.models import User, Video, Course, SubTopic, Subject, Topic, TimeTask
 from learning_platform._helpers import (
     hash_filename, live_vid_content, find_missing_vid, all_vids, acceptable, insertone,
     upload_s3vid, insert_text, presigned_url, course_topic, _file, unlink_file, update_by_id,
@@ -254,7 +254,6 @@ def add_sub_topic():
         new_subtopic = SubTopic(name=subtopic)
         db.session.add(new_subtopic)
         db.session.commit()
-        print('it worked')
         flash(f'{subtopic} successfully added to the topics', category='info')
     return render_template('content_management/add_subtopic.html', form=form)
 
@@ -497,3 +496,24 @@ def update_published_AI(img_id):
             except FileNotFoundError:
                 update_by_id(ObjectId(img_id), name, desc)
     return render_template('content_management/update_ai_content.html', vid=vid)
+
+
+@admin_bp.route('/add_tt', methods=['GET', 'POST'])
+def add_tt():
+    '''
+    add_tt:
+        this will add tasks that will be delayed to the database
+    '''
+    
+    if request.method == "POST":
+        task_id = request.form.get('topic_id')
+        usertask = SubTopic.query.get(task_id).name
+        if usertask:
+            new_task = TimeTask(usertask=usertask, id=task_id)
+            db.session.add(new_task)
+            db.session.commit()
+            flash('added to delayed tasks', category='success')
+            return redirect(url_for('admin.add_tt'))
+
+    avail_tasks = SubTopic.query.all()
+    return render_template('content_management/timely_task.html', avail_tasks=avail_tasks)

@@ -56,13 +56,41 @@
                 </div>
                     </div>
                 </div>
-                {% elif path %}
-                <div class="col-md-9 bg-secondary">
-                  <video controls>
+                {% elif path and not_time %}
+                <div class="col-md-4">
+                  <video controls class="col-md-12">
                     <source src="{{ url_for('static', filename='user_output/' + path ) }}" type="video/mp4">
                   </video>
                 </div>
 
+                {% elif path and pending %}
+                <div class="col-md-4">
+                  <video controls class="col-md-12">
+                    <source src="" type="video/mp4">
+                  </video>
+                  <div class="text-end ">
+                    <a class="btn btn-danger text-info fs-3" href="">
+                      Cancel Request
+                    </a>
+                  </div>
+                </div>
+
+                {% elif path and ask %}
+                <p class="fs-3 text-light">
+                  while waiting, try learning more to broaden your knowledge on this topic
+                </p>
+                <div class="col-md-4">
+                  
+                  <video controls  class="col-md-12">
+                    <source src="" type="video/mp4">
+                  </video>
+                  <div class="text-end ">
+                    <a class="btn btn-success text-info fs-3" href="{{ url_for('users.request_task_solution', topic_id=topic_id) }}">
+                      
+                      Request Solution
+                    </a>
+                  </div>
+                </div>
                 {% endif %}
             </div>
         </div>

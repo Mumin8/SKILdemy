@@ -3,7 +3,7 @@ import boto3
 import secrets
 import shutil
 from werkzeug.local import LocalProxy
-from flask import g, session
+from flask import g, session, flash
 from flask_login import current_user
 import pyttsx3
 from learning_platform import mongo, app
@@ -421,7 +421,7 @@ def validate_time_task(user_id, task_id, task_name):
     timely_task = TimeTask.query.filter_by(usertask=task_name).first()
     if timely_task is None:
         # solution to this task is readily available and so no need to wait
-        return True
+        return True, "Not timely"
     else:
         # this task is timely bound
         task = TimeTask.query.filter_by(user_id=user_id, id=task_id).first()
@@ -431,13 +431,13 @@ def validate_time_task(user_id, task_id, task_name):
             waiting_period = timedelta(days=1)
             if elapsed_time >= waiting_period:
                 # the time for the solution has elapsed so the solution will be available
-                return True
+                return True, "Not timely"
             else:
                 # the time for the solution is not yet up so solution will not be ready
-                print(f'{timedelta(days=1) - elapsed_time} more to go')
+                hours, minutes, seconds = f'{timedelta(days=1) - elapsed_time}'.split(':')
                 flash(
-                    f'solution will be available in {timedelta(days=1) - elapsed_time}')
-                return False
+                    f'solution will be available in {hours} hr, {minutes} MIN', category='info')
+                return False, "pending"
         else:
             flash('please request for the solution')
-            return False
+            return False, "request"

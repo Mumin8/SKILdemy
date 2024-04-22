@@ -182,19 +182,6 @@ def request_task_solution(topic_id):
     flash('successfully associate timely task for your request')
 
     return 'added to time tasks'
-    
-
-# @user_bp.route('/request', methods=['GET', 'POST'])
-# def request_task_solution():
-#     if request.method == "POST":
-#         task_id = request.form.get('topic_id')
-#         usertask = TimeTask.query.get(task_id)
-#         user = User.query.get(current_user.id)
-#         user.time_task.append(usertask)
-#         db.session.commit()
-#         flash('successfully associate timely task for your request')
-#     avail_tasks = SubTopic.query.all()
-#     return render_template('content_management/timely_task.html', avail_tasks=avail_tasks)
 
 
 @user_bp.route('/mat/<int:course_id>/<int:topic_id>', methods=['GET', 'POST'])

@@ -434,7 +434,8 @@ def validate_time_task(user_id, task_id, task_name):
                 return True, "Not timely"
             else:
                 # the time for the solution is not yet up so solution will not be ready
-                hours, minutes, seconds = f'{timedelta(days=1) - elapsed_time}'.split(':')
+                hours, minutes, seconds = f'{timedelta(days=1) - elapsed_time}'.split(
+                    ':')
                 flash(
                     f'solution will be available in {hours} hr, {minutes} MIN', category='info')
                 return False, "pending"

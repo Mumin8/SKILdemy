@@ -172,7 +172,6 @@ def learn_skills(course_id):
     return render_template('user/learn_page.html')
 
 
-
 @user_bp.route('/request/<int:topic_id>', methods=['GET', 'POST'])
 def request_task_solution(topic_id):
     usertask = TimeTask.query.get(topic_id)

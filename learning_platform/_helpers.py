@@ -11,10 +11,10 @@ from datetime import datetime, timedelta
 from moviepy.editor import (AudioFileClip, concatenate_videoclips,
                             VideoFileClip, ImageClip)
 from werkzeug.utils import secure_filename
-from learning_platform.models.models import Course, TimeTask
+from learning_platform.models.models import Course, TimeTask, User
 
 my_audio_video = 'output_folder/'
-video_audio = [[], []]
+# video_audio = [[], []]
 
 
 def get_db():
@@ -366,8 +366,8 @@ def recieve_displayed_text(user_id, vid_list):
         )
         slide_video_clip = VideoFileClip(video_path)
 
-        video_audio[0].append(video_path)
-        video_audio[1].append(audio_path)
+        # video_audio[0].append(video_path)
+        # video_audio[1].append(audio_path)
 
         slide_audio_clip = slide_audio_clip.set_duration(final_clip_duration)
 
@@ -419,26 +419,43 @@ def copy_ai_video(vid_path, dest_path):
 
 def validate_time_task(user_id, task_id, task_name):
     timely_task = TimeTask.query.filter_by(usertask=task_name).first()
+    
     if timely_task is None:
         # solution to this task is readily available and so no need to wait
         return True, "Not timely"
     else:
         # this task is timely bound
         task = TimeTask.query.filter_by(user_id=user_id, id=task_id).first()
+        
         if task:
             # user has requested for solution already
-            elapsed_time = datetime.now() - task.updated_at
-            waiting_period = timedelta(days=1)
-            if elapsed_time >= waiting_period:
+            status, _task = task_pending(user_id)
+            if status:
                 # the time for the solution has elapsed so the solution will be available
-                return True, "Not timely"
+                return status, "Not timely"
             else:
                 # the time for the solution is not yet up so solution will not be ready
                 hours, minutes, seconds = f'{timedelta(days=1) - elapsed_time}'.split(
                     ':')
                 flash(
-                    f'solution will be available in {hours} hr, {minutes} MIN', category='info')
-                return False, "pending"
+                    f'''{_task} is already pending
+                        solution will be available in {hours} hr, {minutes} MIN
+                        But you can decline the previous pending task if you want this rather
+                        ''', category='info')
+                return status, "pending"
         else:
             flash('please request for the solution')
             return False, "request"
+
+
+def task_pending(user_id):
+    user = User.query.get(user_id)
+    print('never called')
+    for tt in user.time_task:
+        elapsed_time = datetime.now() - tt.updated_at
+        waiting_period = timedelta(days=1)
+        if elapsed_time <= waiting_period:
+            print(f'pending {tt} and {tt.usertask}')
+            return False, tt.usertask
+        
+    return True, None

@@ -80,3 +80,8 @@ class Registration(FlaskForm):
     def validate_email(self, email):
         if User.query.filter_by(email=email.data).first():
             raise ValidationError("This email is already taken")
+
+# class PaymentForm(FlaskForm):
+#     amount = IntegerField('Amount', validators=[DataRequired()])
+#     email = StringField('Email', validators=[DataRequired(), Email()])
+#     verified = BooleanField('Verified')

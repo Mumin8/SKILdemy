@@ -5,11 +5,13 @@ from learning_platform import bcrypt, db, app
 from learning_platform.forms.form import Registration, LoginForm, ResetForm, NewPasswordForm
 from learning_platform.models.models import User, Course, SubTopic, TimeTask
 from learning_platform._helpers import (c_and_topics, read_content, copy_ai_video,
-                                        validate_time_task, user_courses)
+                                        validate_time_task, user_courses, get_ref, verify_payment)
 
 user_bp = Blueprint('users', __name__, static_folder='static',
                     template_folder='templates')
 
+
+ref = []
 
 def user_enrolled_courses(course_id):
     try:
@@ -121,7 +123,7 @@ def reset_password(token):
     return render_template('user/reset_password_confirm.html', form=form)
 
 
-@user_bp.route('/enrol/<int:course_id>/', methods=['GET', 'POST'])
+@user_bp.route('/enrol/<int:course_id>', methods=['GET', 'POST'])
 @login_required
 def enroll_course(course_id):
     '''
@@ -129,17 +131,22 @@ def enroll_course(course_id):
     '''
     # this will be used in admin to know the number of users for a particular course
     # course_enrollers(course_id)
-    if user_enrolled_courses(course_id):
-        flash('Already enrolled, login and start learning')
-        return redirect(url_for('users.login'))
-    user = User.query.get(current_user.id)
+    
+    # user = User.query.get(current_user.id)
 
-    course = Course.query.get(course_id)
-    current_user.enrolling.append(course)
-    db.session.commit()
+    
 
-    flash(f'You have successfully enrolled in {course.name}')
-    return "well done"
+    status, result = verify_payment(ref[0])
+
+    if status:
+        course = Course.query.get(course_id)
+        current_user.enrolling.append(course)
+        db.session.commit()
+        flash(f'You have successfully enrolled in {course.name}')
+        return render_template('payment/success.html')
+    else:
+        flash(f'unsuccessful, please check your details or contact paystack support')
+        return render_template('payment/unsuccessful.html')
 
 
 @user_bp.route("/userprofile", methods=['GET', 'POST'])
@@ -224,3 +231,37 @@ def gptplus_vid(course_id, topic_id):
         ask = state
         flash('You can request for the solution')
         return render_template('user/learn_page.html', path=name, course_id=course_id, topic_id=topic_id, ask=ask)
+
+
+# @user_bp.route('/verify_payment/<ref>', methods=['POST'])
+# def verify_payment(ref):
+#     payment = Payment.query.filter_by(ref=ref).first_or_404()
+#     verified = payment.verify_payment()
+#     if request.method == "Post":
+#         if verified:
+#             return render_template('payment/success.html')
+#         else:
+#             return render_template('payment/unsuccessful.html')
+#     return render_template('payment/payment.html')
+
+
+@user_bp.route('/payment/<int:course_id>', methods=['GET', 'POST'])
+def make_payment(course_id):
+    if user_enrolled_courses(course_id):
+        flash('Already enrolled, login and start learning', category='info')
+        return redirect(url_for('users.login'))
+    user = User.query.get(current_user.id)
+    email=user.email
+    
+    course = Course.query.get(course_id)
+    amount = course.price * 100
+    c_id = course.id
+    c_name=course.name
+
+    ref.append(get_ref())
+    print(f'inside make_payment {ref}')
+    pk = os.getenv("PAYSTACK_PUBLIC_KEY")
+    return render_template('payment/payment.html',c_id=c_id, amount=amount, c_name=c_name, email=email, pk=pk, ref=ref[0])
+
+
+

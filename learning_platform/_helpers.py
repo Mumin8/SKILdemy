@@ -1,11 +1,7 @@
-import os
-import boto3
-import secrets
-import shutil
+import os, boto3, secrets, shutil, requests, pyttsx3
 from werkzeug.local import LocalProxy
 from flask import g, session, flash
 from flask_login import current_user
-import pyttsx3
 from learning_platform import mongo, app
 from datetime import datetime, timedelta
 from moviepy.editor import (AudioFileClip, concatenate_videoclips,
@@ -16,6 +12,8 @@ from learning_platform.models.models import Course, TimeTask, User
 my_audio_video = 'output_folder/'
 # video_audio = [[], []]
 
+def get_ref():
+    return secrets.token_urlsafe(50)
 
 def get_db():
     db = getattr(g, "_database", None)
@@ -459,3 +457,23 @@ def task_pending(user_id):
             return False, tt.usertask
         
     return True, None
+
+def verify_payment(ref):
+    PAYSTACK_SK = os.getenv("PAYSTACK_SECRET_KEY")
+    print(PAYSTACK_SK)
+    base_url = "https://api.paystack.co/"
+    path = f'transaction/verify/{ref}'
+    headers = {
+        "Authorization": f"Bearer {PAYSTACK_SK}",
+        "Content-Type": "application/json",
+    }
+
+    url = base_url + path
+    response = requests.get(url, headers=headers)
+   
+    if response.status_code == 200:
+        response_data = response.json()
+        return True, response_data['data']
+
+    response_data = response.json()
+    return False, response_data['message']

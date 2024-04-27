@@ -137,15 +137,17 @@ def enroll_course(course_id):
     
 
     status, result = verify_payment(ref[0])
-
+    
     if status:
         course = Course.query.get(course_id)
-        current_user.enrolling.append(course)
-        db.session.commit()
-        flash(f'You have successfully enrolled in {course.name}')
-        return render_template('payment/success.html')
+        if course.price*100 == result['amount']:
+            print(f'hurray {result["amount"]}')
+            current_user.enrolling.append(course)
+            db.session.commit()
+            flash(f'You have successfully enrolled in {course.name}', category='info')
+            return render_template('payment/success.html')
     else:
-        flash(f'unsuccessful, please check your details or contact paystack support')
+        flash(f'unsuccessful, please check your details or contact paystack support', category='info')
         return render_template('payment/unsuccessful.html')
 
 

@@ -3,9 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    {% extends "base.html" %}
+    <title>
+        {% block title %}
+        SKILdemy
+        {% endblock %}
+    </title>
 </head>
 <body>
-    <p>payment is unsuccessful</p>
+
+    {% block main %}
+    <p class="text-success">payment is unsuccessful</p>
+    <p class="text-success">{ You can contact us for refund if you think there was a technical challenge }</p>
+
+
+    {% endblock %}
+    
 </body>
 </html>

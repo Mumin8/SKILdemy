@@ -433,6 +433,7 @@ def validate_time_task(user_id, task_id, task_name):
                 return status, "Not timely"
             else:
                 # the time for the solution is not yet up so solution will not be ready
+                elapsed_time = datetime.now() - task.updated_at
                 hours, minutes, seconds = f'{timedelta(days=1) - elapsed_time}'.split(
                     ':')
                 flash(
@@ -470,7 +471,6 @@ def verify_payment(ref):
 
     url = base_url + path
     response = requests.get(url, headers=headers)
-   
     if response.status_code == 200:
         response_data = response.json()
         return True, response_data['data']

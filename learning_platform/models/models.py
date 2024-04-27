@@ -70,8 +70,6 @@ class User(db.Model, UserMixin):
 
     time_task = db.relationship('TimeTask', backref='user', lazy='dynamic')
 
-    # wallet = db.relationship('UserWallet', backref='user', uselist=False)
-
     def is_active(self):
         """True, as all users are active."""
         return True
@@ -146,56 +144,6 @@ class TimeTask(db.Model):
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-
-# class UserWallet(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-#     currency = db.Column(db.String(50), default='NGN')
-#     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
-#     def __repr__(self):
-#         return f"UserWallet('{self.currency}', '{self.created_at}')"
-
-
-
-# class Payment(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-#     # amount = db.Column(db.Integer, nullable=False)
-#     # ref = db.Column(db.String(200), unique=True, nullable=False)
-#     # email = db.Column(db.String(120), nullable=False)
-#     verified = db.Column(db.Boolean, default=False, nullable=False)
-#     date_created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-
-
-#     def __repr__(self):
-#         return f"Payment: {self.amount}"
-
-    # def save(self, *args, **kwargs):
-    #     while not self.ref:
-    #         ref = secrets.token_urlsafe(50)
-    #         object_with_similar_ref = Payment.query.filter_by(ref=ref).first()
-    #         if not object_with_similar_ref:
-    #             self.ref = ref
-    #     db.session.add(self)
-    #     db.session.commit()
-
-#     def amount_value(self):
-#         return int(self.amount)*100
-
-    
-#     def verify_payment():
-#         paystack = Paystack()
-#         status, result = paystack.verify_payment(self.ref, self.amount)
-#         if status:
-#             if result['amount'] / 100 == self.amount:
-#                 self.verified = True
-#                 self.save()
-#         if self.verified:
-#             return True
-#         else:
-#             return False
-    
 
 class Video(db.Model):
     '''

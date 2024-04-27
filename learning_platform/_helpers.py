@@ -1,4 +1,9 @@
-import os, boto3, secrets, shutil, requests, pyttsx3
+import os
+import boto3
+import secrets
+import shutil
+import requests
+import pyttsx3
 from werkzeug.local import LocalProxy
 from flask import g, session, flash
 from flask_login import current_user
@@ -12,8 +17,10 @@ from learning_platform.models.models import Course, TimeTask, User
 my_audio_video = 'output_folder/'
 # video_audio = [[], []]
 
+
 def get_ref():
     return secrets.token_urlsafe(50)
+
 
 def get_db():
     db = getattr(g, "_database", None)
@@ -417,14 +424,14 @@ def copy_ai_video(vid_path, dest_path):
 
 def validate_time_task(user_id, task_id, task_name):
     timely_task = TimeTask.query.filter_by(usertask=task_name).first()
-    
+
     if timely_task is None:
         # solution to this task is readily available and so no need to wait
         return True, "Not timely"
     else:
         # this task is timely bound
         task = TimeTask.query.filter_by(user_id=user_id, id=task_id).first()
-        
+
         if task:
             # user has requested for solution already
             status, _task = task_pending(user_id)
@@ -453,7 +460,7 @@ def vid_ids(rel_vid):
         _, path = v.link.split("embed/")
         ids_list.append(path)
     return ids_list
-        
+
 
 def task_pending(user_id):
     user = User.query.get(user_id)
@@ -464,8 +471,9 @@ def task_pending(user_id):
         if elapsed_time <= waiting_period:
             print(f'pending {tt} and {tt.usertask}')
             return False, tt.usertask
-        
+
     return True, None
+
 
 def verify_payment(ref):
     PAYSTACK_SK = os.getenv("PAYSTACK_SECRET_KEY")

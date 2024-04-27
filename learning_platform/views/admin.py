@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from learning_platform.forms.form import (
     Registration, LoginForm, CourseForm, TopicForm, SubjectForm, SubTopicForm)
 from learning_platform.models.models import (User, Video, Course, SubTopic, Subject,
-                                                YouTube, Topic, TimeTask)
+                                             YouTube, Topic, TimeTask)
 from learning_platform._helpers import (
     hash_filename, live_vid_content, find_missing_vid, all_vids, acceptable, insertone,
     upload_s3vid, insert_text, presigned_url, course_topic, _file, unlink_file, update_by_id,
@@ -505,7 +505,7 @@ def add_tt():
     add_tt:
         this will add tasks that will be delayed to the database
     '''
-    
+
     if request.method == "POST":
         task_id = request.form.get('topic_id')
         usertask = SubTopic.query.get(task_id).name
@@ -535,7 +535,7 @@ def add_youtube_vid():
 
         youtube = YouTube()
         youtube.subtopic_id = subtopic_id
-        
+
         f, s = content.split("src=")
         youtube_link, trash = s.split('title')
         youtube.link = youtube_link

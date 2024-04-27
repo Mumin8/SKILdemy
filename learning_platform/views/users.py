@@ -5,7 +5,7 @@ from learning_platform import bcrypt, db, app
 from learning_platform.forms.form import Registration, LoginForm, ResetForm, NewPasswordForm
 from learning_platform.models.models import User, Course, SubTopic, TimeTask, YouTube
 from learning_platform._helpers import (c_and_topics, read_content, copy_ai_video,
-                                        validate_time_task, user_courses, get_ref, 
+                                        validate_time_task, user_courses, get_ref,
                                         vid_ids, verify_payment)
 
 user_bp = Blueprint('users', __name__, static_folder='static',
@@ -13,6 +13,7 @@ user_bp = Blueprint('users', __name__, static_folder='static',
 
 
 ref = []
+
 
 def user_enrolled_courses(course_id):
     try:
@@ -132,20 +133,19 @@ def enroll_course(course_id):
     '''
     # this will be used in admin to know the number of users for a particular course
     # course_enrollers(course_id)
-    
+
     # user = User.query.get(current_user.id)
 
-    
-
     status, result = verify_payment(ref[0])
-    
+
     if status:
         course = Course.query.get(course_id)
         if course.price*100 == result['amount']:
             print(f'hurray {result["amount"]}')
             current_user.enrolling.append(course)
             db.session.commit()
-            flash(f'You have successfully enrolled in {course.name}', category='info')
+            flash(
+                f'You have successfully enrolled in {course.name}', category='info')
             return render_template('payment/success.html')
     else:
         flash(f'unsuccessful, please check your details or contact paystack support', category='info')
@@ -242,17 +242,17 @@ def make_payment(course_id):
         flash('Already enrolled, login and start learning', category='info')
         return redirect(url_for('users.login'))
     user = User.query.get(current_user.id)
-    email=user.email
-    
+    email = user.email
+
     course = Course.query.get(course_id)
     amount = course.price * 100
     c_id = course.id
-    c_name=course.name
+    c_name = course.name
 
     ref.append(get_ref())
     print(f'inside make_payment {ref}')
     pk = os.getenv("PAYSTACK_PUBLIC_KEY")
-    return render_template('payment/payment.html',c_id=c_id, amount=amount, c_name=c_name, email=email, pk=pk, ref=ref[0])
+    return render_template('payment/payment.html', c_id=c_id, amount=amount, c_name=c_name, email=email, pk=pk, ref=ref[0])
 
 
 @user_bp.route('/yt_vid/<int:topic_id>', methods=['GET', 'POST'])
@@ -260,7 +260,5 @@ def youtube_vids(topic_id):
     subtopic = SubTopic.query.filter_by(id=topic_id).first()
     subtopic_videos = subtopic.youtube_videos
     vids = vid_ids(subtopic_videos)
-    
+
     return render_template('user/watch_youtube_video.html', paths=vids)
-
-

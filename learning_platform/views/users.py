@@ -3,9 +3,10 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user, logout_user, login_user
 from learning_platform import bcrypt, db, app
 from learning_platform.forms.form import Registration, LoginForm, ResetForm, NewPasswordForm
-from learning_platform.models.models import User, Course, SubTopic, TimeTask
+from learning_platform.models.models import User, Course, SubTopic, TimeTask, YouTube
 from learning_platform._helpers import (c_and_topics, read_content, copy_ai_video,
-                                        validate_time_task, user_courses, get_ref, verify_payment)
+                                        validate_time_task, user_courses, get_ref, 
+                                        vid_ids, verify_payment)
 
 user_bp = Blueprint('users', __name__, static_folder='static',
                     template_folder='templates')
@@ -235,18 +236,6 @@ def gptplus_vid(course_id, topic_id):
         return render_template('user/learn_page.html', path=name, course_id=course_id, topic_id=topic_id, ask=ask)
 
 
-# @user_bp.route('/verify_payment/<ref>', methods=['POST'])
-# def verify_payment(ref):
-#     payment = Payment.query.filter_by(ref=ref).first_or_404()
-#     verified = payment.verify_payment()
-#     if request.method == "Post":
-#         if verified:
-#             return render_template('payment/success.html')
-#         else:
-#             return render_template('payment/unsuccessful.html')
-#     return render_template('payment/payment.html')
-
-
 @user_bp.route('/payment/<int:course_id>', methods=['GET', 'POST'])
 def make_payment(course_id):
     if user_enrolled_courses(course_id):
@@ -265,5 +254,13 @@ def make_payment(course_id):
     pk = os.getenv("PAYSTACK_PUBLIC_KEY")
     return render_template('payment/payment.html',c_id=c_id, amount=amount, c_name=c_name, email=email, pk=pk, ref=ref[0])
 
+
+@user_bp.route('/yt_vid/<int:topic_id>', methods=['GET', 'POST'])
+def youtube_vids(topic_id):
+    subtopic = SubTopic.query.filter_by(id=topic_id).first()
+    subtopic_videos = subtopic.youtube_videos
+    vids = vid_ids(subtopic_videos)
+    
+    return render_template('user/watch_youtube_video.html', paths=vids)
 
 

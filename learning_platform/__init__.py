@@ -26,6 +26,9 @@ mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 
 
+migrate = Migrate(app, db)
+
+
 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///mydb.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)

@@ -38,7 +38,11 @@
                           <p>AI Tutorial</p>
                           <a class="btn btn-primary" href="{{ url_for('users.gptplus_vid', course_id=course_id, topic_id=topic_id) }}">ai Tutorial</a>
                         </div>
-                        <div class="col text-success">Related video</div>
+                        <div class="col text-success">
+                          <p>Related YouTube videos</p>
+                          <a class="btn btn-primary" href="{{ url_for('users.youtube_vids', topic_id=topic_id) }}">topic specific video</a>
+                        
+                        </div>
                        </div>  
                     <div>
                 {% for line in mat.split('\n') %}

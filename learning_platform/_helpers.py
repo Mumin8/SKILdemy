@@ -447,6 +447,14 @@ def validate_time_task(user_id, task_id, task_name):
             return False, "request"
 
 
+def vid_ids(rel_vid):
+    ids_list = []
+    for v in rel_vid:
+        _, path = v.link.split("embed/")
+        ids_list.append(path)
+    return ids_list
+        
+
 def task_pending(user_id):
     user = User.query.get(user_id)
     print('never called')

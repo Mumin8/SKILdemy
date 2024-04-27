@@ -5,7 +5,8 @@ from learning_platform import bcrypt, db
 from werkzeug.utils import secure_filename
 from learning_platform.forms.form import (
     Registration, LoginForm, CourseForm, TopicForm, SubjectForm, SubTopicForm)
-from learning_platform.models.models import User, Video, Course, SubTopic, Subject, Topic, TimeTask
+from learning_platform.models.models import (User, Video, Course, SubTopic, Subject,
+                                                YouTube, Topic, TimeTask)
 from learning_platform._helpers import (
     hash_filename, live_vid_content, find_missing_vid, all_vids, acceptable, insertone,
     upload_s3vid, insert_text, presigned_url, course_topic, _file, unlink_file, update_by_id,
@@ -517,3 +518,28 @@ def add_tt():
 
     avail_tasks = SubTopic.query.all()
     return render_template('content_management/timely_task.html', avail_tasks=avail_tasks)
+
+
+@admin_bp.route('/you-tube', methods=['GET', 'POST'])
+def add_youtube_vid():
+    subtopic = SubTopic.query.all()
+    if request.method == 'POST':
+        subtopic_id = request.form.get('subtopic_id')
+        if not subtopic_id:
+            flash('select the topic', category='warning')
+            return redirect(url_for('admin.add_youtube_vid'))
+
+        content = request.form.get('iframe_content')
+        if not content:
+            flash('you did not include the content', category='warning')
+
+        youtube = YouTube()
+        youtube.subtopic_id = subtopic_id
+        
+        f, s = content.split("src=")
+        youtube_link, trash = s.split('title')
+        youtube.link = youtube_link
+        db.session.add(youtube)
+        db.session.commit()
+        flash('you have added a link to a youtube video', category='success')
+    return render_template('content_management/add_youtube_video.html', subtopic=subtopic)

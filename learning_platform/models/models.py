@@ -60,11 +60,9 @@ class User(db.Model, UserMixin):
                            nullable=False, default=datetime.utcnow)
     reset_token = db.Column(db.String(120), nullable=True)
 
-    # login manager things
     authenticated = db.Column(db.Boolean, default=False)
     moderator = db.Column(db.Boolean, default=False)
 
-    # relationship thing
     enrolling = db.relationship(
         'Course', secondary='user_course', backref='enrollers')
 
@@ -118,6 +116,7 @@ class Topic(db.Model):
     name = db.Column(db.String(255), nullable=False)
     desc = db.Column(db.String(500), nullable=True)
     sub_topics = db.relationship('SubTopic', backref='topic', lazy='dynamic')
+    
 
 
 class SubTopic(db.Model):
@@ -126,6 +125,7 @@ class SubTopic(db.Model):
     name = db.Column(db.String(80), nullable=False)
     desc = db.Column(db.String(250), nullable=True)
     topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'))
+    youtube_videos = db.relationship('YouTube', backref='subtopic', lazy='dynamic')
 
 
 class Subject(db.Model):
@@ -143,6 +143,14 @@ class TimeTask(db.Model):
     usertask = db.Column(db.String(80), nullable=True)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class YouTube(db.Model):
+    __tablename__= 'youtube'
+    id = db.Column(db.Integer, primary_key=True)
+    subtopic_id = db.Column(db.Integer, db.ForeignKey('subtopic.id'))
+    link = db.Column(db.String(80), nullable=True)
+
 
 
 class Video(db.Model):

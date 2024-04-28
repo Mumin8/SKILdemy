@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% extends "base.html" %}
+    <title>{% block title %}delete course{% endblock %}</title>
+</head>
+<body>
+    {% block main %}
+    {% for _item in cst|sort(attribute='name') %}
+    <div style="
+    background-color: rgb(220, 248, 195); 
+    margin-bottom: 25; border: 10px solid rgb(63, 54, 54);">
+<p class="fs-2 text-start" style="color: lightseagreen;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 
+    'Lucida Grande', 'Lucida Sans Unicode', Geneva, 
+    Verdana, sans-serif;">
+    {{ _item.name }}
+</p>
+            <a class="btn btn-danger" href="{{ url_for('admin.del_course', c_id=_item.id)}}">delete</a>            
+        </div>     
+    {% endfor %}
+    {% endblock %}
+</body>
+</html>

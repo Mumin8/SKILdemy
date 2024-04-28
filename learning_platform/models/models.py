@@ -105,7 +105,7 @@ class Course(db.Model):
     subjects = db.relationship(
         'Subject', secondary=course_subjects, backref=db.backref('courses', lazy=True))
 
-    topics = db.relationship('Topic', secondary=course_topics,
+    topics = db.relationship('Topic', secondary=course_topics, cascade='all,delete',
                              lazy='subquery', backref=db.backref('courses', lazy=True))
 
 
@@ -115,7 +115,7 @@ class Topic(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     desc = db.Column(db.String(500), nullable=True)
-    sub_topics = db.relationship('SubTopic', backref='topic', lazy='dynamic')
+    sub_topics = db.relationship('SubTopic', cascade='all, delete', backref='topic', lazy='dynamic')
     
 
 
@@ -125,7 +125,7 @@ class SubTopic(db.Model):
     name = db.Column(db.String(80), nullable=False)
     desc = db.Column(db.String(250), nullable=True)
     topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'))
-    youtube_videos = db.relationship('YouTube', backref='subtopic', lazy='dynamic')
+    youtube_videos = db.relationship('YouTube', cascade='all,delete', backref='subtopic', lazy='dynamic')
 
 
 class Subject(db.Model):
@@ -133,8 +133,8 @@ class Subject(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    topics = db.relationship(
-        'Topic', secondary=subject_topics, backref=db.backref('subjects', lazy=True))
+    topics = db.relationship('Topic', secondary=subject_topics, cascade='all,delete',
+                                            backref=db.backref('subjects', lazy=True))
 
 
 class TimeTask(db.Model):

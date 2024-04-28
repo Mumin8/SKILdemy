@@ -188,7 +188,7 @@ def cs_avail():
     '''
 
     cst = Course.query.all()
-    return render_template('admin/index.html', cst=cst)
+    return render_template('content_management/delete_course.html', cst=cst)
 
 
 @admin_bp.route('/add_subject', methods=['GET', 'POST'])
@@ -214,7 +214,7 @@ def ss_avail():
         this will get all available subjects
     '''
     cst = Subject.query.all()
-    return render_template('admin/index.html', cst=cst)
+    return render_template('content_management/delete_language.html', cst=cst)
 
 
 @admin_bp.route('/add_topic', methods=['GET', 'POST'])
@@ -229,7 +229,7 @@ def add_topic():
         new_topic = Topic(name=topic)
         db.session.add(new_topic)
         db.session.commit()
-        flash('added to the subjects', category='info')
+        flash('added to the topics', category='info')
     return render_template('content_management/add_topic.html', form=form)
 
 
@@ -240,7 +240,7 @@ def ts_avail():
         this will get all the available topics
     '''
     cst = Topic.query.all()
-    return render_template('admin/index.html', cst=cst)
+    return render_template('content_management/delete_topic.html', cst=cst)
 
 
 @admin_bp.route('/add_subtopic', methods=['GET', 'POST'])
@@ -266,7 +266,7 @@ def sts_avail():
         this will get all the available sub topics
     '''
     cst = SubTopic.query.all()
-    return render_template('admin/index.html', cst=cst)
+    return render_template('content_management/delete_subtopic.html', cst=cst)
 
 
 @admin_bp.route('/add_tc', methods=['GET', 'POST'])
@@ -543,3 +543,41 @@ def add_youtube_vid():
         db.session.commit()
         flash('you have added a link to a youtube video', category='success')
     return render_template('content_management/add_youtube_video.html', subtopic=subtopic)
+
+
+
+@admin_bp.route('/del_course/<int:c_id>', methods=['GET'])
+def del_course(c_id):
+    course = Course.query.filter_by(id=c_id).first()
+    db.session.delete(course)
+    db.session.commit()
+    return render_template('admin/index.html')
+
+
+@admin_bp.route('/del_lang/<int:s_id>', methods=['GET'])
+def del_lang(s_id):
+    language = Subject.query.filter_by(id=s_id).first()
+    db.session.delete(language)
+    db.session.commit()
+    return render_template('admin/index.html')
+
+@admin_bp.route('/del_topic/<int:t_id>', methods=['GET'])
+def del_topic(t_id):
+    try:
+        topic = Topic.query.filter_by(id=t_id).first()
+        db.session.delete(topic)
+        db.session.commit()
+        return render_template('admin/index.html')
+    except:
+        return "something went wrong"
+
+@admin_bp.route('/del_subtopic/<int:st_id>', methods=['GET'])
+def del_subtopic(st_id):
+    try:
+        subtopic = SubTopic.query.filter_by(id=st_id).first()
+        db.session.delete(subtopic)
+        db.session.commit()
+        flash(f'{subtopic.name} deleted successfully', category='info')
+        return render_template('admin/index.html')
+    except:
+        return "something went wrong"

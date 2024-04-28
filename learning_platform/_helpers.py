@@ -476,6 +476,10 @@ def task_pending(user_id):
 
 
 def verify_payment(ref):
+    '''
+    verify_payment:
+            this is where the payment is verified
+    '''
     PAYSTACK_SK = os.getenv("PAYSTACK_SECRET_KEY")
     print(PAYSTACK_SK)
     base_url = "https://api.paystack.co/"
@@ -493,3 +497,4 @@ def verify_payment(ref):
 
     response_data = response.json()
     return False, response_data['message']
+

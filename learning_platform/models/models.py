@@ -2,7 +2,7 @@ from learning_platform import app, db, login_manager, bcrypt
 from flask_login import UserMixin
 from sqlalchemy import func
 from datetime import datetime
-import json
+import json, uuid
 # from ../paystack import Paystack
 
 
@@ -50,7 +50,7 @@ subject_topics = db.Table('subject_topics',
 class User(db.Model, UserMixin):
     __tablename__ = "user"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     fullname = db.Column(db.String(100), nullable=False)
     username = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
@@ -97,7 +97,7 @@ class User(db.Model, UserMixin):
 class Course(db.Model):
     __tablename__ = "course"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     name = db.Column(db.String(80), nullable=False)
     description = db.Column(db.String(250), nullable=False)
     price = db.Column(db.Numeric(10, 2), nullable=False)
@@ -105,41 +105,41 @@ class Course(db.Model):
     subjects = db.relationship(
         'Subject', secondary=course_subjects, backref=db.backref('courses', lazy=True))
 
-    topics = db.relationship('Topic', secondary=course_topics, cascade='all,delete',
+    topics = db.relationship('Topic', secondary=course_topics,
                              lazy='subquery', backref=db.backref('courses', lazy=True))
 
 
 class Topic(db.Model):
     __tablename__ = "topic"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     name = db.Column(db.String(255), nullable=False)
     desc = db.Column(db.String(500), nullable=True)
-    sub_topics = db.relationship('SubTopic', cascade='all, delete', backref='topic', lazy='dynamic')
+    sub_topics = db.relationship('SubTopic', backref='topic', lazy='dynamic')
     
 
 
 class SubTopic(db.Model):
     __tablename__ = "subtopic"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     name = db.Column(db.String(80), nullable=False)
     desc = db.Column(db.String(250), nullable=True)
     topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'))
-    youtube_videos = db.relationship('YouTube', cascade='all,delete', backref='subtopic', lazy='dynamic')
+    youtube_videos = db.relationship('YouTube', backref='subtopic', lazy='dynamic')
 
 
 class Subject(db.Model):
     __tablename__ = "subject"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     name = db.Column(db.String(255), nullable=False)
-    topics = db.relationship('Topic', secondary=subject_topics, cascade='all,delete',
-                                            backref=db.backref('subjects', lazy=True))
+    topics = db.relationship('Topic', secondary=subject_topics,
+                                        backref=db.backref('subjects', lazy=True))
 
 
 class TimeTask(db.Model):
     __tablename__ = "timetask"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     usertask = db.Column(db.String(80), nullable=True)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -147,7 +147,7 @@ class TimeTask(db.Model):
 
 class YouTube(db.Model):
     __tablename__= 'youtube'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     subtopic_id = db.Column(db.Integer, db.ForeignKey('subtopic.id'))
     link = db.Column(db.String(80), nullable=True)
 
@@ -159,7 +159,7 @@ class Video(db.Model):
     added and approved
     '''
     __tablename__ = "video"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     video_id = db.Column(db.String(255))
     video_path = db.Column(db.String(255))
     course = db.Column(db.String(20))

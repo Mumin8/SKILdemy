@@ -23,7 +23,7 @@ v_id = []
 def validate_topic_for_subject(subject_id, topic_id):
     subject = Subject.query.get(subject_id)
     for t in subject.topics:
-        if t.id == int(topic_id):
+        if t.id == topic_id:
             return False
     return True
 
@@ -36,7 +36,7 @@ def validate_subtopic_for_topic(course_id, topic_id):
 
     topics = Topic.query.get(course_id)
     for t in topics.sub_topics:
-        if t.id == int(topic_id):
+        if t.id == topic_id:
             return False
     return True
 
@@ -49,7 +49,8 @@ def validate_topic_for_course(course_id, topic_id):
 
     course = Course.query.get(course_id)
     for t in course.topics:
-        if t.id == int(topic_id):
+        print(f'{type(t.id)} and {type(topic_id)}')
+        if t.id == topic_id:
             return False
     return True
 
@@ -64,7 +65,7 @@ def validate_subject(course_id, subject_id):
     '''
     course = Course.query.get(course_id)
     for s in course.subjects:
-        if s.id == int(subject_id):
+        if s.id == subject_id:
             return False
     return True
 
@@ -328,7 +329,7 @@ def add_sc():
 def add_subtt():
     '''
     add_tc:
-        this will add a particular subtopic to a particular topi
+        this will add a particular subtopic to a particular topic
     '''
 
     topics = Topic.query.all()
@@ -546,7 +547,7 @@ def add_youtube_vid():
 
 
 
-@admin_bp.route('/del_course/<int:c_id>', methods=['GET'])
+@admin_bp.route('/del_course/<string:c_id>', methods=['GET'])
 def del_course(c_id):
     course = Course.query.filter_by(id=c_id).first()
     db.session.delete(course)
@@ -554,14 +555,14 @@ def del_course(c_id):
     return render_template('admin/index.html')
 
 
-@admin_bp.route('/del_lang/<int:s_id>', methods=['GET'])
+@admin_bp.route('/del_lang/<string:s_id>', methods=['GET'])
 def del_lang(s_id):
     language = Subject.query.filter_by(id=s_id).first()
     db.session.delete(language)
     db.session.commit()
     return render_template('admin/index.html')
 
-@admin_bp.route('/del_topic/<int:t_id>', methods=['GET'])
+@admin_bp.route('/del_topic/<string:t_id>', methods=['GET'])
 def del_topic(t_id):
     try:
         topic = Topic.query.filter_by(id=t_id).first()
@@ -571,7 +572,7 @@ def del_topic(t_id):
     except:
         return "something went wrong"
 
-@admin_bp.route('/del_subtopic/<int:st_id>', methods=['GET'])
+@admin_bp.route('/del_subtopic/<string:st_id>', methods=['GET'])
 def del_subtopic(st_id):
     try:
         subtopic = SubTopic.query.filter_by(id=st_id).first()

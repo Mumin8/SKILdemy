@@ -16,6 +16,7 @@ UPLOAD_CODE_FOLDER = os.path.join(basedir, 'static/default/code')
 db = SQLAlchemy()
 app = Flask(__name__)
 
+
 app.config['UPLOAD_CODE_FOLDER'] = UPLOAD_CODE_FOLDER
 
 app.config["MONGO_URI"] = 'mongodb+srv://alhassanmumin8:Mumin2121@cluster0.tmjnuoz.mongodb.net/video_names?retryWrites=true&w=majority'

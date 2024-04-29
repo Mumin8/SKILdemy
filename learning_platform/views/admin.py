@@ -610,12 +610,9 @@ def del_subtopic(st_id):
 def delete_ai_image(img_id):
     try:
         vid = get_byID(ObjectId(img_id))
-        print(vid)
-        print(f'the type {img_id} video code {vid["code"]}')
         unlink_file(vid['code'], 'UPLOAD_CODE_FOLDER')
         delete_byID(img_id)
     except ValueError as e:
-        print('no image found')
         try:
             delete_byID(img_id)
             return f'(No image itself {e})'

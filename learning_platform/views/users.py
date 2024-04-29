@@ -1,5 +1,6 @@
 import os
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
+from learning_platform.google_translations import _translator
 from flask_login import login_required, current_user, logout_user, login_user
 from learning_platform import bcrypt, db, app
 from learning_platform.forms.form import Registration, LoginForm, ResetForm, NewPasswordForm
@@ -262,3 +263,13 @@ def youtube_vids(topic_id):
     vids = vid_ids(subtopic_videos)
 
     return render_template('user/watch_youtube_video.html', paths=vids)
+
+
+@user_bp.route('/fr')
+def all_langs():
+    text = '''in python programming language objects are very important.
+     to define a function you should start with the word def
+     followed my any valid name such as myfunc
+     '''
+    french = _translator(text)
+    return french

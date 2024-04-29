@@ -4,6 +4,7 @@ import secrets
 import shutil
 import requests
 import pyttsx3
+from bson.objectid import ObjectId
 from werkzeug.local import LocalProxy
 from flask import g, session, flash
 from flask_login import current_user
@@ -77,7 +78,10 @@ def unlink_file(name, _dir):
         name: this is the name of the file
         _dir: this is the directory in which the file is 
     '''
-    os.unlink(os.path.join(app.config[_dir], name))
+    try:
+        os.unlink(os.path.join(app.config[_dir], name))
+    except FileNotFoundError:
+        return 'no file found'
 
 
 def find_missing_vid(vid_list):
@@ -497,4 +501,7 @@ def verify_payment(ref):
 
     response_data = response.json()
     return False, response_data['message']
+
+def delete_byID(_id):
+    db.python_text_processing.delete_one({'_id': ObjectId(_id)})
 

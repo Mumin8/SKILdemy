@@ -18,7 +18,9 @@
     Verdana, sans-serif;">
     {{ _item.name }}
 </p>
-            <a class="btn btn-danger" href="{{ url_for('admin.del_course', c_id=_item.id)}}">delete</a>            
+            <a class="btn btn-danger" href="{{ url_for('admin.del_course', c_id=_item.id)}}">
+                delete
+            </a>            
         </div>     
     {% endfor %}
     {% endblock %}

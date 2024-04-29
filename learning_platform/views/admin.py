@@ -9,7 +9,7 @@ from learning_platform.models.models import (User, Video, Course, SubTopic, Subj
                                              YouTube, Topic, TimeTask)
 from learning_platform._helpers import (
     hash_filename, live_vid_content, find_missing_vid, all_vids, acceptable, insertone,
-    upload_s3vid, insert_text, presigned_url, course_topic, _file, unlink_file, update_by_id,
+    upload_s3vid, insert_text, presigned_url, course_topic, _file, delete_byID, unlink_file, update_by_id,
     live_text_Display_AI_content, user_courses, get_text_desc, recieve_displayed_text, get_byID)
 
 
@@ -549,21 +549,39 @@ def add_youtube_vid():
 
 @admin_bp.route('/del_course/<string:c_id>', methods=['GET'])
 def del_course(c_id):
-    course = Course.query.filter_by(id=c_id).first()
-    db.session.delete(course)
-    db.session.commit()
-    return render_template('admin/index.html')
+    '''
+    del_course:
+        this will delete the course with id = s_id from the database
+    '''
+    try:
+        course = Course.query.filter_by(id=c_id).first()
+        db.session.delete(course)
+        db.session.commit()
+        return render_template('admin/index.html')
+    except:
+        return "something went wrong"
 
 
 @admin_bp.route('/del_lang/<string:s_id>', methods=['GET'])
 def del_lang(s_id):
-    language = Subject.query.filter_by(id=s_id).first()
-    db.session.delete(language)
-    db.session.commit()
-    return render_template('admin/index.html')
+    '''
+    del_lang:
+        this will delete the language or subject with id = s_id from the database
+    '''
+    try:
+        language = Subject.query.filter_by(id=s_id).first()
+        db.session.delete(language)
+        db.session.commit()
+        return render_template('admin/index.html')
+    except:
+        return 'something went wrong'
 
 @admin_bp.route('/del_topic/<string:t_id>', methods=['GET'])
 def del_topic(t_id):
+    '''
+    del_topic:
+        this will delete the topic with id = t_id from the database
+    '''
     try:
         topic = Topic.query.filter_by(id=t_id).first()
         db.session.delete(topic)
@@ -574,6 +592,10 @@ def del_topic(t_id):
 
 @admin_bp.route('/del_subtopic/<string:st_id>', methods=['GET'])
 def del_subtopic(st_id):
+    '''
+    del_subtopic:
+        this will delete the subtopic with id = st_id from the database
+    '''
     try:
         subtopic = SubTopic.query.filter_by(id=st_id).first()
         db.session.delete(subtopic)
@@ -582,3 +604,22 @@ def del_subtopic(st_id):
         return render_template('admin/index.html')
     except:
         return "something went wrong"
+
+
+@admin_bp.route('/del_image/<string:img_id>', methods=['GET'])
+def delete_ai_image(img_id):
+    try:
+        vid = get_byID(ObjectId(img_id))
+        print(vid)
+        print(f'the type {img_id} video code {vid["code"]}')
+        unlink_file(vid['code'], 'UPLOAD_CODE_FOLDER')
+        delete_byID(img_id)
+    except ValueError as e:
+        print('no image found')
+        try:
+            delete_byID(img_id)
+            return f'(No image itself {e})'
+        except:
+            return 'failure'
+    return 'success'
+    

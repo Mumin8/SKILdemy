@@ -34,9 +34,13 @@
                     {% endif %}
                     <div  class="" style="display: flex; flex-direction: row;
                                          justify-content: space-between;">
-                        <a href="{{ url_for('admin.update_published_AI', img_id = content['_id'])}}" class="btn btn-info ">Edit</a>
+                        <a href="{{ url_for('admin.update_published_AI', img_id = content['_id'])}}" class="btn btn-info ">
+                            Edit
+                        </a>
+
+                        <a class="btn btn-danger" href="{{ url_for('admin.delete_ai_image', img_id=content['_id'])}}">
+                            Delete</a>
                         
-                        <div class="btn btn-danger ">Delete</div>
                     </div>
 
                     </div>

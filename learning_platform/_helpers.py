@@ -1,9 +1,4 @@
-import os
-import boto3
-import secrets
-import shutil
-import requests
-import pyttsx3
+import os, boto3, secrets, shutil, requests, pyttsx3
 from bson.objectid import ObjectId
 from werkzeug.local import LocalProxy
 from flask import g, session, flash
@@ -13,6 +8,7 @@ from datetime import datetime, timedelta
 from moviepy.editor import (AudioFileClip, concatenate_videoclips,
                             VideoFileClip, ImageClip)
 from werkzeug.utils import secure_filename
+
 from learning_platform.models.models import Course, TimeTask, User
 
 my_audio_video = 'output_folder/'
@@ -504,4 +500,5 @@ def verify_payment(ref):
 
 def delete_byID(_id):
     db.python_text_processing.delete_one({'_id': ObjectId(_id)})
+
 

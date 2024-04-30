@@ -2,18 +2,18 @@ import re
 from gtts import gTTS
 from googletrans import Translator
 
-translator = Translator()
-
 
 def find_matched_words(text1, text2):
-
+    '''
+    find the words that have not been translated
+    '''
     words_text1 = re.findall(r'\b\w+\b', text1.lower())
-
     words_text2 = re.findall(r'\b\w+\b', text2.lower())
     return set(words_text1) & set(words_text2)
 
 
 def _translator(t):
+    translator = Translator()
     return translator.translate(text=t, src='en', dest='es').text
 
 

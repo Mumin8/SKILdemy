@@ -546,7 +546,6 @@ def add_youtube_vid():
     return render_template('content_management/add_youtube_video.html', subtopic=subtopic)
 
 
-
 @admin_bp.route('/del_course/<string:c_id>', methods=['GET'])
 def del_course(c_id):
     '''
@@ -576,6 +575,7 @@ def del_lang(s_id):
     except:
         return 'something went wrong'
 
+
 @admin_bp.route('/del_topic/<string:t_id>', methods=['GET'])
 def del_topic(t_id):
     '''
@@ -589,6 +589,7 @@ def del_topic(t_id):
         return render_template('admin/index.html')
     except:
         return "something went wrong"
+
 
 @admin_bp.route('/del_subtopic/<string:st_id>', methods=['GET'])
 def del_subtopic(st_id):
@@ -619,4 +620,3 @@ def delete_ai_image(img_id):
         except:
             return 'failure'
     return 'success'
-    

@@ -21,7 +21,8 @@ def _translator(t):
 
 
 def from_eng_to_others():
-    english_text = '''In python programming language, lists are very important. Functions are equally important too.
+    english_text = '''
+    In python programming language, lists are very important. Functions are equally important too.
     to declare a function in python you start with the 
     keyword def followed by any name of your choice. To declare a list
     you have to type the name you want followed by = and then follow by the list keyword. There are some custom keywords in python
@@ -42,6 +43,5 @@ def from_eng_to_others():
    
     with open('some.mp3', 'wb') as f:
         for k, v in ls.items():
-            print(k[-2::])
             tts_ = gTTS(v, lang=k[-2::])
             tts_.write_to_fp(f)

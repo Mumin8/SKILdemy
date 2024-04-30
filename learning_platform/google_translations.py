@@ -5,19 +5,16 @@ from googletrans import Translator
 translator = Translator()
 
 
-
-    
-
 def find_matched_words(text1, text2):
-    
+
     words_text1 = re.findall(r'\b\w+\b', text1.lower())
-    
+
     words_text2 = re.findall(r'\b\w+\b', text2.lower())
     return set(words_text1) & set(words_text2)
 
+
 def _translator(t):
     return translator.translate(text=t, src='en', dest='es').text
-
 
 
 def from_eng_to_others():
@@ -29,7 +26,7 @@ def from_eng_to_others():
     such as the word lower, upper, capitalize and so on.
     '''
     trans = _translator(english_text)
-    
+
     matched = find_matched_words(english_text, trans)
 
     ls = dict()
@@ -37,10 +34,10 @@ def from_eng_to_others():
     start = 0
     for idx, word in enumerate(lis):
         if word.lower() in matched:
-            ls[f'{idx}fr'] = ' '.join(w for w in lis[start:idx] )
+            ls[f'{idx}fr'] = ' '.join(w for w in lis[start:idx])
             ls[f'{idx}en'] = word.lower()
             start = idx+1
-   
+
     with open('some.mp3', 'wb') as f:
         for k, v in ls.items():
             tts_ = gTTS(v, lang=k[-2::])

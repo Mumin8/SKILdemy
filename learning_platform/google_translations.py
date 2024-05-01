@@ -2,6 +2,10 @@ import re
 from gtts import gTTS
 from googletrans import Translator
 
+translator = Translator()
+
+def lang_detector(text):
+    return translator.detect(text).lang
 
 def find_matched_words(text1, text2):
     '''
@@ -13,8 +17,50 @@ def find_matched_words(text1, text2):
 
 
 def _translator(t):
-    translator = Translator()
-    return translator.translate(text=t, src='en', dest='es').text
+    return translator.translate(text=t, src='en', dest='ar').text
+
+def process_for_arabic_vid(trans, matched):
+    ls = dict()
+    text = reorganize(trans)
+    start = 0
+    for idx, word in enumerate(text):
+        if word.lower() in matched:
+            ls[f'{idx}ar'] = ' '.join(w for w in text[start:idx])
+            ls[f'{idx}en'] = word.lower()
+            start = idx+1
+    ls[f'{idx}ar'] = ' '.join(w for w in text[start::])
+
+    with open('some.mp3', 'wb') as f:
+        for k, v in ls.items():
+            tts_ = gTTS(v, lang=k[-2::])
+            tts_.write_to_fp(f)
+
+
+def reorganize(trans):
+    lines = trans.split('\n')
+    organized = []
+    for line in lines:
+        organized.extend(reversed(line.split()))
+    return organized
+
+
+def process_for_other_lang_vid(trans, matched):
+    ls = dict()
+    lis = trans.split()
+    start = 0
+    for idx, word in enumerate(lis):
+        if word.lower() in matched:
+            ls[f'{idx}fr'] = ' '.join(w for w in lis[start:idx])
+            ls[f'{idx}en'] = word.lower()
+            start = idx+1
+    ls[f'{idx}fr'] = ' '.join(w for w in lis[start::])
+
+    with open('some.mp3', 'wb') as f:
+        for k, v in ls.items():
+            tts_ = gTTS(v, lang=k[-2::])
+            tts_.write_to_fp(f)
+
+
 
 
 def from_eng_to_others():
@@ -26,19 +72,13 @@ def from_eng_to_others():
     such as the word lower, upper, capitalize and so on.
     '''
     trans = _translator(english_text)
-
     matched = find_matched_words(english_text, trans)
 
-    ls = dict()
-    lis = trans.split()
-    start = 0
-    for idx, word in enumerate(lis):
-        if word.lower() in matched:
-            ls[f'{idx}fr'] = ' '.join(w for w in lis[start:idx])
-            ls[f'{idx}en'] = word.lower()
-            start = idx+1
+    lang = lang_detector(trans)
 
-    with open('some.mp3', 'wb') as f:
-        for k, v in ls.items():
-            tts_ = gTTS(v, lang=k[-2::])
-            tts_.write_to_fp(f)
+    if lang == 'ar':
+        process_for_arabic_vid(trans, matched)
+    else:
+        process_for_other_lang_vid(trans, matched, lang)
+
+   

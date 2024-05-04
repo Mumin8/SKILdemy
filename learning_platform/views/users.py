@@ -1,8 +1,9 @@
 import os
 from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
-from learning_platform.google_translations import _translator, from_eng_to_others
+# from learning_platform.google_translations import _translator, from_eng_to_others
 from flask_login import login_required, current_user, logout_user, login_user
-from learning_platform import bcrypt, db, app
+from flask_mail import Message
+from learning_platform import bcrypt, db, app, mail
 from learning_platform.forms.form import Registration, LoginForm, ResetForm, NewPasswordForm
 from learning_platform.models.models import User, Course, SubTopic, TimeTask, YouTube
 from learning_platform._helpers import (c_and_topics, read_content, copy_ai_video,
@@ -92,7 +93,7 @@ def forgot_password():
         # check if password exists in the database first
         user = User.query.filter_by(email=email).first()
         if user:
-            token = generate_reset_token()
+            token = get_ref()
             user.reset_token = token
             db.session.commit()
             msg = Message('Password Reset Request',
@@ -265,12 +266,12 @@ def youtube_vids(topic_id):
     return render_template('user/watch_youtube_video.html', paths=vids)
 
 
-@user_bp.route('/fr')
-def all_langs():
-    text = '''in python programming language objects are very important.
-     to define a function you should start with the word def
-     followed my any valid name such as myfunc
-     '''
-    from_eng_to_others()
-    return "boom"
+# @user_bp.route('/fr')
+# def all_langs():
+#     text = '''in python programming language objects are very important.
+#      to define a function you should start with the word def
+#      followed my any valid name such as myfunc
+#      '''
+#     from_eng_to_others()
+#     return "boom"
     

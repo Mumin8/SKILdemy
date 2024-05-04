@@ -10,7 +10,8 @@ from learning_platform.models.models import (User, Video, Course, SubTopic, Subj
 from learning_platform._helpers import (
     hash_filename, live_vid_content, find_missing_vid, all_vids, acceptable, insertone,
     upload_s3vid, insert_text, presigned_url, course_topic, _file, delete_byID, unlink_file, update_by_id,
-    live_text_Display_AI_content, user_courses, get_text_desc, recieve_displayed_text, get_byID)
+    live_text_Display_AI_content, user_courses, get_text_desc, recieve_displayed_text, get_byID, text_data,
+    recieve_displayed_text_others)
 
 
 admin_bp = Blueprint(
@@ -157,8 +158,7 @@ def upload():
                 upload_s3vid(file, name)
                 # file.save(os.path.join(app.config['UPLOAD_FOLDER'], name))
                 insertone(file_details)
-                # online_users = db.python_videos.insert_one(file_details)
-                # all_vids()
+                
                 flash('successfully added the video', category='success')
         return render_template('admin/upload_vid.html')
 
@@ -411,7 +411,9 @@ def add_reading_text():
         s_name = Subject.query.get(request.form.get('subject_id')).name
         t_name = SubTopic.query.get(request.form.get('topic_id')).name
         text_data(c_name, s_name, t_name)
-        return 'cool chop'
+        flash('added content ')
+        return render_template('content_management/reading_text.html',
+                           courses=courses, subjects=subjects, topics=topics)
 
     return render_template('content_management/reading_text.html',
                            courses=courses, subjects=subjects, topics=topics)
@@ -431,31 +433,36 @@ def get_published_Video():
 
 @admin_bp.route('/gtv', methods=['GET', 'POST'])
 @login_required
-def aud_vid():
+def aud_vid(lang):
     '''
     aud_vid:
         this is where the audio video clip thing starts
     '''
 
     v = get_text_desc()
+    
 
-    acc_v = recieve_displayed_text(str(current_user.id), v)
+    if lang == 'en':
+        acc_v = recieve_displayed_text(str(current_user.id), v)
+    else:
+        acc_v = recieve_displayed_text_others(str(current_user.id), v, lang)
 
     return acc_v
 
 
-@admin_bp.route('/gptplus/<int:course_id>/<int:topic_id>', methods=['GET', 'POST'])
+@admin_bp.route('/gptplus/<string:language>/<string:course_id>/<string:topic_id>', methods=['GET', 'POST'])
 @login_required
-def gptplus(course_id, topic_id):
+def gptplus(language, course_id, topic_id):
     '''
     gptplus:
         this is where the ai video is processed
     '''
+    
     user_c = sorted(user_courses(current_user.id))
     c_and_t = course_topic(user_c)
     session['course'] = Course.query.get(course_id).name
     session['topic'] = SubTopic.query.get(topic_id).name
-    path = aud_vid()
+    path = aud_vid(language)
     paths = path.split('myvideo')
     flash('video generated successfully', category='success')
 
@@ -464,9 +471,10 @@ def gptplus(course_id, topic_id):
 
 @admin_bp.route('/admin_courses', methods=['GET', 'POST'])
 def admin_all_course():
+    language = request.form.get('language')
     user_c = user_courses()
     c_and_t = course_topic(user_c)
-    return render_template('content_management/generate_ai_video.html', dict_v=c_and_t)
+    return render_template('content_management/generate_ai_video.html', dict_v=c_and_t, language=language)
 
 
 @admin_bp.route('/gpai', methods=['GET'])
@@ -574,7 +582,7 @@ def del_lang(s_id):
         return render_template('admin/index.html')
     except:
         return 'something went wrong'
-
+    
 
 @admin_bp.route('/del_topic/<string:t_id>', methods=['GET'])
 def del_topic(t_id):

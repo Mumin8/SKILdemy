@@ -13,36 +13,36 @@ def user_loader(user_id):
 
 # join user and course
 user_course = db.Table('user_course',
-                       db.Column('user_id', db.Integer, db.ForeignKey(
+                       db.Column('user_id', db.String(36), db.ForeignKey(
                            'user.id'), primary_key=True),
-                       db.Column('course_id', db.Integer, db.ForeignKey(
+                       db.Column('course_id', db.String(36), db.ForeignKey(
                            'course.id'), primary_key=True)
                        )
 
 
 # join course and subjects
 course_subjects = db.Table('course_subjects',
-                           db.Column('course_id', db.Integer, db.ForeignKey(
+                           db.Column('course_id', db.String(36), db.ForeignKey(
                                'course.id'), primary_key=True),
-                           db.Column('subject_id', db.Integer, db.ForeignKey(
+                           db.Column('subject_id', db.String(36), db.ForeignKey(
                                'subject.id'), primary_key=True)
                            )
 
 
 # join couse and topics
 course_topics = db.Table('course_topics',
-                         db.Column('course_id', db.Integer, db.ForeignKey(
+                         db.Column('course_id', db.String(36), db.ForeignKey(
                              'course.id'), primary_key=True),
-                         db.Column('topic_id', db.Integer, db.ForeignKey(
+                         db.Column('topic_id', db.String(36), db.ForeignKey(
                              'topic.id'), primary_key=True)
                          )
 
 
 # join subject and topics
 subject_topics = db.Table('subject_topics',
-                          db.Column('subject_id', db.Integer, db.ForeignKey(
+                          db.Column('subject_id', db.String(36), db.ForeignKey(
                               'subject.id'), primary_key=True),
-                          db.Column('topic_id', db.Integer, db.ForeignKey(
+                          db.Column('topic_id', db.String(36), db.ForeignKey(
                               'topic.id'), primary_key=True)
                           )
 
@@ -50,14 +50,14 @@ subject_topics = db.Table('subject_topics',
 class User(db.Model, UserMixin):
     __tablename__ = "user"
 
-    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
+    id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
     fullname = db.Column(db.String(100), nullable=False)
     username = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     profile = db.Column(db.String(200), unique=False, default='')
     created_at = db.Column(db.DateTime(timezone=True),
-                           nullable=False, default=datetime.utcnow)
+                           nullable=False, default=datetime.now)
     reset_token = db.Column(db.String(120), nullable=True)
 
     authenticated = db.Column(db.Boolean, default=False)
@@ -97,7 +97,7 @@ class User(db.Model, UserMixin):
 class Course(db.Model):
     __tablename__ = "course"
 
-    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
+    id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
     name = db.Column(db.String(80), nullable=False)
     description = db.Column(db.String(250), nullable=False)
     price = db.Column(db.Numeric(10, 2), nullable=False)
@@ -112,7 +112,7 @@ class Course(db.Model):
 class Topic(db.Model):
     __tablename__ = "topic"
 
-    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
+    id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
     name = db.Column(db.String(255), nullable=False)
     desc = db.Column(db.String(500), nullable=True)
     sub_topics = db.relationship('SubTopic', backref='topic', lazy='dynamic')
@@ -121,17 +121,17 @@ class Topic(db.Model):
 
 class SubTopic(db.Model):
     __tablename__ = "subtopic"
-    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
+    id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
     name = db.Column(db.String(80), nullable=False)
     desc = db.Column(db.String(250), nullable=True)
-    topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'))
+    topic_id = db.Column(db.String(36), db.ForeignKey('topic.id'))
     youtube_videos = db.relationship('YouTube', backref='subtopic', lazy='dynamic')
 
 
 class Subject(db.Model):
     __tablename__ = "subject"
 
-    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
+    id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
     name = db.Column(db.String(255), nullable=False)
     topics = db.relationship('Topic', secondary=subject_topics,
                                         backref=db.backref('subjects', lazy=True))
@@ -139,16 +139,16 @@ class Subject(db.Model):
 
 class TimeTask(db.Model):
     __tablename__ = "timetask"
-    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
+    id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
     usertask = db.Column(db.String(80), nullable=True)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
 
 
 class YouTube(db.Model):
     __tablename__= 'youtube'
-    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
-    subtopic_id = db.Column(db.Integer, db.ForeignKey('subtopic.id'))
+    id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
+    subtopic_id = db.Column(db.String(36), db.ForeignKey('subtopic.id'))
     link = db.Column(db.String(80), nullable=True)
 
 
@@ -159,7 +159,7 @@ class Video(db.Model):
     added and approved
     '''
     __tablename__ = "video"
-    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
+    id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
     video_id = db.Column(db.String(255))
     video_path = db.Column(db.String(255))
     course = db.Column(db.String(20))

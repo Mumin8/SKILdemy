@@ -1,14 +1,16 @@
 import os, boto3, secrets, shutil, requests, pyttsx3
 from bson.objectid import ObjectId
 from werkzeug.local import LocalProxy
-from flask import g, session, flash
+from flask import g, session, flash, redirect, url_for, request
 from flask_login import current_user
 from learning_platform import mongo, app
 from datetime import datetime, timedelta
 from moviepy.editor import (AudioFileClip, concatenate_videoclips,
                             VideoFileClip, ImageClip)
 from werkzeug.utils import secure_filename
-
+from learning_platform.google_translations import (
+                                                    text_translator, find_matched_words, process_for_other_lang_vid,
+                                                    process_for_arabic_vid)
 from learning_platform.models.models import Course, TimeTask, User
 
 my_audio_video = 'output_folder/'
@@ -18,6 +20,10 @@ my_audio_video = 'output_folder/'
 def get_ref():
     return secrets.token_urlsafe(50)
 
+
+# def generate_reset_token():
+#     # Generate a secure token for the password reset link
+#     return secrets.token_urlsafe(32)
 
 def get_db():
     db = getattr(g, "_database", None)
@@ -100,6 +106,7 @@ def hash_filename(filename):
 
 def _json(l):
     for i, o in enumerate(l):
+        print ( f"the description {o}")
         l[i]['_id'] = str(o['_id'])
     return l
 
@@ -245,19 +252,22 @@ def get_text_desc():
     get_text_desc:
         this will query the mongodb collection for a match
     '''
-    course = session.get('course')
-    topic = session.get('topic')
-    print(f'the course name {course} and the topic name {topic}')
+    _l = []
+    _course = session.get('course')
+    _topic = session.get('topic')
+    print(f'the course name {_course} and the topic name {_topic}')
     # the collection will change
-    video_ = db.python_text_processing.find(
-        {
-            "$and": [
-                {"course": course},
-                {"topic": topic}
-            ]
-        }
-    )
-    return _json(list(video_))
+    # video_ = db.python_text_processing.find(
+    #     {
+    #         "$and": [
+    #             {"course": _course},
+    #             {"topic": _topic}
+    #         ]
+    #     }
+    # )
+    video_ = db.python_text_processing.find_one({'topic': _topic})
+    _l.append(video_)
+    return _l
 
 
 def live_vid_content():
@@ -325,6 +335,28 @@ def join_clips(user_id, res_clips):
     return output_p
 
 
+def join_clips_others(res_clips):
+    '''
+    join_clips:
+        this will join all the clips together
+    return:
+        the final output path
+    '''
+    root_path = app.root_path
+    comp_file = f'{session.get("course")}_{session.get("topic")}.mp4'
+    output_p = os.path.join(root_path, 'static', 'myvideo', comp_file)
+
+    clips_list = []
+
+    for _clip in res_clips:
+        clips_list.append(VideoFileClip(_clip))
+
+    final_c = concatenate_videoclips(clips_list, method="compose")
+    # the final result will be placed in s3 bucket
+    # final_c.write_videofile(output_p)
+
+    return output_p
+
 def tts(text, output_path):
     '''
     tts:
@@ -387,6 +419,71 @@ def recieve_displayed_text(user_id, vid_list):
 
     return final_output_path
 
+
+def recieve_displayed_text_others(user_id, vid_list, lang):
+    '''
+    recieve_displayed_text:
+        It will read the text from Mongodb
+    arg:
+        vid_list: the list of videos
+    '''
+
+    res_clips = []
+    root_path = app.root_path
+
+    print(vid_list)
+
+    for i, _d in enumerate(vid_list):
+        audio_file = f'temp_slide_audio_{i}.mp3'
+        video_file = f'temp_slide_video_{i}.mp4'
+
+        audio_path = os.path.join(my_audio_video, audio_file)
+        video_path = os.path.join(my_audio_video, video_file)
+
+        trans = text_translator(_d["desc"], lang)
+        
+        matched = find_matched_words(_d["desc"], trans)
+
+        # _matched = matched_dic(matched, trans.split())
+       
+        if lang == 'ar':
+            process_for_arabic_vid(trans, matched, audio_path, lang)
+        else:
+            process_for_other_lang_vid(trans, matched, audio_path, lang)
+
+        # create_audio_clip_others(trans, audio_path, lang)
+        slide_audio_clip = AudioFileClip(audio_path)
+
+        final_clip_duration = slide_audio_clip.duration
+        create_video_clip(
+            f'{root_path}/static/default/code/{vid_list[i]["code"]}',
+            video_path, final_clip_duration, my_audio_video
+        )
+        slide_video_clip = VideoFileClip(video_path)
+
+        # video_audio[0].append(video_path)
+        # video_audio[1].append(audio_path)
+
+        slide_audio_clip = slide_audio_clip.set_duration(final_clip_duration)
+
+        slide_video_clip = slide_video_clip.set_duration(final_clip_duration)
+        cl = slide_video_clip.set_audio(slide_audio_clip)
+
+        output_p = os.path.join(root_path, 'static', 'video_lists', video_file)
+        res_clips.append(output_p)
+        cl.write_videofile(output_p)
+
+    final_output_path = join_clips_others(res_clips)
+
+    return final_output_path
+
+
+def matched_dic(matched, text_list):
+    match_dict = dict()
+    for v in matched:
+        _n = text_list.count(v)
+        match_dict[v] = _n
+    return match_dict
 
 def live_text_Display_AI_content():
     all_videos = []
@@ -502,3 +599,12 @@ def delete_byID(_id):
     db.python_text_processing.delete_one({'_id': ObjectId(_id)})
 
 
+
+def text_data(course, subject, topic, desc=None):
+    ''' 
+    text_data:
+        the approved videos will be handled by this
+    '''
+    print('you are not needed')
+    file_details = {"course":course,"language": subject, "topic": topic, "desc":desc}
+    online_users = db.text_display.insert_one(file_details)

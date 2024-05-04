@@ -16,21 +16,29 @@ def find_matched_words(text1, text2):
     return set(words_text1) & set(words_text2)
 
 
-def _translator(t):
-    return translator.translate(text=t, src='en', dest='ar').text
+def text_translator(text, lang):
+    '''
+    translates the text to a language specified as lang
+    '''
+    return translator.translate(text=text, src='en', dest=lang).text
 
-def process_for_arabic_vid(trans, matched):
+
+def process_for_arabic_vid(trans, matched, audio_path, lang):
+    '''
+        process the text to arabic  language
+    '''
+    
     ls = dict()
     text = reorganize(trans)
     start = 0
     for idx, word in enumerate(text):
         if word.lower() in matched:
-            ls[f'{idx}ar'] = ' '.join(w for w in text[start:idx])
+            ls[f'{idx}{lang}'] = ' '.join(w for w in text[start:idx])
             ls[f'{idx}en'] = word.lower()
             start = idx+1
     ls[f'{idx}ar'] = ' '.join(w for w in text[start::])
 
-    with open('some.mp3', 'wb') as f:
+    with open(audio_path, 'wb') as f:
         for k, v in ls.items():
             tts_ = gTTS(v, lang=k[-2::])
             tts_.write_to_fp(f)
@@ -44,41 +52,23 @@ def reorganize(trans):
     return organized
 
 
-def process_for_other_lang_vid(trans, matched):
+def process_for_other_lang_vid(trans, matched, audio_path, lang):
     ls = dict()
     lis = trans.split()
+    
     start = 0
     for idx, word in enumerate(lis):
         if word.lower() in matched:
-            ls[f'{idx}fr'] = ' '.join(w for w in lis[start:idx])
+            ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start:idx])
             ls[f'{idx}en'] = word.lower()
             start = idx+1
-    ls[f'{idx}fr'] = ' '.join(w for w in lis[start::])
+            lis[idx] = ''
+    ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start::])
 
-    with open('some.mp3', 'wb') as f:
+    print(ls)
+    with open(audio_path, 'wb') as f:
         for k, v in ls.items():
-            tts_ = gTTS(v, lang=k[-2::])
-            tts_.write_to_fp(f)
-
-
-
-
-def from_eng_to_others():
-    english_text = '''
-    In python programming language, lists are very important. Functions are equally important too.
-    to declare a function in python you start with the 
-    keyword def followed by any name of your choice. To declare a list
-    you have to type the name you want followed by = and then follow by the list keyword. There are some custom keywords in python
-    such as the word lower, upper, capitalize and so on.
-    '''
-    trans = _translator(english_text)
-    matched = find_matched_words(english_text, trans)
-
-    lang = lang_detector(trans)
-
-    if lang == 'ar':
-        process_for_arabic_vid(trans, matched)
-    else:
-        process_for_other_lang_vid(trans, matched, lang)
-
-   
+            print(f'the text : {v}')
+            if v:
+                tts_ = gTTS(v, lang=k[-2::])
+                tts_.write_to_fp(f)

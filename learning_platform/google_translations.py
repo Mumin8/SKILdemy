@@ -22,29 +22,10 @@ def text_translator(text, lang):
     '''
     return translator.translate(text=text, src='en', dest=lang).text
 
-
-def process_for_arabic_vid(trans, matched, audio_path, lang):
-    '''
-        process the text to arabic  language
-    '''
-    
-    ls = dict()
-    text = reorganize(trans)
-    start = 0
-    for idx, word in enumerate(text):
-        if word.lower() in matched:
-            ls[f'{idx}{lang}'] = ' '.join(w for w in text[start:idx])
-            ls[f'{idx}en'] = word.lower()
-            start = idx+1
-    ls[f'{idx}ar'] = ' '.join(w for w in text[start::])
-
-    with open(audio_path, 'wb') as f:
-        for k, v in ls.items():
-            tts_ = gTTS(v, lang=k[-2::])
-            tts_.write_to_fp(f)
-
-
 def reorganize(trans):
+    '''
+    reorganize the arabic to read like the rest of the languages
+    '''
     lines = trans.split('\n')
     organized = []
     for line in lines:
@@ -52,23 +33,37 @@ def reorganize(trans):
     return organized
 
 
-def process_for_other_lang_vid(trans, matched, audio_path, lang):
+def process_for_arabic_vid(trans, matched, audio_path, lang):
+    '''
+        process the text to arabic  language
+    '''
+    _trans = reorganize(trans)
+    process_for_nonEnglish(_trans, matched, audio_path, lang)
+ 
+
+
+def process_for_nonEnglish(trans, matched, audio_path, lang):
+    '''
+    processes the text to aanother language
+    '''
     ls = dict()
-    lis = trans.split()
+    if isinstance(trans, list):
+        lis = trans
+    else:
+        lis = trans.split()
     
     start = 0
     for idx, word in enumerate(lis):
         if word.lower() in matched:
-            ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start:idx])
+            ls[f'{idx}{lang}'] = ' '.join(lis[start:idx]).strip()
             ls[f'{idx}en'] = word.lower()
             start = idx+1
             lis[idx] = ''
-    ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start::])
+    ls[f'{idx}{lang}'] = ' '.join(lis[start::]).strip()
 
-    print(ls)
+
     with open(audio_path, 'wb') as f:
         for k, v in ls.items():
-            print(f'the text : {v}')
             if v:
                 tts_ = gTTS(v, lang=k[-2::])
                 tts_.write_to_fp(f)

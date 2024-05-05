@@ -11,7 +11,7 @@ from learning_platform._helpers import (
     hash_filename, live_vid_content, find_missing_vid, all_vids, acceptable, insertone,
     upload_s3vid, insert_text, presigned_url, course_topic, _file, delete_byID, unlink_file, update_by_id,
     live_text_Display_AI_content, user_courses, get_text_desc, recieve_displayed_text, get_byID, text_data,
-    recieve_displayed_text_others)
+)
 
 
 admin_bp = Blueprint(
@@ -440,12 +440,10 @@ def aud_vid(lang):
     '''
 
     v = get_text_desc()
-    
+    acc_v = recieve_displayed_text(v, lang)
 
-    if lang == 'en':
-        acc_v = recieve_displayed_text(str(current_user.id), v)
-    else:
-        acc_v = recieve_displayed_text_others(str(current_user.id), v, lang)
+    # else:
+    #     acc_v = recieve_displayed_text_others(str(current_user.id), v, lang)
 
     return acc_v
 
@@ -499,12 +497,9 @@ def update_published_AI(img_id):
         desc = request.form.get('desc')
         name = None
         if request.files['file']:
-            name = _file(request.files, 'UPLOAD_CODE_FOLDER')
-            try:
-                unlink_file(vid['code'], 'UPLOAD_CODE_FOLDER')
-                update_by_id(ObjectId(img_id), name, desc)
-            except FileNotFoundError:
-                update_by_id(ObjectId(img_id), name, desc)
+            name = _file(request.files, 'UPLOAD_CODE_FOLDER' )
+            unlink_file(vid['code'], 'UPLOAD_CODE_FOLDER' )
+        update_by_id(ObjectId(img_id), name, desc)
     return render_template('content_management/update_ai_content.html', vid=vid)
 
 

@@ -9,7 +9,7 @@ from moviepy.editor import (AudioFileClip, concatenate_videoclips,
                             VideoFileClip, ImageClip)
 from werkzeug.utils import secure_filename
 from learning_platform.google_translations import (
-                                                    text_translator, find_matched_words, process_for_other_lang_vid,
+                                                    text_translator, find_matched_words, process_for_nonEnglish,
                                                     process_for_arabic_vid)
 from learning_platform.models.models import Course, TimeTask, User
 
@@ -171,9 +171,10 @@ def update_by_id(_id, code, desc):
     update_fields = {}
     if desc != None:
         update_fields['desc'] = desc
-    if code != '':
+    if code != '' and code != None:
         update_fields['code'] = code
 
+    print(f'result: {update_fields}')
     result = db.python_text_processing.update_one(
         {'_id': _id},
         {'$set': update_fields}
@@ -313,7 +314,7 @@ def create_video_clip(text, output_path, duration, folder):
     os.remove(path_aud)
 
 
-def join_clips(user_id, res_clips):
+def join_clips(res_clips):
     '''
     join_clips:
         this will join all the clips together
@@ -375,7 +376,7 @@ def tts(text, output_path):
     engine.runAndWait()
 
 
-def recieve_displayed_text(user_id, vid_list):
+def recieve_displayed_text(vid_list, lang):
     '''
     recieve_displayed_text:
         It will read the text from Mongodb
@@ -393,7 +394,19 @@ def recieve_displayed_text(user_id, vid_list):
         audio_path = os.path.join(my_audio_video, audio_file)
         video_path = os.path.join(my_audio_video, video_file)
 
-        create_audio_clip(_d["desc"], audio_path)
+
+        if lang == "en":
+            create_audio_clip(_d["desc"], audio_path)
+        else:
+            trans = text_translator(_d["desc"], lang)
+            matched = find_matched_words(_d["desc"], trans)
+
+            if lang == 'ar':
+                process_for_arabic_vid(trans, matched, audio_path, lang)
+            else:
+                process_for_nonEnglish(trans, matched, audio_path, lang)
+
+
         slide_audio_clip = AudioFileClip(audio_path)
 
         final_clip_duration = slide_audio_clip.duration
@@ -402,9 +415,6 @@ def recieve_displayed_text(user_id, vid_list):
             video_path, final_clip_duration, my_audio_video
         )
         slide_video_clip = VideoFileClip(video_path)
-
-        # video_audio[0].append(video_path)
-        # video_audio[1].append(audio_path)
 
         slide_audio_clip = slide_audio_clip.set_duration(final_clip_duration)
 
@@ -415,65 +425,57 @@ def recieve_displayed_text(user_id, vid_list):
         res_clips.append(output_p)
         cl.write_videofile(output_p)
 
-    final_output_path = join_clips(user_id, res_clips)
+    final_output_path = join_clips(res_clips)
 
     return final_output_path
 
 
-def recieve_displayed_text_others(user_id, vid_list, lang):
-    '''
-    recieve_displayed_text:
-        It will read the text from Mongodb
-    arg:
-        vid_list: the list of videos
-    '''
+# def recieve_displayed_text_others(vid_list, lang):
+#     '''
+#     recieve_displayed_text:
+#         It will read the text from Mongodb
+#     arg:
+#         vid_list: the list of videos
+#     '''
 
-    res_clips = []
-    root_path = app.root_path
+#     res_clips = []
+#     root_path = app.root_path
 
-    print(vid_list)
+#     for i, _d in enumerate(vid_list):
+#         audio_file = f'temp_slide_audio_{i}.mp3'
+#         video_file = f'temp_slide_video_{i}.mp4'
 
-    for i, _d in enumerate(vid_list):
-        audio_file = f'temp_slide_audio_{i}.mp3'
-        video_file = f'temp_slide_video_{i}.mp4'
+#         audio_path = os.path.join(my_audio_video, audio_file)
+#         video_path = os.path.join(my_audio_video, video_file)
 
-        audio_path = os.path.join(my_audio_video, audio_file)
-        video_path = os.path.join(my_audio_video, video_file)
-
-        trans = text_translator(_d["desc"], lang)
+#         trans = text_translator(_d["desc"], lang)
         
-        matched = find_matched_words(_d["desc"], trans)
+#         matched = find_matched_words(_d["desc"], trans)
 
-        # _matched = matched_dic(matched, trans.split())
-       
-        if lang == 'ar':
-            process_for_arabic_vid(trans, matched, audio_path, lang)
-        else:
-            process_for_other_lang_vid(trans, matched, audio_path, lang)
+#         if lang == 'ar':
+#             process_for_arabic_vid(trans, matched, audio_path, lang)
+#         else:
+#             process_for_nonEnglish(trans, matched, audio_path, lang)
 
-        # create_audio_clip_others(trans, audio_path, lang)
-        slide_audio_clip = AudioFileClip(audio_path)
+#         slide_audio_clip = AudioFileClip(audio_path)
 
-        final_clip_duration = slide_audio_clip.duration
-        create_video_clip(
-            f'{root_path}/static/default/code/{vid_list[i]["code"]}',
-            video_path, final_clip_duration, my_audio_video
-        )
-        slide_video_clip = VideoFileClip(video_path)
+#         final_clip_duration = slide_audio_clip.duration
+#         create_video_clip(
+#             f'{root_path}/static/default/code/{vid_list[i]["code"]}',
+#             video_path, final_clip_duration, my_audio_video
+#         )
+#         slide_video_clip = VideoFileClip(video_path)
 
-        # video_audio[0].append(video_path)
-        # video_audio[1].append(audio_path)
+#         slide_audio_clip = slide_audio_clip.set_duration(final_clip_duration)
 
-        slide_audio_clip = slide_audio_clip.set_duration(final_clip_duration)
+#         slide_video_clip = slide_video_clip.set_duration(final_clip_duration)
+#         cl = slide_video_clip.set_audio(slide_audio_clip)
 
-        slide_video_clip = slide_video_clip.set_duration(final_clip_duration)
-        cl = slide_video_clip.set_audio(slide_audio_clip)
+#         output_p = os.path.join(root_path, 'static', 'video_lists', video_file)
+#         res_clips.append(output_p)
+#         cl.write_videofile(output_p)
 
-        output_p = os.path.join(root_path, 'static', 'video_lists', video_file)
-        res_clips.append(output_p)
-        cl.write_videofile(output_p)
-
-    final_output_path = join_clips_others(res_clips)
+#     final_output_path = join_clips_others(res_clips)
 
     return final_output_path
 
@@ -501,7 +503,6 @@ def user_courses(id=None):
     else:
         courses = Course.query.all()
     try:
-        # print(f'all courses {course} and user enrolling {current_user.enrolling}')
         for c in courses:
             course_list.append([])
             course_list[-1].append(c.name)
@@ -526,14 +527,11 @@ def validate_time_task(user_id, task_id, task_name):
         # solution to this task is readily available and so no need to wait
         return True, "Not timely"
     else:
-        # this task is timely bound
         task = TimeTask.query.filter_by(user_id=user_id, id=task_id).first()
 
         if task:
-            # user has requested for solution already
             status, _task = task_pending(user_id)
             if status:
-                # the time for the solution has elapsed so the solution will be available
                 return status, "Not timely"
             else:
                 # the time for the solution is not yet up so solution will not be ready
@@ -608,3 +606,4 @@ def text_data(course, subject, topic, desc=None):
     print('you are not needed')
     file_details = {"course":course,"language": subject, "topic": topic, "desc":desc}
     online_users = db.text_display.insert_one(file_details)
+    

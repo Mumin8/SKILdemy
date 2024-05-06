@@ -55,12 +55,12 @@ def process_for_nonEnglish(trans, matched, audio_path, lang):
     start = 0
     for idx, word in enumerate(lis):
         if word.lower() in matched:
-            ls[f'{idx}{lang}'] = ' '.join(lis[start:idx]).strip()
+            ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start:idx]).strip()
             ls[f'{idx}en'] = word.lower()
             start = idx+1
             lis[idx] = ''
-    ls[f'{idx}{lang}'] = ' '.join(lis[start::]).strip()
-
+    if lis[start::]:
+        ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start::]).strip()
 
     with open(audio_path, 'wb') as f:
         for k, v in ls.items():

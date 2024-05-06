@@ -160,6 +160,17 @@ def upload_s3vid(uploaded_file, filename):
     client = s3_client()
     client.upload_fileobj(uploaded_file, os.getenv(
         "AWS_STORAGE_BUCKET_NAME"), filename)
+    
+
+def upload_s3vid_languages(uploaded_file, filename, lang):
+    '''
+        I will work on this part of the code later
+    '''
+    client = s3_client()
+    client.upload_fileobj(uploaded_file, os.getenv(
+        f"AWS_STORAGE_BUCKET_NAME{lang}"), filename)
+    
+
 
 
 def get_byID(_id):
@@ -254,21 +265,32 @@ def get_text_desc():
         this will query the mongodb collection for a match
     '''
     _l = []
+    content = []
     _course = session.get('course')
     _topic = session.get('topic')
     print(f'the course name {_course} and the topic name {_topic}')
-    # the collection will change
-    # video_ = db.python_text_processing.find(
-    #     {
-    #         "$and": [
-    #             {"course": _course},
-    #             {"topic": _topic}
-    #         ]
-    #     }
-    # )
-    video_ = db.python_text_processing.find_one({'topic': _topic})
-    _l.append(video_)
-    return _l
+    
+    video_ = db.python_text_processing.find(
+        {
+            "$and": [
+                {"course": _course},
+                {"topic": _topic}
+        ]
+
+        }
+    )
+    return list(video_)
+
+    # video_ = db.python_text_processing.find({'topic': _topic})
+    # content.append(list(video_))
+    # print(content)
+    # print('=======================')
+    # for v in content[0]:
+    #     if v['course'] == _course:
+    #         print(v)
+    #         _l.append(v)
+
+    # return _l
 
 
 def live_vid_content():

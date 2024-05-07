@@ -163,15 +163,12 @@ def upload_s3vid(uploaded_file, filename):
     
 
 def upload_s3vid_languages(uploaded_file, filename, lang):
-    '''
-        I will work on this part of the code later
-    '''
     client = s3_client()
-    client.upload_fileobj(uploaded_file, os.getenv(
-        f"AWS_STORAGE_BUCKET_NAME{lang}"), filename)
+    with open(uploaded_file, 'rb') as file_obj:
+        client.upload_fileobj(file_obj, os.getenv(
+            f"AWS_STORAGE_BUCKET_NAME{lang}"), filename)
+
     
-
-
 
 def get_byID(_id):
     video_ = db.python_text_processing.find_one({'_id': _id})
@@ -255,8 +252,8 @@ def insert_text(code='f.PNG', desc=''):
         "code": code, "desc": desc, "course": course,
         "subject": subject, "topic": topic_name
     }
-
-    online_users = db.python_text_processing.insert_one(text_details)
+    
+    db.python_text_processing.insert_one(text_details)
 
 
 def get_text_desc():
@@ -264,8 +261,6 @@ def get_text_desc():
     get_text_desc:
         this will query the mongodb collection for a match
     '''
-    _l = []
-    content = []
     _course = session.get('course')
     _topic = session.get('topic')
     print(f'the course name {_course} and the topic name {_topic}')
@@ -281,16 +276,6 @@ def get_text_desc():
     )
     return list(video_)
 
-    # video_ = db.python_text_processing.find({'topic': _topic})
-    # content.append(list(video_))
-    # print(content)
-    # print('=======================')
-    # for v in content[0]:
-    #     if v['course'] == _course:
-    #         print(v)
-    #         _l.append(v)
-
-    # return _l
 
 
 def live_vid_content():
@@ -336,7 +321,7 @@ def create_video_clip(text, output_path, duration, folder):
     os.remove(path_aud)
 
 
-def join_clips(res_clips):
+def join_clips(res_clips, lang):
     '''
     join_clips:
         this will join all the clips together
@@ -353,32 +338,37 @@ def join_clips(res_clips):
         clips_list.append(VideoFileClip(_clip))
 
     final_c = concatenate_videoclips(clips_list, method="compose")
+
+    
     final_c.write_videofile(output_p)
 
-    return output_p
-
-
-def join_clips_others(res_clips):
-    '''
-    join_clips:
-        this will join all the clips together
-    return:
-        the final output path
-    '''
-    root_path = app.root_path
-    comp_file = f'{session.get("course")}_{session.get("topic")}.mp4'
-    output_p = os.path.join(root_path, 'static', 'myvideo', comp_file)
-
-    clips_list = []
-
-    for _clip in res_clips:
-        clips_list.append(VideoFileClip(_clip))
-
-    final_c = concatenate_videoclips(clips_list, method="compose")
-    # the final result will be placed in s3 bucket
-    # final_c.write_videofile(output_p)
+    print(f' the output file : {output_p}')
+    upload_s3vid_languages(output_p, comp_file, lang)
 
     return output_p
+
+
+# def join_clips_others(res_clips):
+#     '''
+#     join_clips:
+#         this will join all the clips together
+#     return:
+#         the final output path
+#     '''
+#     root_path = app.root_path
+#     comp_file = f'{session.get("course")}_{session.get("topic")}.mp4'
+#     output_p = os.path.join(root_path, 'static', 'myvideo', comp_file)
+
+#     clips_list = []
+
+#     for _clip in res_clips:
+#         clips_list.append(VideoFileClip(_clip))
+
+#     final_c = concatenate_videoclips(clips_list, method="compose")
+#     # the final result will be placed in s3 bucket
+#     # final_c.write_videofile(output_p)
+
+#     return output_p
 
 def tts(text, output_path):
     '''
@@ -447,57 +437,7 @@ def recieve_displayed_text(vid_list, lang):
         res_clips.append(output_p)
         cl.write_videofile(output_p)
 
-    final_output_path = join_clips(res_clips)
-
-    return final_output_path
-
-
-# def recieve_displayed_text_others(vid_list, lang):
-#     '''
-#     recieve_displayed_text:
-#         It will read the text from Mongodb
-#     arg:
-#         vid_list: the list of videos
-#     '''
-
-#     res_clips = []
-#     root_path = app.root_path
-
-#     for i, _d in enumerate(vid_list):
-#         audio_file = f'temp_slide_audio_{i}.mp3'
-#         video_file = f'temp_slide_video_{i}.mp4'
-
-#         audio_path = os.path.join(my_audio_video, audio_file)
-#         video_path = os.path.join(my_audio_video, video_file)
-
-#         trans = text_translator(_d["desc"], lang)
-        
-#         matched = find_matched_words(_d["desc"], trans)
-
-#         if lang == 'ar':
-#             process_for_arabic_vid(trans, matched, audio_path, lang)
-#         else:
-#             process_for_nonEnglish(trans, matched, audio_path, lang)
-
-#         slide_audio_clip = AudioFileClip(audio_path)
-
-#         final_clip_duration = slide_audio_clip.duration
-#         create_video_clip(
-#             f'{root_path}/static/default/code/{vid_list[i]["code"]}',
-#             video_path, final_clip_duration, my_audio_video
-#         )
-#         slide_video_clip = VideoFileClip(video_path)
-
-#         slide_audio_clip = slide_audio_clip.set_duration(final_clip_duration)
-
-#         slide_video_clip = slide_video_clip.set_duration(final_clip_duration)
-#         cl = slide_video_clip.set_audio(slide_audio_clip)
-
-#         output_p = os.path.join(root_path, 'static', 'video_lists', video_file)
-#         res_clips.append(output_p)
-#         cl.write_videofile(output_p)
-
-#     final_output_path = join_clips_others(res_clips)
+    final_output_path = join_clips(res_clips, lang)
 
     return final_output_path
 

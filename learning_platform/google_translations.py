@@ -46,24 +46,30 @@ def process_for_nonEnglish(trans, matched, audio_path, lang):
     '''
     processes the text to aanother language
     '''
+    latin_alphabet = {'pt', 'fr', 'es'}
     ls = dict()
+
     if isinstance(trans, list):
         lis = trans
-    else:
+    elif lang not in latin_alphabet:
         lis = trans.split()
     
-    start = 0
-    for idx, word in enumerate(lis):
-        if word.lower() in matched:
-            ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start:idx]).strip()
-            ls[f'{idx}en'] = word.lower()
-            start = idx+1
-            lis[idx] = ''
-    if lis[start::]:
-        ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start::]).strip()
+    if lang in latin_alphabet:
+        tts_ = gTTS(trans, lang=lang)
+        tts_.save(audio_path)
+    else:
+        start = 0
+        for idx, word in enumerate(lis):
+            if word.lower() in matched:
+                ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start:idx]).strip()
+                ls[f'{idx}en'] = word.lower()
+                start = idx+1
+                lis[idx] = ''
+        if lis[start::]:
+            ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start::]).strip()
 
-    with open(audio_path, 'wb') as f:
-        for k, v in ls.items():
-            if v:
-                tts_ = gTTS(v, lang=k[-2::])
-                tts_.write_to_fp(f)
+        with open(audio_path, 'wb') as f:
+            for k, v in ls.items():
+                if v:
+                    tts_ = gTTS(v, lang=k[-2::])
+                    tts_.write_to_fp(f)

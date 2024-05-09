@@ -5,7 +5,9 @@
   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% extends "base.html" %}
-    <title>{% block title %} Dashboard {% endblock %}</title>
+    <title>
+      {% block title %} Dashboard {% endblock %}
+    </title>
     
 </head>
     
@@ -13,16 +15,25 @@
   {% block main %}
   <div class="container-fluid">
 
-    <nav class="text-info fs-3 text-center">Dashboard</nav>
+    <nav class="text-info fs-3 text-end">
+      <a class="btn btn-info" href="{{ url_for( 'users.user_logout') }}">
+        logout
+      </a>
+    </nav>
     <div class="row">
         <div class="col bg-secondary" >
-            <p class="text-light fs-2">My courses</p>
+            <p class="text-light fs-2">
+              My courses
+            </p>
             {% for c in user %}
-            <div class="profile-info"><button class="btn btn-info">
-                <a href="{{ url_for('users.learn_skills', course_id=c.id) }}"> {{ c.name }} </a>
-            </button></div>
+            <div class="profile-info">
+              <button class="btn btn-info">
+                <a href="{{ url_for('users.learn_skills', course_id=c.id) }}">
+                   {{ c.name }} 
+                </a>
+              </button>
+            </div>
             {% endfor %}
-
         </div>
     </div>
   </div>

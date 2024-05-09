@@ -175,6 +175,8 @@ def get_byID(_id):
     return video_
 
 
+
+
 def update_by_id(_id, code, desc):
     update_fields = {}
     if desc != None:
@@ -348,28 +350,6 @@ def join_clips(res_clips, lang):
     return output_p
 
 
-# def join_clips_others(res_clips):
-#     '''
-#     join_clips:
-#         this will join all the clips together
-#     return:
-#         the final output path
-#     '''
-#     root_path = app.root_path
-#     comp_file = f'{session.get("course")}_{session.get("topic")}.mp4'
-#     output_p = os.path.join(root_path, 'static', 'myvideo', comp_file)
-
-#     clips_list = []
-
-#     for _clip in res_clips:
-#         clips_list.append(VideoFileClip(_clip))
-
-#     final_c = concatenate_videoclips(clips_list, method="compose")
-#     # the final result will be placed in s3 bucket
-#     # final_c.write_videofile(output_p)
-
-#     return output_p
-
 def tts(text, output_path):
     '''
     tts:
@@ -406,14 +386,14 @@ def recieve_displayed_text(vid_list, lang):
         audio_path = os.path.join(my_audio_video, audio_file)
         video_path = os.path.join(my_audio_video, video_file)
 
-
+        arabic_alphabet = {'ar', 'urdu'}
         if lang == "en":
             create_audio_clip(_d["desc"], audio_path)
         else:
             trans = text_translator(_d["desc"], lang)
             matched = find_matched_words(_d["desc"], trans)
 
-            if lang == 'ar':
+            if lang in arabic_alphabet:
                 process_for_arabic_vid(trans, matched, audio_path, lang)
             else:
                 process_for_nonEnglish(trans, matched, audio_path, lang)
@@ -486,7 +466,6 @@ def validate_time_task(user_id, task_id, task_name):
     timely_task = TimeTask.query.filter_by(usertask=task_name).first()
 
     if timely_task is None:
-        # solution to this task is readily available and so no need to wait
         return True, "Not timely"
     else:
         task = TimeTask.query.filter_by(user_id=user_id, id=task_id).first()
@@ -560,12 +539,64 @@ def delete_byID(_id):
 
 
 
-def text_data(course, subject, topic, desc=None):
+def text_data(course, subject, topic, desc=None, en=None, 
+              ru=None, es=None, hi=None, ar=None, fr=None, 
+              ur=None, bn=None, pt=None, ch=None, tr=None):
     ''' 
     text_data:
-        the approved videos will be handled by this
+        structure of the reading text
     '''
-    print('you are not needed')
-    file_details = {"course":course,"language": subject, "topic": topic, "desc":desc}
-    online_users = db.text_display.insert_one(file_details)
+    file_details = {"course":course,"language": subject, "topic": topic, "desc":desc,
+                    "en":en, "ar":ar, "bn":bn, 'fr':fr, "tr":tr, "es":es, "pt":pt,
+                    "ur":ur, "ru":ru, "hi":hi, "zh-CN":ch
+                    }
+    db.text_display.insert_one(file_details)
+
+
+
+
+def live_display_text_content():
+    all_videos = []
+    col_content = db.text_display.find()
+    all_videos.append(list(col_content))
+
+    _list = _json(all_videos[0])
+    return _list
+
+def get_display_text_byID(_id):
+    video_ = db.text_display.find_one({'_id': _id})
+    return video_
+
+
+
+def tream(_id, text):
+    update_fields = {}
+    update_fields['desc'] = text
+    
+    result = db.text_display.update_one(
+        {'_id': ObjectId(_id)},
+        {'$set': update_fields}
+    )
+
+    return result
+
+
+def update_display_text(_id, desc):
+    '''
+        populate other fields with the described text
+    '''
+    lang = session.get('lang')
+    update_fields = {}
+    update_fields[lang] = text_translator(desc,  lang)
+
+    result = db.text_display.update_one(
+        {'_id': ObjectId(_id)},
+        {'$set': update_fields}
+    )
+
+    return result
+
+def delete_display_text_byID(_id):
+    db.text_display.delete_one({'_id': ObjectId(_id)})
+
     

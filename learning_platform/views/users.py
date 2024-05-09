@@ -82,7 +82,7 @@ def user_logout():
     db.session.add(user)
     db.session.commit()
     logout_user()
-    return redirect(url_for('users.register_auth'))
+    return redirect(url_for('users.login'))
 
 
 @user_bp.route('/forgot_password', methods=['GET', 'POST'])

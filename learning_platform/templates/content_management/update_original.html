@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% extends "base.html" %}
+    <title>{% block title %} Text {% endblock %}</title>
+</head>
+<body>
+    {% block main %}
+    <div class="container text-center">
+        <div class="row align-items-start text-center text-light">
+            <form method="post">
+            <input  type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="col-8 fs-3 bg-primary">
+            <label for="desc">explanation</label><br>
+            <textarea id="desc" name="desc" rows="8" cols="50">{{ desc }}</textarea>
+          </div>
+          <input type="submit" value="update">
+        </form>
+        
+        </div>
+      </div>
+    {% endblock %}  
+</body>
+</html>

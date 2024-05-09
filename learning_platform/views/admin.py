@@ -11,6 +11,7 @@ from learning_platform._helpers import (
     hash_filename, live_vid_content, find_missing_vid, all_vids, acceptable, insertone,
     upload_s3vid, insert_text, presigned_url, course_topic, _file, delete_byID, unlink_file, update_by_id,
     live_text_Display_AI_content, user_courses, get_text_desc, recieve_displayed_text, get_byID, text_data,
+    update_display_text, live_display_text_content, get_display_text_byID, delete_display_text_byID, tream
 )
 
 
@@ -486,20 +487,20 @@ def get_published_AI():
     return render_template('content_management/preview_ai_content.html', contents=contents)
 
 
-@admin_bp.route('/updatePAI/<string:img_id>', methods=['GET', 'POST'])
-def update_published_AI(img_id):
+@admin_bp.route('/updatePAI/<string:_id>', methods=['GET', 'POST'])
+def update_published_AI(_id):
     '''
     update_published_AI:
         the text and code snippet will be updated here
     '''
-    vid = get_byID(ObjectId(img_id))
+    vid = get_byID(ObjectId(_id))
     if request.method == 'POST':
         desc = request.form.get('desc')
         name = None
         if request.files['file']:
             name = _file(request.files, 'UPLOAD_CODE_FOLDER' )
             unlink_file(vid['code'], 'UPLOAD_CODE_FOLDER' )
-        update_by_id(ObjectId(img_id), name, desc)
+        update_by_id(ObjectId(_id), name, desc)
     return render_template('content_management/update_ai_content.html', vid=vid)
 
 
@@ -623,3 +624,53 @@ def delete_ai_image(img_id):
         except:
             return 'failure'
     return 'success'
+
+
+
+@admin_bp.route('/gptd', methods=['GET', 'POST'])
+def get_reading_text():
+    '''
+    get_published_AI:
+        this will get the AI content for analysis
+    '''
+    lang = request.form.get('language')
+    print(f'the selected language to translate: {lang}')
+    session['lang'] = lang 
+    contents = live_display_text_content()
+
+    return render_template('content_management/preview_text_to_translate.html', contents=contents, lang=lang)
+
+
+@admin_bp.route('/tream/<string:_id>', methods=['GET', 'POST'])
+def tream_original(_id):
+    '''It will update a particular field
+    '''
+    if request.method == 'POST':
+        desc = request.form.get('desc')
+        print(f'the desc: {desc}')
+        tream(_id, desc)
+        flash('text updated successfully')
+        return redirect(url_for('admin.get_reading_text'))
+    desc = request.form.get('desc')
+    return render_template('content_management/update_original.html', desc=desc)
+
+@admin_bp.route('/t_update/<string:_id>', methods=['GET', 'POST'])
+def update_text(_id):
+    '''It will update a particular field
+    '''
+
+    if request.method == 'POST':
+        desc = request.form.get('desc')
+        update_display_text(ObjectId(_id), desc)
+        flash('text updated successfully')
+        return render_template('admin/index.html')
+    vid = get_display_text_byID(ObjectId(_id))
+    return render_template('content_management/update_display_text.html', vid=vid)
+
+
+
+@admin_bp.route('/del_txt_d/<string:_id>', methods=['GET'])
+def delete_display_text(_id):
+    delete_display_text_byID(ObjectId(_id))
+    flash('successfully deleted the record', category='info')
+    return redirect(url_for('admin.get_reading_text'))

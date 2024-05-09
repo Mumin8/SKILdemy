@@ -15,30 +15,30 @@
                 
                 <div class="col bg-dark">
                     {% for content in contents %}
+                    {% if content[lang] %}
+                    <p class="text-light fs-3"> {{ content[lang] }}</p>
+                    {% else %}
+                    <p>Nothing yet</p>
+                    {% endif %}
                     <div class="mb-5" style="background-color: #080808;">
                     <div class="btn btn-outline-success m-1">{{content['course']}}</div>
                     <br>
                     <div class="btn btn-outline-success m-1">{{content['topic']}}</div>
                     <br>
-                    
-                    {% if content['code'] %}
-
-                    
-                        <p class="text-light">{{ content['code'] }}</p>
-                    <img src="{{ url_for('static', filename='default/code/' + content['code']) }}" alt="">
-    
-                    {% endif %}
-
+                    <a href="{{ url_for('admin.tream_original', _id = content['_id'])}}" class="btn btn-info ">
+                        Edit text
+                    </a>
                     {% if content['desc'] %}
                     <p class="text-light fs-3"> {{ content['desc'] }}</p>
                     {% endif %}
+                     
                     <div  class="" style="display: flex; flex-direction: row;
                                          justify-content: space-between;">
-                        <a href="{{ url_for('admin.update_published_AI', _id = content['_id'])}}" class="btn btn-info ">
-                            Edit
+                        <a href="{{ url_for('admin.update_text', _id = content['_id'])}}" class="btn btn-info ">
+                            Proceed translation
                         </a>
 
-                        <a class="btn btn-danger" href="{{ url_for('admin.delete_ai_image', _id=content['_id'])}}">
+                        <a class="btn btn-danger" href="{{ url_for('admin.delete_display_text', _id=content['_id'])}}">
                             Delete
                         </a>
                         

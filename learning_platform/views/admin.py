@@ -634,7 +634,7 @@ def get_reading_text():
         this will get the AI content for analysis
     '''
     lang = request.form.get('language')
-    print(f'the selected language to translate: {lang}')
+    
     session['lang'] = lang 
     contents = live_display_text_content()
 
@@ -647,12 +647,11 @@ def tream_original(_id):
     '''
     if request.method == 'POST':
         desc = request.form.get('desc')
-        print(f'the desc: {desc}')
-        tream(_id, desc)
+        tream(ObjectId(_id), desc)
         flash('text updated successfully')
         return redirect(url_for('admin.get_reading_text'))
-    desc = request.form.get('desc')
-    return render_template('content_management/update_original.html', desc=desc)
+    val = get_display_text_byID(ObjectId(_id))
+    return render_template('content_management/update_original.html', desc=val['desc'])
 
 @admin_bp.route('/t_update/<string:_id>', methods=['GET', 'POST'])
 def update_text(_id):
@@ -662,7 +661,7 @@ def update_text(_id):
     if request.method == 'POST':
         desc = request.form.get('desc')
         update_display_text(ObjectId(_id), desc)
-        flash('text updated successfully')
+        flash('text updated successfully', category='success')
         return render_template('admin/index.html')
     vid = get_display_text_byID(ObjectId(_id))
     return render_template('content_management/update_display_text.html', vid=vid)

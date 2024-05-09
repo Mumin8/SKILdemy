@@ -574,7 +574,7 @@ def tream(_id, text):
     update_fields['desc'] = text
     
     result = db.text_display.update_one(
-        {'_id': ObjectId(_id)},
+        {'_id': _id},
         {'$set': update_fields}
     )
 
@@ -590,13 +590,13 @@ def update_display_text(_id, desc):
     update_fields[lang] = text_translator(desc,  lang)
 
     result = db.text_display.update_one(
-        {'_id': ObjectId(_id)},
+        {'_id': _id},
         {'$set': update_fields}
     )
 
     return result
 
 def delete_display_text_byID(_id):
-    db.text_display.delete_one({'_id': ObjectId(_id)})
+    db.text_display.delete_one({'_id': _id})
 
     

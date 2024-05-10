@@ -13,27 +13,31 @@
 </head>
 <body>
     {% block main %}
+    
 
-    <div class="container-fluid bg-dark">
-       <div class="row">
-        <div class="collapse" id="navbarToggleExternalContent">
-            <div class="bg-dark p-2">
-                <div class="" id="register"><a class="btn btn-info" href="{{ url_for('users.register') }}">Register</a></div>
+    <div class="container-fluid">
+       <div class="row nav">
+        <nav>
+            <div >
+                <div class="" id="register">
+                    <a class="btn btn-info fs-3" href="{{ url_for('users.register') }} " id="auth">
+                        Register
+                    </a>
+                </div>
             </div>
-            <div class="bg-dark p-2">
-                <div class="" id="sign-in"><a class="btn btn-info" href="{{ url_for('users.login') }}">Login</a></div>
+            <div >
+                <div class="" id="sign-in">
+                    <a class="btn btn-info fs-3" href="{{ url_for('users.login') }}" id="auth">
+                        Login
+                    </a>
+                </div>
               </div>
 
-          </div>
-          <nav class="navbar navbar-dark bg-dark">
-            <div class="container-fluid">
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-            </div>
-          </nav>
+            </nav>
+    
        </div>
-       <div class="row">
+       <p class="text-light">The locale language will be displayed here</p>
+       <div class="row ">
         {% if topics %} 
         
         <div class="col" style="background-color: rgb(240, 240, 241);">
@@ -59,13 +63,11 @@
         </div>
         
         {% else %}
+      <div class="parent"> 
+    {% for course in courses %}  
         
-        {% for course in courses %}  
-        <div class="col-3" style="background-color: rgb(192, 190, 188);"></div>
-        <div class="col-5 pb-5">  
-    <div class="text-light p-2" style="
-                                    height: auto; background-color: rgb(240, 240, 241);
-                                    border: 2px solid green;">
+      
+    <div class="text-light" id="course">
         <div class="d-flex justify-content-end">
             <a class="btn btn-info" id="enrol" href="{{ url_for('users.make_payment', course_id=course.id) }}" >
                 Enroll now
@@ -90,11 +92,9 @@
         </div>
         
     </div>
-</div>
-<div class="col-4 " style="background-color: rgb(192, 190, 188);">
-   
-</div>
+
     {% endfor %}
+</div>
     {% endif %}
        </div>
       </div>

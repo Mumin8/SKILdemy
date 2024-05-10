@@ -1,6 +1,63 @@
+/* the home page */
+
+.container-fluid{
+    background-color: rgb(13, 43, 77);
+}
+
+.container-fluid .nav{
+    border: 2px solid rgb(247, 233, 170);
+    border-radius: 4px;
+}
+
+.container-fluid .hr{
+    margin-bottom: 24px;
+    border: 2px solid rgb(157, 247, 212);
+    border-radius: 4px;
+}
+
+div nav{
+    margin-top: 20px;
+    color: rgb(70, 70, 65);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+nav #auth {
+    padding: 4px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+
+.parent{
+    display: flex;
+    flex-wrap: wrap;
+    border: 2px solid rgb(157, 247, 212);
+    border-radius: 4px;
+    background-color: rgb(44, 37, 44); 
+}
+
+
+.parent #course{
+    border-radius: 7px;
+    padding: 7px;
+    min-width: 250px;
+    background-color: rgb(245, 244, 195);
+    width: 100%;
+    max-width: 480px;
+    margin: 24px;
+    flex-grow: 1;
+}
+
+
+
 #editor {
     height: 400px; 
 }
+
+
+
 
 /* this is the home page */
 body{
@@ -30,16 +87,10 @@ header h1{
     background-color: rgb(189, 197, 169);
     height: fit-content;
 }
-/* main{
-    height: 70vh; 
-    background-image: url('/static/images/mass@chu.jpg'); 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+
+/* .home{
+    background-color: rgb(163, 47, 66);
 } */
-.home{
-    background-color: beige;
-}
 .home main{
     display: flex;
     flex-direction: row;
@@ -67,14 +118,7 @@ header h1{
     display: flex;
     justify-content: flex-start;
 }
-.home main .auths #register{
-    border-right: solid;
-    margin-right: 30px;
-}
-.home main .auths #sign-in{
-    border-left: solid;
-    margin-left: 30px;
-}
+
 
 .fa{
     width: 76px;

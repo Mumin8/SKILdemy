@@ -273,8 +273,11 @@ def gptplus_vid(course_id, topic_id):
             ask=ask)
 
 
-@user_bp.route('/payment/<int:course_id>', methods=['GET', 'POST'])
+@user_bp.route('/payment/<string:course_id>', methods=['GET', 'POST'])
 def make_payment(course_id):
+    '''
+        This is where payment is made
+    '''
     if user_enrolled_courses(course_id):
         flash('Already enrolled, login and start learning', category='info')
         return redirect(url_for('users.login'))

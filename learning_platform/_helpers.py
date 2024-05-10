@@ -19,7 +19,6 @@ from learning_platform.google_translations import (
 from learning_platform.models.models import Course, TimeTask, User
 
 my_audio_video = 'output_folder/'
-# video_audio = [[], []]
 
 
 def get_ref():

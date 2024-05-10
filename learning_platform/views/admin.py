@@ -5,14 +5,34 @@ from learning_platform import bcrypt, db
 from werkzeug.utils import secure_filename
 from learning_platform.forms.form import (
     Registration, LoginForm, CourseForm, TopicForm, SubjectForm, SubTopicForm)
-from learning_platform.models.models import (User, Video, Course, SubTopic, Subject,
-                                             YouTube, Topic, TimeTask)
+from learning_platform.models.models import (
+    User, Video, Course, SubTopic, Subject, YouTube, Topic, TimeTask)
 from learning_platform._helpers import (
-    hash_filename, live_vid_content, find_missing_vid, all_vids, acceptable, insertone,
-    upload_s3vid, insert_text, presigned_url, course_topic, _file, delete_byID, unlink_file, update_by_id,
-    live_text_Display_AI_content, user_courses, get_text_desc, recieve_displayed_text, get_byID, text_data,
-    update_display_text, live_display_text_content, get_display_text_byID, delete_display_text_byID, tream
-)
+    hash_filename,
+    live_vid_content,
+    find_missing_vid,
+    all_vids,
+    acceptable,
+    insertone,
+    upload_s3vid,
+    insert_text,
+    presigned_url,
+    course_topic,
+    _file,
+    delete_byID,
+    unlink_file,
+    update_by_id,
+    live_text_Display_AI_content,
+    user_courses,
+    get_text_desc,
+    recieve_displayed_text,
+    get_byID,
+    text_data,
+    update_display_text,
+    live_display_text_content,
+    get_display_text_byID,
+    delete_display_text_byID,
+    tream)
 
 
 admin_bp = Blueprint(
@@ -95,7 +115,8 @@ def admin_login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
+        if user and bcrypt.check_password_hash(
+                user.password, form.password.data):
             user.authenticated = True
             user.moderator = True
             db.session.add(user)
@@ -125,7 +146,10 @@ def admin_add_vid():
         print(
             f'course {request.form.get("course")} topic {request.form.get("topic")}')
         return redirect(url_for('admin.upload'))
-    return render_template('admin/add_video.html', courses=courses, topics=topics)
+    return render_template(
+        'admin/add_video.html',
+        courses=courses,
+        topics=topics)
 
 
 @admin_bp.route('/upload', methods=['GET', 'POST'])
@@ -139,7 +163,9 @@ def upload():
     v_id.append(video_)
 
     if len(v_id[0]) > 3:
-        flash('the number of videos is up to 4 alread, you will be notified if  a slop is available', category='success')
+        flash(
+            'the number of videos is up to 4 alread, you will be notified if  a slop is available',
+            category='success')
         return redirect(url_for('learn_skills'))
     else:
         if request.method == 'POST':
@@ -159,7 +185,7 @@ def upload():
                 upload_s3vid(file, name)
                 # file.save(os.path.join(app.config['UPLOAD_FOLDER'], name))
                 insertone(file_details)
-                
+
                 flash('successfully added the video', category='success')
         return render_template('admin/upload_vid.html')
 
@@ -179,7 +205,9 @@ def register_course():
         db.session.add(new_course)
         db.session.commit()
         return jsonify({'message': 'Course created successfully'}), 201
-    return render_template('content_management/Register_course.html', form=form)
+    return render_template(
+        'content_management/Register_course.html',
+        form=form)
 
 
 @admin_bp.route('/cs_avail', methods=['GET', 'POST'])
@@ -289,12 +317,21 @@ def add_tc():
             course.topics.append(topic)
             db.session.commit()
             flash(f'added {topic} to {course}', category='success')
-            return render_template('content_management/topic_to_course.html', courses=courses, topics=topics)
+            return render_template(
+                'content_management/topic_to_course.html',
+                courses=courses,
+                topics=topics)
         else:
             flash('the topic is associated with this course', category='info')
-            return render_template('content_management/topic_to_course.html', courses=courses, topics=topics)
+            return render_template(
+                'content_management/topic_to_course.html',
+                courses=courses,
+                topics=topics)
 
-    return render_template('content_management/topic_to_course.html', courses=courses, topics=topics)
+    return render_template(
+        'content_management/topic_to_course.html',
+        courses=courses,
+        topics=topics)
 
 
 @admin_bp.route('/add_sc', methods=['GET', 'POST'])
@@ -316,14 +353,24 @@ def add_sc():
             course.subjects.append(subject)
             db.session.commit()
             flash(
-                f'successfully added {subject} to {course}', category='success')
-            return render_template('content_management/subject_to_course.html', courses=courses, subjects=subjects)
+                f'successfully added {subject} to {course}',
+                category='success')
+            return render_template(
+                'content_management/subject_to_course.html',
+                courses=courses,
+                subjects=subjects)
         else:
             flash('this subject is associated with this course already',
                   category='info')
-            return render_template('content_management/subject_to_course.html', courses=courses, subjects=subjects)
+            return render_template(
+                'content_management/subject_to_course.html',
+                courses=courses,
+                subjects=subjects)
 
-    return render_template('content_management/subject_to_course.html', courses=courses, subjects=subjects)
+    return render_template(
+        'content_management/subject_to_course.html',
+        courses=courses,
+        subjects=subjects)
 
 
 @admin_bp.route('/add_subtt', methods=['GET', 'POST'])
@@ -345,12 +392,23 @@ def add_subtt():
             topic.sub_topics.append(subtopic)
             db.session.commit()
             flash(f'successfully added {subtopic} to {topic}')
-            return render_template('content_management/subtopic_to_topic.html', subtopics=subtopics, topics=topics)
+            return render_template(
+                'content_management/subtopic_to_topic.html',
+                subtopics=subtopics,
+                topics=topics)
         else:
-            flash(f'the topic is associated with this course', category='warning')
-            return render_template('content_management/subtopic_to_topic.html', subtopics=subtopics, topics=topics)
+            flash(
+                f'the topic is associated with this course',
+                category='warning')
+            return render_template(
+                'content_management/subtopic_to_topic.html',
+                subtopics=subtopics,
+                topics=topics)
 
-    return render_template('content_management/subtopic_to_topic.html', subtopics=subtopics, topics=topics)
+    return render_template(
+        'content_management/subtopic_to_topic.html',
+        subtopics=subtopics,
+        topics=topics)
 
 
 @admin_bp.route('/add_ts', methods=['GET', 'POST'])
@@ -374,12 +432,21 @@ def add_topic_to_subject():
             db.session.commit()
             flash(
                 f'successfully added {topic} to {subject}', category='success')
-            return render_template('content_management/topic_to_subject.html', subjects=subjects, topics=topics)
+            return render_template(
+                'content_management/topic_to_subject.html',
+                subjects=subjects,
+                topics=topics)
         else:
             flash('the topic is associated with this course', category='info')
-            return render_template('content_management/topic_to_subject.html', subjects=subjects, topics=topics)
+            return render_template(
+                'content_management/topic_to_subject.html',
+                subjects=subjects,
+                topics=topics)
 
-    return render_template('content_management/topic_to_subject.html', subjects=subjects, topics=topics)
+    return render_template(
+        'content_management/topic_to_subject.html',
+        subjects=subjects,
+        topics=topics)
 
 
 @admin_bp.route('/c_s_st', methods=['GET', 'POST'])
@@ -394,7 +461,11 @@ def add_c_s_st():
         session['subtopic'] = request.form.get("subtopic")
         insert_text()
         flash('successfully added content for ai video')
-    return render_template('content_management/course_subject_subtopic.html', course=course, subject=subject, subtopic=subtopic)
+    return render_template(
+        'content_management/course_subject_subtopic.html',
+        course=course,
+        subject=subject,
+        subtopic=subtopic)
 
 
 @admin_bp.route('/reading_text', methods=['GET', 'POST'])
@@ -413,8 +484,11 @@ def add_reading_text():
         t_name = SubTopic.query.get(request.form.get('topic_id')).name
         text_data(c_name, s_name, t_name)
         flash('added content ')
-        return render_template('content_management/reading_text.html',
-                           courses=courses, subjects=subjects, topics=topics)
+        return render_template(
+            'content_management/reading_text.html',
+            courses=courses,
+            subjects=subjects,
+            topics=topics)
 
     return render_template('content_management/reading_text.html',
                            courses=courses, subjects=subjects, topics=topics)
@@ -429,7 +503,9 @@ def get_published_Video():
     vid_content = live_vid_content()
     url = presigned_url('3957dc2fc92e347daa1d388e5b9b71eb.mp4')
     # print(f'the url {vid_content}')
-    return render_template('content_management/preview_shared_videos.html', url=url)
+    return render_template(
+        'content_management/preview_shared_videos.html',
+        url=url)
 
 
 @admin_bp.route('/gtv', methods=['GET', 'POST'])
@@ -449,14 +525,15 @@ def aud_vid(lang):
     return acc_v
 
 
-@admin_bp.route('/gptplus/<string:language>/<string:course_id>/<string:topic_id>', methods=['GET', 'POST'])
+@admin_bp.route('/gptplus/<string:language>/<string:course_id>/<string:topic_id>',
+                methods=['GET', 'POST'])
 @login_required
 def gptplus(language, course_id, topic_id):
     '''
     gptplus:
         this is where the ai video is processed
     '''
-    
+
     user_c = sorted(user_courses(current_user.id))
     c_and_t = course_topic(user_c)
     session['course'] = Course.query.get(course_id).name
@@ -473,7 +550,10 @@ def admin_all_course():
     language = request.form.get('language')
     user_c = user_courses()
     c_and_t = course_topic(user_c)
-    return render_template('content_management/generate_ai_video.html', dict_v=c_and_t, language=language)
+    return render_template(
+        'content_management/generate_ai_video.html',
+        dict_v=c_and_t,
+        language=language)
 
 
 @admin_bp.route('/gpai', methods=['GET'])
@@ -484,7 +564,9 @@ def get_published_AI():
     '''
     contents = live_text_Display_AI_content()
 
-    return render_template('content_management/preview_ai_content.html', contents=contents)
+    return render_template(
+        'content_management/preview_ai_content.html',
+        contents=contents)
 
 
 @admin_bp.route('/updatePAI/<string:_id>', methods=['GET', 'POST'])
@@ -498,10 +580,12 @@ def update_published_AI(_id):
         desc = request.form.get('desc')
         name = None
         if request.files['file']:
-            name = _file(request.files, 'UPLOAD_CODE_FOLDER' )
-            unlink_file(vid['code'], 'UPLOAD_CODE_FOLDER' )
+            name = _file(request.files, 'UPLOAD_CODE_FOLDER')
+            unlink_file(vid['code'], 'UPLOAD_CODE_FOLDER')
         update_by_id(ObjectId(_id), name, desc)
-    return render_template('content_management/update_ai_content.html', vid=vid)
+    return render_template(
+        'content_management/update_ai_content.html',
+        vid=vid)
 
 
 @admin_bp.route('/add_tt', methods=['GET', 'POST'])
@@ -522,7 +606,9 @@ def add_tt():
             return redirect(url_for('admin.add_tt'))
 
     avail_tasks = SubTopic.query.all()
-    return render_template('content_management/timely_task.html', avail_tasks=avail_tasks)
+    return render_template(
+        'content_management/timely_task.html',
+        avail_tasks=avail_tasks)
 
 
 @admin_bp.route('/you-tube', methods=['GET', 'POST'])
@@ -547,7 +633,9 @@ def add_youtube_vid():
         db.session.add(youtube)
         db.session.commit()
         flash('you have added a link to a youtube video', category='success')
-    return render_template('content_management/add_youtube_video.html', subtopic=subtopic)
+    return render_template(
+        'content_management/add_youtube_video.html',
+        subtopic=subtopic)
 
 
 @admin_bp.route('/del_course/<string:c_id>', methods=['GET'])
@@ -561,7 +649,7 @@ def del_course(c_id):
         db.session.delete(course)
         db.session.commit()
         return render_template('admin/index.html')
-    except:
+    except BaseException:
         return "something went wrong"
 
 
@@ -576,9 +664,9 @@ def del_lang(s_id):
         db.session.delete(language)
         db.session.commit()
         return render_template('admin/index.html')
-    except:
+    except BaseException:
         return 'something went wrong'
-    
+
 
 @admin_bp.route('/del_topic/<string:t_id>', methods=['GET'])
 def del_topic(t_id):
@@ -591,7 +679,7 @@ def del_topic(t_id):
         db.session.delete(topic)
         db.session.commit()
         return render_template('admin/index.html')
-    except:
+    except BaseException:
         return "something went wrong"
 
 
@@ -607,7 +695,7 @@ def del_subtopic(st_id):
         db.session.commit()
         flash(f'{subtopic.name} deleted successfully', category='info')
         return render_template('admin/index.html')
-    except:
+    except BaseException:
         return "something went wrong"
 
 
@@ -621,10 +709,9 @@ def delete_ai_image(img_id):
         try:
             delete_byID(img_id)
             return f'(No image itself {e})'
-        except:
+        except BaseException:
             return 'failure'
     return 'success'
-
 
 
 @admin_bp.route('/gptd', methods=['GET', 'POST'])
@@ -634,11 +721,14 @@ def get_reading_text():
         this will get the AI content for analysis
     '''
     lang = request.form.get('language')
-    
-    session['lang'] = lang 
+
+    session['lang'] = lang
     contents = live_display_text_content()
 
-    return render_template('content_management/preview_text_to_translate.html', contents=contents, lang=lang)
+    return render_template(
+        'content_management/preview_text_to_translate.html',
+        contents=contents,
+        lang=lang)
 
 
 @admin_bp.route('/tream/<string:_id>', methods=['GET', 'POST'])
@@ -651,11 +741,15 @@ def tream_original(_id):
         flash('text updated successfully')
         return redirect(url_for('admin.get_reading_text'))
     val = get_display_text_byID(ObjectId(_id))
-    return render_template('content_management/update_original.html', desc=val['desc'])
+    return render_template(
+        'content_management/update_original.html',
+        desc=val['desc'])
+
 
 @admin_bp.route('/t_update/<string:_id>', methods=['GET', 'POST'])
 def update_text(_id):
-    '''It will update a particular field
+    '''
+        It will update a particular field
     '''
 
     if request.method == 'POST':
@@ -664,12 +758,16 @@ def update_text(_id):
         flash('text updated successfully', category='success')
         return render_template('admin/index.html')
     vid = get_display_text_byID(ObjectId(_id))
-    return render_template('content_management/update_display_text.html', vid=vid)
-
+    return render_template(
+        'content_management/update_display_text.html',
+        vid=vid)
 
 
 @admin_bp.route('/del_txt_d/<string:_id>', methods=['GET'])
 def delete_display_text(_id):
+    '''
+        It will delete the record for the reading
+    '''
     delete_display_text_byID(ObjectId(_id))
     flash('successfully deleted the record', category='info')
     return redirect(url_for('admin.get_reading_text'))

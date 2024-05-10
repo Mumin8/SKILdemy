@@ -4,8 +4,10 @@ from googletrans import Translator
 
 translator = Translator()
 
+
 def lang_detector(text):
     return translator.detect(text).lang
+
 
 def find_matched_words(text1, text2):
     '''
@@ -24,6 +26,7 @@ def text_translator(text, lang):
     # print(text)
     return text
 
+
 def reorganize(trans):
     '''
     reorganize the arabic to read like the rest of the languages
@@ -40,7 +43,7 @@ def process_for_arabic_vid(trans, matched, audio_path, lang):
         process the text to arabic  language
     '''
     _trans = reorganize(trans)
-    process_for_nonEnglish(_trans, matched, audio_path, lang) 
+    process_for_nonEnglish(_trans, matched, audio_path, lang)
 
 
 def process_for_nonEnglish(trans, matched, audio_path, lang):
@@ -54,7 +57,7 @@ def process_for_nonEnglish(trans, matched, audio_path, lang):
         lis = trans
     elif lang not in latin_alphabet:
         lis = trans.split()
-    
+
     if lang in latin_alphabet:
         tts_ = gTTS(trans, lang=lang)
         tts_.save(audio_path)
@@ -62,9 +65,10 @@ def process_for_nonEnglish(trans, matched, audio_path, lang):
         start = 0
         for idx, word in enumerate(lis):
             if word.lower() in matched:
-                ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start:idx]).strip()
+                ls[f'{idx}{lang}'] = ' '.join(
+                    w for w in lis[start:idx]).strip()
                 ls[f'{idx}en'] = word.lower()
-                start = idx+1
+                start = idx + 1
                 lis[idx] = ''
         if lis[start::]:
             ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start::]).strip()

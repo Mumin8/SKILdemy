@@ -1,4 +1,9 @@
-import os, boto3, secrets, shutil, requests, pyttsx3
+import os
+import boto3
+import secrets
+import shutil
+import requests
+import pyttsx3
 from bson.objectid import ObjectId
 from werkzeug.local import LocalProxy
 from flask import g, session, flash, redirect, url_for, request
@@ -9,8 +14,8 @@ from moviepy.editor import (AudioFileClip, concatenate_videoclips,
                             VideoFileClip, ImageClip)
 from werkzeug.utils import secure_filename
 from learning_platform.google_translations import (
-                                                    text_translator, find_matched_words, process_for_nonEnglish,
-                                                    process_for_arabic_vid)
+    text_translator, find_matched_words, process_for_nonEnglish,
+    process_for_arabic_vid)
 from learning_platform.models.models import Course, TimeTask, User
 
 my_audio_video = 'output_folder/'
@@ -78,7 +83,7 @@ def unlink_file(name, _dir):
         this will delete the unneeded files from the directory
     args:
         name: this is the name of the file
-        _dir: this is the directory in which the file is 
+        _dir: this is the directory in which the file is
     '''
     try:
         os.unlink(os.path.join(app.config[_dir], name))
@@ -106,7 +111,7 @@ def hash_filename(filename):
 
 def _json(l):
     for i, o in enumerate(l):
-        print ( f"the description {o}")
+        print(f"the description {o}")
         l[i]['_id'] = str(o['_id'])
     return l
 
@@ -160,7 +165,7 @@ def upload_s3vid(uploaded_file, filename):
     client = s3_client()
     client.upload_fileobj(uploaded_file, os.getenv(
         "AWS_STORAGE_BUCKET_NAME"), filename)
-    
+
 
 def upload_s3vid_languages(uploaded_file, filename, lang):
     client = s3_client()
@@ -168,20 +173,17 @@ def upload_s3vid_languages(uploaded_file, filename, lang):
         client.upload_fileobj(file_obj, os.getenv(
             f"AWS_STORAGE_BUCKET_NAME{lang}"), filename)
 
-    
 
 def get_byID(_id):
     video_ = db.python_text_processing.find_one({'_id': _id})
     return video_
 
 
-
-
 def update_by_id(_id, code, desc):
     update_fields = {}
-    if desc != None:
+    if desc is not None:
         update_fields['desc'] = desc
-    if code != '' and code != None:
+    if code != '' and code is not None:
         update_fields['code'] = code
 
     print(f'result: {update_fields}')
@@ -195,11 +197,11 @@ def update_by_id(_id, code, desc):
 
 def course_topic(course):
     """
-    validate_topic: 
+    validate_topic:
         this ensures there is no topic with the same name
-    arg:    
+    arg:
         course_list: the list of all the courses
-    return: 
+    return:
         True if no such topic exists and False otherwise
     """
 
@@ -222,7 +224,7 @@ def c_and_topics(course):
 
 
 def read_content(course, topic):
-    ''' 
+    '''
     text_data:
         the approved videos will be handled by this
     '''
@@ -254,7 +256,7 @@ def insert_text(code='f.PNG', desc=''):
         "code": code, "desc": desc, "course": course,
         "subject": subject, "topic": topic_name
     }
-    
+
     db.python_text_processing.insert_one(text_details)
 
 
@@ -266,18 +268,17 @@ def get_text_desc():
     _course = session.get('course')
     _topic = session.get('topic')
     print(f'the course name {_course} and the topic name {_topic}')
-    
+
     video_ = db.python_text_processing.find(
         {
             "$and": [
                 {"course": _course},
                 {"topic": _topic}
-        ]
+            ]
 
         }
     )
     return list(video_)
-
 
 
 def live_vid_content():
@@ -341,7 +342,6 @@ def join_clips(res_clips, lang):
 
     final_c = concatenate_videoclips(clips_list, method="compose")
 
-    
     final_c.write_videofile(output_p)
 
     print(f' the output file : {output_p}')
@@ -398,7 +398,6 @@ def recieve_displayed_text(vid_list, lang):
             else:
                 process_for_nonEnglish(trans, matched, audio_path, lang)
 
-
         slide_audio_clip = AudioFileClip(audio_path)
 
         final_clip_duration = slide_audio_clip.duration
@@ -428,6 +427,7 @@ def matched_dic(matched, text_list):
         _n = text_list.count(v)
         match_dict[v] = _n
     return match_dict
+
 
 def live_text_Display_AI_content():
     all_videos = []
@@ -475,7 +475,8 @@ def validate_time_task(user_id, task_id, task_name):
             if status:
                 return status, "Not timely"
             else:
-                # the time for the solution is not yet up so solution will not be ready
+                # the time for the solution is not yet up so solution will not
+                # be ready
                 elapsed_time = datetime.now() - task.updated_at
                 hours, minutes, seconds = f'{timedelta(days=1) - elapsed_time}'.split(
                     ':')
@@ -534,28 +535,44 @@ def verify_payment(ref):
     response_data = response.json()
     return False, response_data['message']
 
+
 def delete_byID(_id):
+    '''
+        Delete the field with the _id
+    '''
     db.python_text_processing.delete_one({'_id': ObjectId(_id)})
 
 
-
-def text_data(course, subject, topic, desc=None, en=None, 
-              ru=None, es=None, hi=None, ar=None, fr=None, 
+def text_data(course, subject, topic, desc=None, en=None,
+              ru=None, es=None, hi=None, ar=None, fr=None,
               ur=None, bn=None, pt=None, ch=None, tr=None):
-    ''' 
+    '''
     text_data:
         structure of the reading text
     '''
-    file_details = {"course":course,"language": subject, "topic": topic, "desc":desc,
-                    "en":en, "ar":ar, "bn":bn, 'fr':fr, "tr":tr, "es":es, "pt":pt,
-                    "ur":ur, "ru":ru, "hi":hi, "zh-CN":ch
-                    }
+    file_details = {
+        "course": course,
+        "language": subject,
+        "topic": topic,
+        "desc": desc,
+        "en": en,
+        "ar": ar,
+        "bn": bn,
+        'fr': fr,
+        "tr": tr,
+        "es": es,
+        "pt": pt,
+        "ur": ur,
+        "ru": ru,
+        "hi": hi,
+        "zh-CN": ch}
     db.text_display.insert_one(file_details)
 
 
-
-
 def live_display_text_content():
+    '''
+        Processes the text that will be displayed
+    '''
     all_videos = []
     col_content = db.text_display.find()
     all_videos.append(list(col_content))
@@ -563,16 +580,22 @@ def live_display_text_content():
     _list = _json(all_videos[0])
     return _list
 
+
 def get_display_text_byID(_id):
+    '''
+        Retrieve the text in the field with _id
+    '''
     video_ = db.text_display.find_one({'_id': _id})
     return video_
 
 
-
 def tream(_id, text):
+    '''
+        Edit the original text in the field
+    '''
     update_fields = {}
     update_fields['desc'] = text
-    
+
     result = db.text_display.update_one(
         {'_id': _id},
         {'$set': update_fields}
@@ -587,7 +610,7 @@ def update_display_text(_id, desc):
     '''
     lang = session.get('lang')
     update_fields = {}
-    update_fields[lang] = text_translator(desc,  lang)
+    update_fields[lang] = text_translator(desc, lang)
 
     result = db.text_display.update_one(
         {'_id': _id},
@@ -596,7 +619,9 @@ def update_display_text(_id, desc):
 
     return result
 
-def delete_display_text_byID(_id):
-    db.text_display.delete_one({'_id': _id})
 
-    
+def delete_display_text_byID(_id):
+    '''
+        Delete the record with the _id
+    '''
+    db.text_display.delete_one({'_id': _id})

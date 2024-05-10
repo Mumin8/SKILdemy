@@ -6,9 +6,15 @@ from flask_mail import Message
 from learning_platform import bcrypt, db, app, mail
 from learning_platform.forms.form import Registration, LoginForm, ResetForm, NewPasswordForm
 from learning_platform.models.models import User, Course, SubTopic, TimeTask, YouTube
-from learning_platform._helpers import (c_and_topics, read_content, copy_ai_video,
-                                        validate_time_task, user_courses, get_ref,
-                                        vid_ids, verify_payment)
+from learning_platform._helpers import (
+    c_and_topics,
+    read_content,
+    copy_ai_video,
+    validate_time_task,
+    user_courses,
+    get_ref,
+    vid_ids,
+    verify_payment)
 
 user_bp = Blueprint('users', __name__, static_folder='static',
                     template_folder='templates')
@@ -55,7 +61,8 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         try:
-            if user and bcrypt.check_password_hash(user.password, form.password.data):
+            if user and bcrypt.check_password_hash(
+                    user.password, form.password.data):
                 user.authenticated = True
                 db.session.add(user)
                 db.session.commit()
@@ -64,7 +71,7 @@ def login():
                 return redirect(url_for('users.userprofile'))
             flash("Invalid Credentials", category='warning')
             return redirect(url_for('users.login'))
-        except:
+        except BaseException:
             return redirect(url_for('users.login'))
 
     return render_template('user/login.html', form=form)
@@ -109,7 +116,10 @@ def forgot_password():
         else:
             flash('Email not found', category='danger')
             return redirect(url_for('users.login'))
-    return render_template('user/reset_password.html', form=form, title='Reset Password')
+    return render_template(
+        'user/reset_password.html',
+        form=form,
+        title='Reset Password')
 
 
 @user_bp.route('/reset_password/<token>', methods=['GET', 'POST'])
@@ -142,15 +152,18 @@ def enroll_course(course_id):
 
     if status:
         course = Course.query.get(course_id)
-        if course.price*100 == result['amount']:
+        if course.price * 100 == result['amount']:
             print(f'hurray {result["amount"]}')
             current_user.enrolling.append(course)
             db.session.commit()
             flash(
-                f'You have successfully enrolled in {course.name}', category='info')
+                f'You have successfully enrolled in {course.name}',
+                category='info')
             return render_template('payment/success.html')
     else:
-        flash(f'unsuccessful, please check your details or contact paystack support', category='info')
+        flash(
+            f'unsuccessful, please check your details or contact paystack support',
+            category='info')
         return render_template('payment/unsuccessful.html')
 
 
@@ -180,7 +193,10 @@ def learn_skills(course_id):
     if user_c:
         c_and_t = c_and_topics(user_c)
         first_key, first_value = next(iter(c_and_t.items()))
-        return render_template('user/learn_page.html', fk=first_key, fv=first_value)
+        return render_template(
+            'user/learn_page.html',
+            fk=first_key,
+            fv=first_value)
     return render_template('user/learn_page.html')
 
 
@@ -204,10 +220,15 @@ def topic_by_course(course_id, topic_id):
     topic = SubTopic.query.get(topic_id).name
     if course:
         mat = read_content(course, topic)
-    return render_template('user/learn_page.html', mat=mat, course_id=course_id, topic_id=topic_id)
+    return render_template(
+        'user/learn_page.html',
+        mat=mat,
+        course_id=course_id,
+        topic_id=topic_id)
 
 
-@user_bp.route('/gptplus_vid/<int:course_id>/<int:topic_id>', methods=['GET', 'POST'])
+@user_bp.route('/gptplus_vid/<int:course_id>/<int:topic_id>',
+               methods=['GET', 'POST'])
 @login_required
 def gptplus_vid(course_id, topic_id):
     '''
@@ -225,17 +246,31 @@ def gptplus_vid(course_id, topic_id):
 
         name = copy_ai_video(vid_path, dest_path)
         not_time = state
-        return render_template('user/learn_page.html', path=name, course_id=course_id, not_time=not_time)
+        return render_template(
+            'user/learn_page.html',
+            path=name,
+            course_id=course_id,
+            not_time=not_time)
 
     elif not status and state == "pending":
         name = "not yet ready"
         pending = state
-        return render_template('user/learn_page.html', path=name, course_id=course_id, topic_id=topic_id, pending=pending)
+        return render_template(
+            'user/learn_page.html',
+            path=name,
+            course_id=course_id,
+            topic_id=topic_id,
+            pending=pending)
     elif not status and state == 'request':
         name = "make request"
         ask = state
         flash('You can request for the solution')
-        return render_template('user/learn_page.html', path=name, course_id=course_id, topic_id=topic_id, ask=ask)
+        return render_template(
+            'user/learn_page.html',
+            path=name,
+            course_id=course_id,
+            topic_id=topic_id,
+            ask=ask)
 
 
 @user_bp.route('/payment/<int:course_id>', methods=['GET', 'POST'])
@@ -254,7 +289,14 @@ def make_payment(course_id):
     ref.append(get_ref())
     print(f'inside make_payment {ref}')
     pk = os.getenv("PAYSTACK_PUBLIC_KEY")
-    return render_template('payment/payment.html', c_id=c_id, amount=amount, c_name=c_name, email=email, pk=pk, ref=ref[0])
+    return render_template(
+        'payment/payment.html',
+        c_id=c_id,
+        amount=amount,
+        c_name=c_name,
+        email=email,
+        pk=pk,
+        ref=ref[0])
 
 
 @user_bp.route('/yt_vid/<int:topic_id>', methods=['GET', 'POST'])
@@ -274,4 +316,3 @@ def youtube_vids(topic_id):
 #      '''
 #     from_eng_to_others()
 #     return "boom"
-    

@@ -1,9 +1,25 @@
 import re
+from flask import g, request
 from gtts import gTTS
 from googletrans import Translator
 
 translator = Translator()
 
+
+def get_locale():
+    user = getattr(g, 'user', None)
+    if user is not None:
+        return user.locale
+
+    return request.accept_languages.best_match(
+        ['ar', 'bn', 'zh-CN', 'en', 'es', 'fr', 'hi', 'pt', 'ru', 'tr', 'ur']
+    )
+
+
+# def get_timezone():
+#     user = getattr(g, 'user', None)
+#     if user is not None:
+#         return user.timezone
 
 def lang_detector(text):
     return translator.detect(text).lang

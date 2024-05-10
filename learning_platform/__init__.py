@@ -7,6 +7,7 @@ from flask_migrate import Migrate
 from flask_pymongo import PyMongo
 from flask_wtf.csrf import CSRFProtect
 import os
+# from learning_platform.google_translations import get_locale, get_timezone
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))

@@ -15,10 +15,19 @@
   {% block main %}
   <div class="container-fluid">
 
-    <nav class="text-info fs-3 text-end">
-      <a class="btn btn-info" href="{{ url_for( 'users.user_logout') }}">
-        logout
-      </a>
+    <nav class="text-info fs-3" id="profile">
+      <div class="child">
+        <a class="" href="{{ url_for( 'home.home') }}">
+          Home
+        </a>
+      </div>
+      
+      <div class="child">
+        <a class="" href="{{ url_for( 'users.user_logout') }}">
+          logout
+        </a>
+      </div>
+      
     </nav>
     <div class="row">
         <div class="col bg-secondary" >

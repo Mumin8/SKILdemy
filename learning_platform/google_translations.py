@@ -12,7 +12,7 @@ def get_locale():
         return user.locale
 
     return request.accept_languages.best_match(
-        ['ar', 'bn', 'zh-CN', 'en', 'es', 'fr', 'hi', 'pt', 'ru', 'tr', 'ur']
+        ['ar', 'bn', 'zh-CN', 'en', 'es', 'fr', 'hi', 'id', 'pt', 'ru', 'tr', 'ur']
     )
 
 

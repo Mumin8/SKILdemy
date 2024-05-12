@@ -1,5 +1,10 @@
 /* the home page */
 
+a img{
+    margin: 12px;
+    width: 70px;
+}
+
 .container-fluid{
     background-color: rgb(13, 43, 77);
 }
@@ -58,8 +63,6 @@ nav #auth {
 
 
 
-
-/* this is the home page */
 body{
     background-color: rgb(23, 24, 23);
 }
@@ -69,6 +72,45 @@ header{
     justify-content: center;
     align-items: center;
 }
+
+
+
+
+/* the personal profile page */
+
+#profile {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#profile .child{
+    margin: 12px;
+    font-size: 24px;
+    background-color: rgb(175, 245, 233);
+    border: 0px solid rgb(157, 247, 212);
+    border-radius: 5px;
+}
+#profile .child:hover{
+    background-color: rgb(18, 248, 237);
+}
+
+#profile .child a:hover{
+    font-size: 27px;
+}
+
+
+#profile .child a{
+    color: rgb(32, 52, 82);
+    font-size: 18px;
+    text-decoration: none;
+    margin: 5px;
+}
+
+
+
+/* this is the home page */
+
 header h1{
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-weight: lighter;

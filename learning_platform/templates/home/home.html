@@ -7,7 +7,7 @@
     
     <title>
         {% block title %}
-        Mass@chusettes Tech Camp
+        SKILdemy
         {% endblock %}
     </title>
 </head>
@@ -18,6 +18,21 @@
     <div class="container-fluid">
        <div class="row nav">
         <nav>
+            {% if auth %}
+            <div>
+                <a class="btn btn-info fs-4 m-2" href="{{ url_for('users.userprofile')}}">
+                    Personal Page
+                </a>
+            </div>
+
+            <div>
+                <a class="" href="{{ url_for('users.user_locale')}}"> 
+                    <img src="{{ url_for('static', filename='flags/' + lang)}}" alt="">    
+                </a>
+            </div>
+
+            
+            {% else %}
             <div >
                 <div class="" id="register">
                     <a class="btn btn-info fs-3" href="{{ url_for('users.register') }} " id="auth">
@@ -32,7 +47,7 @@
                     </a>
                 </div>
               </div>
-
+            {% endif %}
             </nav>
     
        </div>
@@ -50,12 +65,12 @@
                 </ul>
               </nav>
 
-              <div class="fs-2 text-center text-info p-2"> {{course.name}}</div>
+              <div class="fs-2 text-center text-info p-2"> {{ course.name }}</div>
             <p>
                 <ul>
                         <h3 class="text-info">course content</h3>
                         {% for topic in topics %}
-                         <li class="text-primary">{{ topic.name  }}</li>
+                         <li class="fs-3 text-success">{{ topic.name  }}</li>
                         {% endfor %}
                 </ul>
     
@@ -69,7 +84,7 @@
       
     <div class="text-light" id="course">
         <div class="d-flex justify-content-end">
-            <a class="btn btn-info" id="enrol" href="{{ url_for('users.make_payment', course_id=course.id) }}" >
+            <a class="btn btn-info m-2" id="enrol" href="{{ url_for('users.make_payment', course_id=course.id) }}" >
                 Enroll now
             </a>
         </div>
@@ -79,8 +94,8 @@
                 <p class="text-dark">
                     {{ course.description}}...
                     <span>
-                            <a class="text-dark"  style="text-decoration: none;" href="">
-                             see more
+                        <a class="text-dark"  style="text-decoration: none;" href="{{ url_for('home.home_', course_id=course.id) }}">
+                            see more
                         </a>
                     </span>
                     

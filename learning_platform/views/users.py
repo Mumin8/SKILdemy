@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
+from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 # from learning_platform.google_translations import _translator, from_eng_to_others
 from flask_login import login_required, current_user, logout_user, login_user
 from flask_mail import Message
@@ -30,7 +30,7 @@ def user_enrolled_courses(course_id):
             if c.id == course_id:
                 return True
     except AttributeError:
-        return {"error": "please login"}
+        return "error"
 
 
 @user_bp.route("/auth")
@@ -67,8 +67,13 @@ def login():
                 db.session.add(user)
                 db.session.commit()
                 login_user(user)
-                flash('Happy Coding!  😊', category='success')
-                return redirect(url_for('users.userprofile'))
+                next = request.args.get('next') or url_for('users.userprofile')
+                print(next)
+                if next == '/':
+                    flash('You may now enrol!  😊', category='success')
+                else:
+                    flash('Happy Coding!  😊', category='success')
+                return redirect(next)
             flash("Invalid Credentials", category='warning')
             return redirect(url_for('users.login'))
         except BaseException:
@@ -89,7 +94,7 @@ def user_logout():
     db.session.add(user)
     db.session.commit()
     logout_user()
-    return redirect(url_for('users.login'))
+    return redirect(url_for('home.home'))
 
 
 @user_bp.route('/forgot_password', methods=['GET', 'POST'])
@@ -137,7 +142,7 @@ def reset_password(token):
     return render_template('user/reset_password_confirm.html', form=form)
 
 
-@user_bp.route('/enrol/<int:course_id>', methods=['GET', 'POST'])
+@user_bp.route('/enrol/<string:course_id>', methods=['GET', 'POST'])
 @login_required
 def enroll_course(course_id):
     '''
@@ -183,7 +188,7 @@ def userprofile():
         return redirect(url_for('users.login'))
 
 
-@user_bp.route('/learns/<int:course_id>/', methods=['GET', 'POST'])
+@user_bp.route('/learns/<string:course_id>/', methods=['GET', 'POST'])
 @login_required
 def learn_skills(course_id):
     '''
@@ -200,7 +205,7 @@ def learn_skills(course_id):
     return render_template('user/learn_page.html')
 
 
-@user_bp.route('/request/<int:topic_id>', methods=['GET', 'POST'])
+@user_bp.route('/request/<string:topic_id>', methods=['GET', 'POST'])
 def request_task_solution(topic_id):
     usertask = TimeTask.query.get(topic_id)
     user = User.query.get(current_user.id)
@@ -211,7 +216,7 @@ def request_task_solution(topic_id):
     return 'added to time tasks'
 
 
-@user_bp.route('/mat/<int:course_id>/<int:topic_id>', methods=['GET', 'POST'])
+@user_bp.route('/mat/<string:course_id>/<string:topic_id>', methods=['GET', 'POST'])
 def topic_by_course(course_id, topic_id):
     '''
     gets and displays the reading content for the user
@@ -227,7 +232,7 @@ def topic_by_course(course_id, topic_id):
         topic_id=topic_id)
 
 
-@user_bp.route('/gptplus_vid/<int:course_id>/<int:topic_id>',
+@user_bp.route('/gptplus_vid/<string:course_id>/<string:topic_id>',
                methods=['GET', 'POST'])
 @login_required
 def gptplus_vid(course_id, topic_id):
@@ -278,9 +283,15 @@ def make_payment(course_id):
     '''
         This is where payment is made
     '''
-    if user_enrolled_courses(course_id):
+    stat = user_enrolled_courses(course_id)
+    if stat == True:
         flash('Already enrolled, login and start learning', category='info')
         return redirect(url_for('users.login'))
+    elif stat == 'error':
+        next = url_for('home.home')
+        flash('please login first', category='info')
+        return redirect(url_for('users.login', next=next))
+    
     user = User.query.get(current_user.id)
     email = user.email
 
@@ -302,13 +313,22 @@ def make_payment(course_id):
         ref=ref[0])
 
 
-@user_bp.route('/yt_vid/<int:topic_id>', methods=['GET', 'POST'])
+@user_bp.route('/yt_vid/<string:topic_id>', methods=['GET', 'POST'])
 def youtube_vids(topic_id):
     subtopic = SubTopic.query.filter_by(id=topic_id).first()
     subtopic_videos = subtopic.youtube_videos
     vids = vid_ids(subtopic_videos)
 
     return render_template('user/watch_youtube_video.html', paths=vids)
+
+
+@user_bp.route('/locale', methods=['GET', 'POST'])
+def user_locale():
+    if request.method == "POST":
+        session['lang'] = request.form.get('language')
+        return redirect(url_for('home.home'))  
+
+    return render_template('user/locale.html')
 
 
 # @user_bp.route('/fr')

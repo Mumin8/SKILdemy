@@ -304,6 +304,8 @@ def create_video_clip(text, output_path, duration, folder):
     create_video_clip:
         this will create the video clip
     '''
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.admin_login'))
 
     # video_duration = duration
     audio_clip_path = str(current_user.id) + "_"'temp_audio.mp3'
@@ -452,10 +454,12 @@ def user_courses(id=None):
         return course_list
     except AttributeError:
         flash('Please login to access this page', category='success')
-        return redirect(url_for('login'))
+        return redirect(url_for('users.admin_login'))
 
 
 def copy_ai_video(vid_path, dest_path):
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.login'))
     name = f'{current_user.id}_video_file.mp4'
     shutil.copyfile(vid_path, os.path.join(dest_path, name))
     return name

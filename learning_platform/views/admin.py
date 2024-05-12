@@ -533,6 +533,8 @@ def gptplus(language, course_id, topic_id):
     gptplus:
         this is where the ai video is processed
     '''
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.login'))
 
     user_c = sorted(user_courses(current_user.id))
     c_and_t = course_topic(user_c)

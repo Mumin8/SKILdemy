@@ -24,13 +24,16 @@ ref = []
 
 
 def user_enrolled_courses(course_id):
-    try:
-        user = User.query.get(current_user.id)
+    if current_user.is_authenticated:
+        # user = User.query.get(current_user.id)
         for c in current_user.enrolling:
             if c.id == course_id:
                 return True
-    except AttributeError:
-        return "error"
+        return False
+    
+    flash('please login first', category='info')
+    return  redirect(url_for('home.home'))
+    
 
 
 @user_bp.route("/auth")
@@ -153,6 +156,9 @@ def enroll_course(course_id):
 
     # user = User.query.get(current_user.id)
 
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.login'))
+
     status, result = verify_payment(ref[0])
 
     if status:
@@ -179,13 +185,10 @@ def userprofile():
     userprofile:
         this will initiate the user profile setting
     '''
-
-    try:
+    if current_user.is_authenticated:
         user = User.query.filter_by(id=current_user.id).first()
         return render_template('user/profile.html', user=user.enrolling)
-    except Exception as e:
-        flash('please login')
-        return redirect(url_for('users.login'))
+    return redirect(url_for('users.login'))
 
 
 @user_bp.route('/learns/<string:course_id>/', methods=['GET', 'POST'])
@@ -207,13 +210,15 @@ def learn_skills(course_id):
 
 @user_bp.route('/request/<string:topic_id>', methods=['GET', 'POST'])
 def request_task_solution(topic_id):
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.login'))
     usertask = TimeTask.query.get(topic_id)
     user = User.query.get(current_user.id)
     user.time_task.append(usertask)
     db.session.commit()
     flash('successfully associate timely task for your request')
-
     return 'added to time tasks'
+
 
 
 @user_bp.route('/mat/<string:course_id>/<string:topic_id>', methods=['GET', 'POST'])
@@ -243,6 +248,9 @@ def gptplus_vid(course_id, topic_id):
     course = Course.query.get(course_id).name
     topic = SubTopic.query.get(topic_id).name
     file = f'{course}_{topic}.mp4'
+
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.logn'))
 
     status, state = validate_time_task(current_user.id, topic_id, topic)
     if status and state == "Not timely":
@@ -284,13 +292,16 @@ def make_payment(course_id):
         This is where payment is made
     '''
     stat = user_enrolled_courses(course_id)
-    if stat == True:
+    if stat:
         flash('Already enrolled, login and start learning', category='info')
-        return redirect(url_for('users.login'))
-    elif stat == 'error':
-        next = url_for('home.home')
-        flash('please login first', category='info')
-        return redirect(url_for('users.login', next=next))
+        return redirect(url_for('home.home'))
+    # elif stat == 'error':
+    #     next = url_for('home.home')
+    #     flash('please login first', category='info')
+    #     return redirect(url_for('users.login', next=next))
+
+    if not current_user.is_authenticated:
+        return redirect(url_for('home.home'))
     
     user = User.query.get(current_user.id)
     email = user.email

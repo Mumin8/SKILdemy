@@ -14,6 +14,7 @@ welcome_message = {
     'es': 'Spanish stuff',
     'fr': 'French stuff',
     'hi': 'Hindi stuff',
+    'id': 'Indonesia stuff',
     'pt': 'Portuguese stuff',
     'ru': 'Russian stuff',
     'tr': 'Turkish stuff',
@@ -36,7 +37,6 @@ def home():
     lang=session.get('lang')
     if lang is None:
         lang = user_locale
-    
     lang = lang + '.jpg'
     
     return render_template(

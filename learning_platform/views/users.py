@@ -70,12 +70,9 @@ def login():
                 db.session.add(user)
                 db.session.commit()
                 login_user(user)
-                next = request.args.get('next') or url_for('users.userprofile')
-                print(next)
-                if next == '/':
-                    flash('You may now enrol!  😊', category='success')
-                else:
-                    flash('Happy Coding!  😊', category='success')
+                next = request.args.get('next_url') or url_for('users.userprofile')
+                
+                flash('Happy Coding!  😊', category='success')
                 return redirect(next)
             flash("Invalid Credentials", category='warning')
             return redirect(url_for('users.login'))
@@ -179,7 +176,6 @@ def enroll_course(course_id):
 
 
 @user_bp.route("/userprofile", methods=['GET', 'POST'])
-@login_required
 def userprofile():
     '''
     userprofile:
@@ -188,15 +184,21 @@ def userprofile():
     if current_user.is_authenticated:
         user = User.query.filter_by(id=current_user.id).first()
         return render_template('user/profile.html', user=user.enrolling)
-    return redirect(url_for('users.login'))
+    next_url = request.url
+    print(f'the userprofile next: {next_url}')
+    return redirect(url_for('home.home', next_url=next_url))
 
 
 @user_bp.route('/learns/<string:course_id>/', methods=['GET', 'POST'])
-@login_required
 def learn_skills(course_id):
     '''
     the course and topics will be displayed for the
     '''
+    if not current_user.is_authenticated:
+        next_url = request.url
+        print(f'the learn skill next: {next_url}')
+        return redirect(url_for('users.login', next_url=next_url))
+
     user_c = Course.query.get(course_id)
     if user_c:
         c_and_t = c_and_topics(user_c)
@@ -301,7 +303,9 @@ def make_payment(course_id):
     #     return redirect(url_for('users.login', next=next))
 
     if not current_user.is_authenticated:
-        return redirect(url_for('home.home'))
+        next_url = request.url
+        print(f'the next url: {next}')
+        return redirect(url_for('users.login', next_url=next_url))
     
     user = User.query.get(current_user.id)
     email = user.email

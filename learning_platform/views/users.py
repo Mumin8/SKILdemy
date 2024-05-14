@@ -23,6 +23,12 @@ user_bp = Blueprint('users', __name__, static_folder='static',
 ref = []
 
 
+def pop_ref():
+    for i, v in enumerate(ref):
+        ref.pop(i)
+
+
+
 def user_enrolled_courses(course_id):
     if current_user.is_authenticated:
         # user = User.query.get(current_user.id)
@@ -30,10 +36,9 @@ def user_enrolled_courses(course_id):
             if c.id == course_id:
                 return True
         return False
-    
+
     flash('please login first', category='info')
-    return  redirect(url_for('home.home'))
-    
+    return redirect(url_for('home.home'))
 
 
 @user_bp.route("/auth")
@@ -70,8 +75,8 @@ def login():
                 db.session.add(user)
                 db.session.commit()
                 login_user(user)
-                next = request.args.get('next_url') or url_for('users.userprofile')
-                
+                next = request.args.get(
+                    'next_url') or url_for('users.userprofile')
                 flash('Happy Coding!  😊', category='success')
                 return redirect(next)
             flash("Invalid Credentials", category='warning')
@@ -160,8 +165,9 @@ def enroll_course(course_id):
 
     if status:
         course = Course.query.get(course_id)
-        if course.price * 100 == result['amount']:
-            print(f'hurray {result["amount"]}')
+        price = course.price
+        rate = course.rate
+        if result['amount'] > rate*price*65:
             current_user.enrolling.append(course)
             db.session.commit()
             flash(
@@ -222,8 +228,8 @@ def request_task_solution(topic_id):
     return 'added to time tasks'
 
 
-
-@user_bp.route('/mat/<string:course_id>/<string:topic_id>', methods=['GET', 'POST'])
+@user_bp.route('/mat/<string:course_id>/<string:topic_id>',
+               methods=['GET', 'POST'])
 def topic_by_course(course_id, topic_id):
     '''
     gets and displays the reading content for the user
@@ -288,7 +294,7 @@ def gptplus_vid(course_id, topic_id):
             ask=ask)
 
 
-@user_bp.route('/payment/<string:course_id>', methods=['GET', 'POST'])
+@user_bp.route('/payment/<string:course_id>', methods=['GET'])
 def make_payment(course_id):
     '''
         This is where payment is made
@@ -306,21 +312,27 @@ def make_payment(course_id):
         next_url = request.url
         print(f'the next url: {next}')
         return redirect(url_for('users.login', next_url=next_url))
-    
+
     user = User.query.get(current_user.id)
     email = user.email
 
     course = Course.query.get(course_id)
-    amount = course.price * 100
+    rate = course.rate
+    price = course.price
+    amount = rate*price * 100
+    _price = price
     c_id = course.id
     c_name = course.name
 
+    pop_ref()
+
     ref.append(get_ref())
-    print(f'inside make_payment {ref}')
+
     pk = os.getenv("PAYSTACK_PUBLIC_KEY")
     return render_template(
         'payment/payment.html',
         c_id=c_id,
+        _price=_price,
         amount=amount,
         c_name=c_name,
         email=email,
@@ -330,6 +342,9 @@ def make_payment(course_id):
 
 @user_bp.route('/yt_vid/<string:topic_id>', methods=['GET', 'POST'])
 def youtube_vids(topic_id):
+    '''
+    this will get the video related to the topic in youtube
+    '''
     subtopic = SubTopic.query.filter_by(id=topic_id).first()
     subtopic_videos = subtopic.youtube_videos
     vids = vid_ids(subtopic_videos)
@@ -339,18 +354,11 @@ def youtube_vids(topic_id):
 
 @user_bp.route('/locale', methods=['GET', 'POST'])
 def user_locale():
+    '''
+    this will get the language of the client user
+    '''
     if request.method == "POST":
         session['lang'] = request.form.get('language')
-        return redirect(url_for('home.home'))  
+        return redirect(url_for('home.home'))
 
     return render_template('user/locale.html')
-
-
-# @user_bp.route('/fr')
-# def all_langs():
-#     text = '''in python programming language objects are very important.
-#      to define a function you should start with the word def
-#      followed my any valid name such as myfunc
-#      '''
-#     from_eng_to_others()
-#     return "boom"

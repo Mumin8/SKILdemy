@@ -30,20 +30,23 @@
 
 
                 {% elif mat %}
-                <div class="col-9 fs-3" style="background-color: rgb(226, 233, 235);">
+                <div class="col fs-3" style="background-color: rgb(214, 255, 159);">
                     <a class="btn btn-primary" href="{{ url_for('users.learn_skills', course_id=course_id) }}">Back</a>
                     <div class="row">
-                       <div class="bg-dark">
+                       <nav id="ai-yt">
                         <div class="col text-success">
-                          <p>AI Tutorial</p>
-                          <a class="btn btn-primary" href="{{ url_for('users.gptplus_vid', course_id=course_id, topic_id=topic_id) }}">ai Tutorial</a>
+                          <a class="btn btn-primary" 
+                          href="{{ url_for('users.gptplus_vid', course_id=course_id, topic_id=topic_id) }}">
+                          ai Tutorial
+                        </a>
                         </div>
                         <div class="col text-success">
-                          <p>Related YouTube videos</p>
-                          <a class="btn btn-primary" href="{{ url_for('users.youtube_vids', topic_id=topic_id) }}">topic specific video</a>
-                        
+                          <a class="btn btn-primary" 
+                          href="{{ url_for('users.youtube_vids', topic_id=topic_id) }}">
+                          Videos
+                        </a>
                         </div>
-                       </div>  
+                       </nav>  
                     <div>
                 {% for line in mat.split('\n') %}
 
@@ -63,7 +66,8 @@
                 {% elif path and not_time %}
                 <div class="col-md-4">
                   <video controls class="col-md-12">
-                    <source src="{{ url_for('static', filename='user_output/' + path ) }}" type="video/mp4">
+                    <source src="{{ url_for('static', filename='user_output/' + path ) }}"
+                     type="video/mp4">
                   </video>
                 </div>
 

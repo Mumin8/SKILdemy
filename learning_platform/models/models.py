@@ -101,6 +101,15 @@ class Course(db.Model):
     name = db.Column(db.String(80), nullable=False)
     description = db.Column(db.String(250), nullable=False)
     price = db.Column(db.Numeric(10, 2), nullable=False)
+    rate = db.Column(db.Numeric(10, 2), nullable=False, default=1.00)
+    updated_at = db.Column(db.DateTime(timezone=True), default=func.now())
+
+    def update(self, update_):
+        self.updated_at = update_
+
+    def get_updated(self):
+        return self.updated_at
+        
 
     subjects = db.relationship(
         'Subject', secondary=course_subjects, backref=db.backref('courses', lazy=True))

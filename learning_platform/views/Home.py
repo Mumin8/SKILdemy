@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, session
 from flask_login import current_user
+from learning_platform import db
 from learning_platform.models.models import Course
 from learning_platform.google_translations import get_locale
+from learning_platform._helpers import exchange_rate, time_
 home_bp = Blueprint('home', __name__, static_folder='static',
                     template_folder='templates')
 
@@ -28,12 +30,27 @@ def home():
         the page visited when the site is visited
     '''
 
+    
+
     user_locale = get_locale()
     courses = Course.query.all()
+
+
+    status, t = time_()
+    if status:
+        rate = exchange_rate()
+        print(f'rate: {rate}')
+
+        for c in courses:
+            c.update(t)
+            c.rate = rate
+        db.session.commit()
+
     auth = False
     if current_user.is_authenticated:
         auth = True
-    print(user_locale)
+   
+
     lang=session.get('lang')
     if lang is None:
         lang = user_locale

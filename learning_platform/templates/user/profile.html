@@ -34,13 +34,19 @@
             <p class="text-light fs-2">
               My courses
             </p>
-            {% for c in user %}
-            <div class="profile-info">
-              <button class="btn btn-info">
+            {% for c in user_courses %}
+            <div class="profile-info m-3 ">
+              <div class="btn btn-info">
                 <a href="{{ url_for('users.learn_skills', course_id=c.id) }}">
                    {{ c.name }} 
                 </a>
-              </button>
+              </div>
+              <div style="background-color: bisque;">
+                <a href="{{ url_for('users.cert_of_completion', course_id=c.id) }}">
+                   Get certificate <span style="font-size: 26px;">🎓</span>
+                </a>
+              </div>
+              
             </div>
             {% endfor %}
         </div>

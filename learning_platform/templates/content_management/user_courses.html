@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% extends "base.html" %}
+    <title>{% block title %} User Courses {% endblock %}</title>
+</head>
+<body>
+
+    {% block main %}
+    {% if courses %}
+   {% for course in courses %}
+   <div style="display: block; margin: 12px;">
+    <p class="text-light">Name of Course: {{course.name}}</p>
+    <p class="text-light">{{course.id}}</p>
+    <p class="text-light">{{u_id}}</p>
+    <a href="{{ url_for('admin.unenroll', u_id=u_id, c_id=course.id)}}">unenroll user</a>
+    </div>
+   
+   {% endfor %}
+   {% else %}
+   <p style="background-color: whitesmoke;">
+    User is not enrolled in any course
+</p>
+   {% endif %}
+    {% endblock %}
+    
+</body>
+</html>

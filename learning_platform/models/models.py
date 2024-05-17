@@ -102,6 +102,7 @@ class Course(db.Model):
     description = db.Column(db.String(250), nullable=False)
     price = db.Column(db.Numeric(10, 2), nullable=False)
     rate = db.Column(db.Numeric(10, 2), nullable=False, default=1.00)
+    enrolled_at = db.Column(db.DateTime(timezone=True), default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
     def update(self, update_):
@@ -109,6 +110,11 @@ class Course(db.Model):
 
     def get_updated(self):
         return self.updated_at
+    
+
+    def update_enrolled_at(self, enrolled):
+        self.enrolled_at = enrolled
+        db.session.commit()
         
 
     subjects = db.relationship(

@@ -108,6 +108,24 @@ header{
 }
 
 
+.profile-info{
+    background-color: black;
+    padding: 4px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.profile-info div{
+    margin-right: 36px;
+    margin-left: 36px;
+    border-radius: 5px;
+    
+}
+
+.profile-info div a{text-decoration: none;}
+
+
 /* learn page */
 #ai-yt{
     background-color: rgb(71, 41, 41);

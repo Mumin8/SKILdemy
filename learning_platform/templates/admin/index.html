@@ -15,8 +15,12 @@
             
            
 
-            <div class="col">
-                <div class="col bg-success">
+            <div class="row" style="display: flex; flex-direction: row;
+                                 justify-content: space-between;
+                                 background-color: rgb(22, 22, 21);">
+                
+                <div class="col-6 bg-success">
+                    <p>Available content</p>
                     <div class="row align-items-start btn btn-outline-primary fs-5">
                     <a href="{{ url_for('admin.cs_avail')}}" class="btn btn-primary" id="admin">
                         Available Courses
@@ -45,6 +49,19 @@
                     </div>
                 </div>
            
+                </div>
+                <div class="col-6 bg-light">
+                    <p class="text-info fs-3">user stuff</p>
+                    <div class="col">
+                        <div class="row align-items-start btn btn-outline-danger btn-sm fs-5">
+                            <a href="{{ url_for('admin.unenroll_user')}}"
+                             class="btn btn-danger" id="admin">
+                                Unenroll User
+                            </a>
+                        </div>
+                    </div>
+
+
                 </div>
              </div>
              <div class="row" style="display: flex; flex-direction: row;

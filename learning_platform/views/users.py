@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 # from learning_platform.google_translations import _translator, from_eng_to_others
 from flask_login import login_required, current_user, logout_user, login_user
@@ -14,7 +15,8 @@ from learning_platform._helpers import (
     user_courses,
     get_ref,
     vid_ids,
-    verify_payment)
+    verify_payment,
+    completed_course)
 
 user_bp = Blueprint('users', __name__, static_folder='static',
                     template_folder='templates')
@@ -165,9 +167,11 @@ def enroll_course(course_id):
 
     if status:
         course = Course.query.get(course_id)
+
         price = course.price
         rate = course.rate
         if result['amount'] > rate*price*65:
+            course.update_enrolled_at(datetime.now())
             current_user.enrolling.append(course)
             db.session.commit()
             flash(
@@ -189,7 +193,7 @@ def userprofile():
     '''
     if current_user.is_authenticated:
         user = User.query.filter_by(id=current_user.id).first()
-        return render_template('user/profile.html', user=user.enrolling)
+        return render_template('user/profile.html', user_courses=user.enrolling)
     next_url = request.url
     print(f'the userprofile next: {next_url}')
     return redirect(url_for('home.home', next_url=next_url))
@@ -303,10 +307,7 @@ def make_payment(course_id):
     if stat:
         flash('Already enrolled, login and start learning', category='info')
         return redirect(url_for('home.home'))
-    # elif stat == 'error':
-    #     next = url_for('home.home')
-    #     flash('please login first', category='info')
-    #     return redirect(url_for('users.login', next=next))
+    
 
     if not current_user.is_authenticated:
         next_url = request.url
@@ -362,3 +363,29 @@ def user_locale():
         return redirect(url_for('home.home'))
 
     return render_template('user/locale.html')
+
+
+@user_bp.route('/cert/<string:course_id>', methods=['GET', 'POST'])
+def cert_of_completion(course_id):
+    '''
+    where the certificate will be initiated
+    '''
+
+    if not current_user.is_authenticated:
+        next_url = request.url
+        print(f'the next url: {next}')
+        return redirect(url_for('users.login', next_url=next_url))
+    
+    course = Course.query.get(course_id)
+    
+    for c in current_user.enrolling:
+        if c == course:
+            if completed_course(c):
+                flash('Your certificate is ready for download', category='info')
+                return render_template('user/certificate.html')
+            else:
+                flash("certificate will be ready after completion", category='info')
+                return redirect(url_for('users.userprofile'))
+
+    return redirect(url_for('users.userprofile'))
+    

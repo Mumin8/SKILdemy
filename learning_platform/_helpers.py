@@ -23,7 +23,6 @@ my_audio_video = 'output_folder/'
 
 def get_ref():
     return secrets.token_urlsafe(50)
-    
 
 
 # def generate_reset_token():
@@ -36,7 +35,6 @@ def get_db():
     if db is None:
         db = g._database = mongo.db
     return db
-
 
 
 db = LocalProxy(get_db)
@@ -631,8 +629,10 @@ def delete_display_text_byID(_id):
     db.text_display.delete_one({'_id': _id})
 
 
-
 def exchange_rate():
+    '''
+    gets the exchange rate for the course
+    '''
     url = "https://openexchangerates.org/api/latest.json?app_id=72d8b9a87a934d46afb186e51fd18a8e&base=USD&symbols=GHS"
 
     response = requests.get(url)
@@ -641,13 +641,22 @@ def exchange_rate():
 
 
 def time_():
+    '''
+    checks if the time is up to update the rate
+    '''
     courses = Course.query.all()
 
     course = next(iter(courses))
-    
-   
+
     elapsed_time = datetime.now() - course.get_updated()
-    print(elapsed_time)
     if elapsed_time >= timedelta(hours=1):
         return True, datetime.now()
     return False, datetime.now()
+
+
+def completed_course(course):
+    elapsed_time = datetime.now() - course.enrolled_at
+    print(elapsed_time)
+    if elapsed_time >= timedelta(hours=3):
+        return True
+    return False

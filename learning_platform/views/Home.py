@@ -69,5 +69,8 @@ def home_(course_id):
         the page visited when a course is clicked
     '''
     course = Course.query.get(course_id)
-    topics = Course.query.get(course_id).topics
-    return render_template('home/home.html', topics=topics, course=course)
+    if course:
+        topics = course.topics
+        return render_template('home/home.html', topics=topics, course=course)
+    return render_template('home/home.html', course=course)
+    

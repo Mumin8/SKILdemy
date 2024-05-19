@@ -11,10 +11,10 @@
 <body>
     {% block main %}
     <div class="text-center">
-        <img src="{{ url_for('static', filename='student_certificates/student_certificate.jpg') }}"
+        <img src="{{ url_for('static', filename='student_certificates/' + dest) }}"
          alt=""
          height="540">
-         <button><a href="#">download</a></button>
+         <button><a href="{{ url_for('users.download_your_cert')}}">download</a></button>
     </div>
     {% endblock %}
 </body>

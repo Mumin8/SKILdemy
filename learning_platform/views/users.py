@@ -1,6 +1,7 @@
 import os
-from datetime import datetime
-from flask import Blueprint, render_template, redirect, url_for, request, flash, session
+import urllib.request
+from datetime import datetime, timedelta
+from flask import Blueprint, render_template, redirect, url_for, request, flash, session, send_from_directory
 # from learning_platform.google_translations import _translator, from_eng_to_others
 from flask_login import login_required, current_user, logout_user, login_user
 from flask_mail import Message
@@ -383,19 +384,29 @@ def cert_of_completion(course_id):
         if c == course:
             if completed_course(c):
                 flash('Your certificate is ready for download', category='info')
-                return render_template('user/certificate.html', course=c)
+                return render_template('user/certificate.html', course_id=c.id, name=c.name)
             else:
                 flash("certificate will be ready after completion", category='info')
                 return redirect(url_for('users.userprofile'))
     return redirect(url_for('users.userprofile'))
 
 
-@user_bp.route('/dl_cert/<string:course>', methods=['GET', 'POST'])
-def download_cert(course):
+@user_bp.route('/preview_cert/<string:course_id>', methods=['GET', 'POST'])
+def download_cert(course_id):
+
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.login'))
+    
+
+    course = Course.query.get(course_id)
     root_path = app.root_path
-    cert_file = os.path.join(root_path, 'static', 'certificate/certificate.jpg')
+    src = 'certificate.jpg'
+    dest = current_user.id + '.jpg'
+
+    source_path = os.path.join(root_path, 'static', 'certificate', src)
+    dest_path = os.path.join(root_path, 'static', 'student_certificates', dest)
     resize = (1056, 816)
-    img = Image.open(cert_file)
+    img = Image.open(source_path)
     img =img.resize(resize)
     img = img.convert('RGB')
     original_size = img.size
@@ -410,14 +421,34 @@ def download_cert(course):
     course_name_pos = (218, 514)
     completed_date_pos = (670, 612)
 
-    student_name = 'Alhassan Mumin'
-    course_name = 'Python from zero to hero'
-    completed_on = '2024-06-02'
+    student_name = current_user.fullname
+    course_name = course.name
+    for c in current_user.enrolling:
+        if c == course:
+            completed_on = c.enrolled_at + timedelta(days=120)
+            completed_on, _ = str(completed_on).split()
+            break
 
     draw.text(student_name_pos, student_name, font=font)
     draw.text(course_name_pos, course_name, font=font)
     draw.text(completed_date_pos, completed_on, font=font)
 
-    img.save('student_certificate.jpg')
+    img.save(dest_path)
 
-    return render_template('user/view_cert.html')
+    return render_template('user/view_cert.html', dest=dest)
+
+
+@user_bp.route('/dl_cert', methods=['GET', 'POST'])
+def download_your_cert():
+    '''
+    where the certificate will be downloaded
+    '''
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.login'))
+    
+    root_path = app.root_path
+    cert = current_user.id + '.jpg'
+    cert_path = os.path.join(root_path, 'static', 'student_certificates')
+    name = 'certificate.jpg'
+
+    return send_from_directory(cert_path, cert, as_attachment=True, download_name=name)

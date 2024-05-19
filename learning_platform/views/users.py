@@ -17,6 +17,7 @@ from learning_platform._helpers import (
     vid_ids,
     verify_payment,
     completed_course)
+from PIL import Image, ImageDraw, ImageFont
 
 user_bp = Blueprint('users', __name__, static_folder='static',
                     template_folder='templates')
@@ -382,10 +383,41 @@ def cert_of_completion(course_id):
         if c == course:
             if completed_course(c):
                 flash('Your certificate is ready for download', category='info')
-                return render_template('user/certificate.html')
+                return render_template('user/certificate.html', course=c)
             else:
                 flash("certificate will be ready after completion", category='info')
                 return redirect(url_for('users.userprofile'))
-
     return redirect(url_for('users.userprofile'))
+
+
+@user_bp.route('/dl_cert/<string:course>', methods=['GET', 'POST'])
+def download_cert(course):
+    root_path = app.root_path
+    cert_file = os.path.join(root_path, 'static', 'certificate/certificate.jpg')
+    resize = (1056, 816)
+    img = Image.open(cert_file)
+    img =img.resize(resize)
+    img = img.convert('RGB')
+    original_size = img.size
     
+    print(f'the original size {original_size}')
+    
+    draw = ImageDraw.Draw(img)
+    font = ImageFont.truetype('arial.ttf', 32)
+    
+
+    student_name_pos = (218, 410)
+    course_name_pos = (218, 514)
+    completed_date_pos = (670, 612)
+
+    student_name = 'Alhassan Mumin'
+    course_name = 'Python from zero to hero'
+    completed_on = '2024-06-02'
+
+    draw.text(student_name_pos, student_name, font=font)
+    draw.text(course_name_pos, course_name, font=font)
+    draw.text(completed_date_pos, completed_on, font=font)
+
+    img.save('student_certificate.jpg')
+
+    return render_template('user/view_cert.html')

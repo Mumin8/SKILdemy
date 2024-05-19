@@ -32,7 +32,6 @@ def pop_ref():
         ref.pop(i)
 
 
-
 def user_enrolled_courses(course_id):
     if current_user.is_authenticated:
         # user = User.query.get(current_user.id)
@@ -172,7 +171,7 @@ def enroll_course(course_id):
 
         price = course.price
         rate = course.rate
-        if result['amount'] > rate*price*65:
+        if result['amount'] > rate * price * 65:
             course.update_enrolled_at(datetime.now())
             current_user.enrolling.append(course)
             db.session.commit()
@@ -195,7 +194,9 @@ def userprofile():
     '''
     if current_user.is_authenticated:
         user = User.query.filter_by(id=current_user.id).first()
-        return render_template('user/profile.html', user_courses=user.enrolling)
+        return render_template(
+            'user/profile.html',
+            user_courses=user.enrolling)
     next_url = request.url
     print(f'the userprofile next: {next_url}')
     return redirect(url_for('home.home', next_url=next_url))
@@ -309,7 +310,6 @@ def make_payment(course_id):
     if stat:
         flash('Already enrolled, login and start learning', category='info')
         return redirect(url_for('home.home'))
-    
 
     if not current_user.is_authenticated:
         next_url = request.url
@@ -322,7 +322,7 @@ def make_payment(course_id):
     course = Course.query.get(course_id)
     rate = course.rate
     price = course.price
-    amount = rate*price * 100
+    amount = rate * price * 100
     _price = price
     c_id = course.id
     c_name = course.name
@@ -377,16 +377,21 @@ def cert_of_completion(course_id):
         next_url = request.url
         print(f'the next url: {next}')
         return redirect(url_for('users.login', next_url=next_url))
-    
+
     course = Course.query.get(course_id)
-    
+
     for c in current_user.enrolling:
         if c == course:
             if completed_course(c):
-                flash('Your certificate is ready for download', category='info')
-                return render_template('user/certificate.html', course_id=c.id, name=c.name)
+                flash(
+                    'Your certificate is ready for download',
+                    category='info')
+                return render_template(
+                    'user/certificate.html', course_id=c.id, name=c.name)
             else:
-                flash("certificate will be ready after completion", category='info')
+                flash(
+                    "certificate will be ready after completion",
+                    category='info')
                 return redirect(url_for('users.userprofile'))
     return redirect(url_for('users.userprofile'))
 
@@ -396,7 +401,6 @@ def download_cert(course_id):
 
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
-    
 
     course = Course.query.get(course_id)
     root_path = app.root_path
@@ -407,15 +411,14 @@ def download_cert(course_id):
     dest_path = os.path.join(root_path, 'static', 'student_certificates', dest)
     resize = (1056, 816)
     img = Image.open(source_path)
-    img =img.resize(resize)
+    img = img.resize(resize)
     img = img.convert('RGB')
     original_size = img.size
-    
+
     print(f'the original size {original_size}')
-    
+
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype('arial.ttf', 32)
-    
 
     student_name_pos = (218, 410)
     course_name_pos = (218, 514)
@@ -445,10 +448,14 @@ def download_your_cert():
     '''
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
-    
+
     root_path = app.root_path
     cert = current_user.id + '.jpg'
     cert_path = os.path.join(root_path, 'static', 'student_certificates')
     name = 'certificate.jpg'
 
-    return send_from_directory(cert_path, cert, as_attachment=True, download_name=name)
+    return send_from_directory(
+        cert_path,
+        cert,
+        as_attachment=True,
+        download_name=name)

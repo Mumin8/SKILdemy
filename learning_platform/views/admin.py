@@ -775,32 +775,34 @@ def delete_display_text(_id):
     return redirect(url_for('admin.get_reading_text'))
 
 
-
 @admin_bp.route('/unenroll_user', methods=['GET', 'POST'])
 def unenroll_user():
     '''
     Get user based on email
     '''
-    if request.method=="POST":
+    if request.method == "POST":
         email = request.form.get('email')
         user = User.query.filter_by(email=email).first()
         if user:
             courses = user.enrolling
-            return render_template('content_management/user_courses.html', courses=courses, u_id=user.id)
+            return render_template(
+                'content_management/user_courses.html',
+                courses=courses,
+                u_id=user.id)
         return render_template('content_management/user_courses.html')
-        
+
     return render_template('content_management/user_email.html')
 
 
-@admin_bp.route('/unenroll/<string:u_id>/<string:c_id>', methods=['GET', 'POST'])
+@admin_bp.route('/unenroll/<string:u_id>/<string:c_id>',
+                methods=['GET', 'POST'])
 def unenroll(c_id, u_id):
     '''
     user will be removed from here
     '''
     user = User.query.get(u_id)
     course = Course.query.get(c_id)
-    
+
     user.enrolling.remove(course)
     db.session.commit()
     return redirect(url_for('admin.unenroll_user'))
-    

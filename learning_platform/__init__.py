@@ -24,9 +24,8 @@ db = SQLAlchemy()
 app = Flask(__name__)
 
 
+# babel things
 babel = Babel(app, locale_selector=get_locale)
-
-
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = pkg_path
 
 app.config['UPLOAD_CODE_FOLDER'] = UPLOAD_CODE_FOLDER

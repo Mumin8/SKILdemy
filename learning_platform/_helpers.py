@@ -15,7 +15,7 @@ from moviepy.editor import (AudioFileClip, concatenate_videoclips,
 from werkzeug.utils import secure_filename
 from learning_platform.google_translations import (
     text_translator, find_matched_words, process_for_nonEnglish,
-    process_for_arabic_vid)
+    process_for_arabic_vid, get_locale)
 from learning_platform.models.models import Course, TimeTask, User
 
 my_audio_video = 'output_folder/'
@@ -28,6 +28,7 @@ def get_ref():
 # def generate_reset_token():
 #     # Generate a secure token for the password reset link
 #     return secrets.token_urlsafe(32)
+
 
 def get_db():
     db = getattr(g, "_database", None)
@@ -237,11 +238,19 @@ def read_content(course, topic):
         }
     )
     my_list.append(list(content_))
-    print(my_list)
+    
     if my_list[0]:
-        return my_list[0][0]['desc']
+        # this is assuming a subtopic will only have 1 record
+        return my_list[0][0][get_lang()]
     return 'Nothing published. stay tuned'
 
+
+def get_lang():
+    user_locale = get_locale()
+    lang=session.get('lang')
+    if lang is None:
+        lang = user_locale
+    return lang
 
 def insert_text(code='f.PNG', desc=''):
     '''
@@ -591,12 +600,15 @@ def get_display_text_byID(_id):
     return video_
 
 
-def tream(_id, text):
+def tream(_id, text, lang=None):
     '''
         Edit the original text in the field
     '''
     update_fields = {}
-    update_fields['desc'] = text
+    if lang == None:
+        update_fields['desc'] = text
+    else:
+        update_fields[lang] = text
 
     result = db.text_display.update_one(
         {'_id': _id},
@@ -655,8 +667,10 @@ def time_():
 
 
 def completed_course(course):
+    '''
+    check if the user is ready to retrieve certificate
+    '''
     elapsed_time = datetime.now() - course.enrolled_at
-    print(elapsed_time)
-    if elapsed_time >= timedelta(hours=3):
+    if elapsed_time >= timedelta(days=120):
         return True
     return False

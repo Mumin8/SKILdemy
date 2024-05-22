@@ -1,4 +1,4 @@
-# French translations for PROJECT.
+# Spanish translations for PROJECT.
 # Copyright (C) 2024 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2024-05-22 10:26+0000\n"
-"PO-Revision-Date: 2024-05-22 10:27+0000\n"
+"PO-Revision-Date: 2024-05-22 10:28+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: fr\n"
-"Language-Team: fr <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: es\n"
+"Language-Team: es <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,88 +20,85 @@ msgstr ""
 
 #: templates/home/home.html:24
 msgid "Dashboard"
-msgstr "Tableau de bord"
+msgstr ""
 
 #: templates/home/home.html:39
 msgid "Register"
-msgstr "S’inscrire"
+msgstr ""
 
 #: templates/home/home.html:46
 msgid "login"
-msgstr "connexion"
+msgstr ""
 
 #: templates/home/home.html:73
 msgid "course content"
-msgstr "Contenu du cours"
+msgstr ""
 
 #: templates/home/home.html:84
 msgid "click on course for more information"
-msgstr "Cliquez sur le cours pour plus d’informations"
+msgstr ""
 
 #: templates/home/home.html:95
 msgid "Enrol now"
-msgstr "Inscrivez-vous maintenant"
+msgstr ""
 
 #: views/home.py:33
 msgid "Welcome to SKILdemy"
-msgstr "Bienvenue sur SKILdemy"
+msgstr ""
 
 #: views/users.py:42
 msgid "please login first"
-msgstr "Veuillez vous connecter d’abord"
+msgstr ""
 
 #: views/users.py:63
 msgid "Thank you for Registering"
-msgstr "Merci de vous être inscrit(e)"
+msgstr ""
 
 #: views/users.py:82
 msgid "Happy Coding!  😊"
-msgstr "Bon codage ! 😊"
+msgstr ""
 
 #: views/users.py:84
 msgid "Invalid Credentials"
-msgstr "Identifiants invalides"
+msgstr ""
 
 #: views/users.py:126
 msgid "Check your email for the password reset link."
-msgstr "Vérifiez votre e-mail pour le lien de réinitialisation du mot de passe"
+msgstr ""
 
 #: views/users.py:129
 msgid "Email not found"
-msgstr "E-mail introuvable"
+msgstr ""
 
 #: views/users.py:147
 msgid "successfully reset password"
-msgstr "Réinitialisation du mot de passe réussie"
+msgstr ""
 
 #: views/users.py:177
 msgid "You have successfully enrolled in"
-msgstr "Vous vous êtes inscrit(e) avec succès à"
+msgstr ""
 
 #: views/users.py:184
 msgid "unsuccessful, please check your details or contact paystack support"
-msgstr "Échec, veuillez vérifier vos détails ou contacter le support Paystack"
+msgstr ""
 
 #: views/users.py:232
 msgid "successfully associate timely task for your request"
-msgstr "Échec, veuillez vérifier vos détails ou contacter le support Paystack"
+msgstr ""
 
 #: views/users.py:293
 msgid "You can request for the solution"
-msgstr "Vous pouvez demander la solution"
+msgstr ""
 
 #: views/users.py:309
 msgid "Already enrolled, login and start learning"
-msgstr "Déjà inscrit(e), connectez-vous et commencez à apprendre"
+msgstr ""
 
 #: views/users.py:383
 msgid "Your certificate is ready for download"
-msgstr "Votre certificat est prêt pour le téléchargement"
+msgstr ""
 
 #: views/users.py:389
 msgid "certificate will be ready after completion"
-msgstr "Le certificat sera prêt après la fin du cours"
-
-#~ msgid "from zero to intermediate"
-#~ msgstr "de zéro à intermédiaire"
+msgstr ""
 

@@ -21,7 +21,7 @@
             {% if auth %}
             <div>
                 <a class="btn btn-info fs-4 m-2" href="{{ url_for('users.userprofile')}}">
-                    Personal Page
+                    {{ _('Dashboard') }}
                 </a>
             </div>
 
@@ -67,8 +67,8 @@
 
               <div class="fs-2 text-center text-info p-2"> {{ course.name }}</div>
             <p>
-                <ul>
-                        <h3 class="text-info">course content</h3>
+                <ul>   
+                        <h3 class="text-info">{{_('course content')}}</h3>
                         {% for topic in topics %}
                          <li class="fs-3 text-success">{{ topic.name  }}</li>
                         {% endfor %}
@@ -78,34 +78,33 @@
         </div>
         
         {% else %}
+        <h2 style="text-align: center; color: #83e4cf;">
+            {{_('click on course for more information')}}
+        </h2>
       <div class="parent"> 
+        
     {% for course in courses %}  
         
       
     <div class="text-light" id="course">
-        <div class="d-flex justify-content-end">
-            <a class="btn btn-info m-2" id="enrol" href="{{ url_for('users.make_payment', course_id=course.id) }}" >
+        <div class="d-flex justify-content-end bg-dark">
+            <a class="btn btn-info m-2" id="enrol" 
+            href="{{ url_for('users.make_payment', course_id=course.id) }}" >
                 {{ _('Enrol now') }}
             </a>
         </div>
+        <a class="text-dark"  style="text-decoration: none;" 
+        href="{{ url_for('home.home_', course_id=course.id) }}">
         <div class="col">
             <div class="pb-4 btn btn-outline-success fs-2">{{ course.name }}</div>
             <div class="pt-5 pb-5 text-wrap fs-5 text-secondary">
-                <p class="text-dark">
-                    {{ course.description}}...
-                    <span>
-                        <a class="text-dark"  style="text-decoration: none;" href="{{ url_for('home.home_', course_id=course.id) }}">
-                            {{ _('see more') }}
-                        </a>
-                    </span>
-                    
-                </p>
+                
             </div>
             <div class="fs-3 text-center text-dark"> $ <span class="fs-3 text-success">{{ course.price }}
 
             </span></div>
         </div>
-        
+    </a>
     </div>
 
     {% endfor %}

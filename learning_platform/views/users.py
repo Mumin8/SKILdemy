@@ -1,8 +1,7 @@
 import os
-import urllib.request
 from datetime import datetime, timedelta
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session, send_from_directory
-# from learning_platform.google_translations import _translator, from_eng_to_others
+from flask_babel import gettext as _
 from flask_login import login_required, current_user, logout_user, login_user
 from flask_mail import Message
 from learning_platform import bcrypt, db, app, mail
@@ -40,7 +39,7 @@ def user_enrolled_courses(course_id):
                 return True
         return False
 
-    flash('please login first', category='info')
+    flash(_('please login first'), category='info')
     return redirect(url_for('home.home'))
 
 
@@ -61,7 +60,7 @@ def register():
                     password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash("Thank you for Registering", category='success')
+        flash(_("Thank you for Registering"), category='success')
         return redirect(url_for('users.register_auth'))
     return render_template('user/register.html', form=form)
 
@@ -80,9 +79,9 @@ def login():
                 login_user(user)
                 next = request.args.get(
                     'next_url') or url_for('users.userprofile')
-                flash('Happy Coding!  😊', category='success')
+                flash(_('Happy Coding!  😊'), category='success')
                 return redirect(next)
-            flash("Invalid Credentials", category='warning')
+            flash(_("Invalid Credentials"), category='warning')
             return redirect(url_for('users.login'))
         except BaseException:
             return redirect(url_for('users.login'))
@@ -124,10 +123,10 @@ def forgot_password():
             '''
             mail.send(msg)
 
-            flash('Check your email for the password reset link.',
+            flash(_('Check your email for the password reset link.'),
                   category='success')
         else:
-            flash('Email not found', category='danger')
+            flash(_('Email not found'), category='danger')
             return redirect(url_for('users.login'))
     return render_template(
         'user/reset_password.html',
@@ -145,7 +144,7 @@ def reset_password(token):
             user.set_password(new_password)
             user.reset_token = None
             db.session.commit()
-            flash('successfully reset password')
+            flash(_('successfully reset password'))
             return redirect(url_for('users.login'))
     return render_template('user/reset_password_confirm.html', form=form)
 
@@ -175,13 +174,14 @@ def enroll_course(course_id):
             course.update_enrolled_at(datetime.now())
             current_user.enrolling.append(course)
             db.session.commit()
+            mes = _('You have successfully enrolled in')
             flash(
-                f'You have successfully enrolled in {course.name}',
+                f'{mes} {course.name}',
                 category='info')
             return render_template('payment/success.html')
     else:
         flash(
-            f'unsuccessful, please check your details or contact paystack support',
+            _('unsuccessful, please check your details or contact paystack support'),
             category='info')
         return render_template('payment/unsuccessful.html')
 
@@ -198,7 +198,6 @@ def userprofile():
             'user/profile.html',
             user_courses=user.enrolling)
     next_url = request.url
-    print(f'the userprofile next: {next_url}')
     return redirect(url_for('home.home', next_url=next_url))
 
 
@@ -209,7 +208,6 @@ def learn_skills(course_id):
     '''
     if not current_user.is_authenticated:
         next_url = request.url
-        print(f'the learn skill next: {next_url}')
         return redirect(url_for('users.login', next_url=next_url))
 
     user_c = Course.query.get(course_id)
@@ -231,7 +229,7 @@ def request_task_solution(topic_id):
     user = User.query.get(current_user.id)
     user.time_task.append(usertask)
     db.session.commit()
-    flash('successfully associate timely task for your request')
+    flash(_('successfully associate timely task for your request'))
     return 'added to time tasks'
 
 
@@ -292,7 +290,7 @@ def gptplus_vid(course_id, topic_id):
     elif not status and state == 'request':
         name = "make request"
         ask = state
-        flash('You can request for the solution')
+        flash(_('You can request for the solution'))
         return render_template(
             'user/learn_page.html',
             path=name,
@@ -308,12 +306,11 @@ def make_payment(course_id):
     '''
     stat = user_enrolled_courses(course_id)
     if stat:
-        flash('Already enrolled, login and start learning', category='info')
+        flash(_('Already enrolled, login and start learning'), category='info')
         return redirect(url_for('home.home'))
 
     if not current_user.is_authenticated:
         next_url = request.url
-        print(f'the next url: {next}')
         return redirect(url_for('users.login', next_url=next_url))
 
     user = User.query.get(current_user.id)
@@ -375,7 +372,6 @@ def cert_of_completion(course_id):
 
     if not current_user.is_authenticated:
         next_url = request.url
-        print(f'the next url: {next}')
         return redirect(url_for('users.login', next_url=next_url))
 
     course = Course.query.get(course_id)
@@ -384,13 +380,13 @@ def cert_of_completion(course_id):
         if c == course:
             if completed_course(c):
                 flash(
-                    'Your certificate is ready for download',
+                    _('Your certificate is ready for download'),
                     category='info')
                 return render_template(
                     'user/certificate.html', course_id=c.id, name=c.name)
             else:
                 flash(
-                    "certificate will be ready after completion",
+                    _("certificate will be ready after completion"),
                     category='info')
                 return redirect(url_for('users.userprofile'))
     return redirect(url_for('users.userprofile'))

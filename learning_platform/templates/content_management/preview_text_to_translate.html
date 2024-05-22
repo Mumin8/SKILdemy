@@ -16,7 +16,11 @@
                 <div class="col bg-dark">
                     {% for content in contents %}
                     {% if content[lang] %}
+                    <a href="{{ url_for('admin.edit_translation', _id = content['_id'])}}" class="btn btn-info ">
+                        Edit text
+                    </a>
                     <p class="text-light fs-3"> {{ content[lang] }}</p>
+                    
                     {% else %}
                     <p>Nothing yet</p>
                     {% endif %}

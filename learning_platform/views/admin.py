@@ -748,6 +748,22 @@ def tream_original(_id):
         desc=val['desc'])
 
 
+@admin_bp.route('/edit_trans/<string:_id>', methods=['GET', 'POST'])
+def edit_translation(_id):
+    '''It will update a particular field
+    '''
+    lang = session.get('lang')
+    if request.method == 'POST':
+        desc = request.form.get('desc')
+        tream(ObjectId(_id), desc, lang)
+        flash('text updated successfully')
+        return redirect(url_for('admin.get_reading_text'))
+    val = get_display_text_byID(ObjectId(_id))
+    return render_template(
+        'content_management/update_original.html',
+        desc=val[lang])
+
+
 @admin_bp.route('/t_update/<string:_id>', methods=['GET', 'POST'])
 def update_text(_id):
     '''

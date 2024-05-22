@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-22 00:07+0000\n"
+"POT-Creation-Date: 2024-05-22 10:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
+
+#: templates/home/home.html:24
+msgid "Dashboard"
+msgstr ""
 
 #: templates/home/home.html:39
 msgid "Register"
@@ -25,15 +29,75 @@ msgstr ""
 msgid "login"
 msgstr ""
 
-#: templates/home/home.html:88
+#: templates/home/home.html:73
+msgid "course content"
+msgstr ""
+
+#: templates/home/home.html:84
+msgid "click on course for more information"
+msgstr ""
+
+#: templates/home/home.html:95
 msgid "Enrol now"
 msgstr ""
 
-#: templates/home/home.html:98
-msgid "see more"
+#: views/home.py:33
+msgid "Welcome to SKILdemy"
 msgstr ""
 
-#: views/home.py:34
-msgid "Welcome to SKILdemy"
+#: views/users.py:42
+msgid "please login first"
+msgstr ""
+
+#: views/users.py:63
+msgid "Thank you for Registering"
+msgstr ""
+
+#: views/users.py:82
+msgid "Happy Coding!  😊"
+msgstr ""
+
+#: views/users.py:84
+msgid "Invalid Credentials"
+msgstr ""
+
+#: views/users.py:126
+msgid "Check your email for the password reset link."
+msgstr ""
+
+#: views/users.py:129
+msgid "Email not found"
+msgstr ""
+
+#: views/users.py:147
+msgid "successfully reset password"
+msgstr ""
+
+#: views/users.py:177
+msgid "You have successfully enrolled in"
+msgstr ""
+
+#: views/users.py:184
+msgid "unsuccessful, please check your details or contact paystack support"
+msgstr ""
+
+#: views/users.py:232
+msgid "successfully associate timely task for your request"
+msgstr ""
+
+#: views/users.py:293
+msgid "You can request for the solution"
+msgstr ""
+
+#: views/users.py:309
+msgid "Already enrolled, login and start learning"
+msgstr ""
+
+#: views/users.py:383
+msgid "Your certificate is ready for download"
+msgstr ""
+
+#: views/users.py:389
+msgid "certificate will be ready after completion"
 msgstr ""
 

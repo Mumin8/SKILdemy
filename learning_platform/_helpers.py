@@ -238,7 +238,7 @@ def read_content(course, topic):
         }
     )
     my_list.append(list(content_))
-    
+
     if my_list[0]:
         # this is assuming a subtopic will only have 1 record
         return my_list[0][0][get_lang()]
@@ -247,10 +247,11 @@ def read_content(course, topic):
 
 def get_lang():
     user_locale = get_locale()
-    lang=session.get('lang')
+    lang = session.get('lang')
     if lang is None:
         lang = user_locale
     return lang
+
 
 def insert_text(code='f.PNG', desc=''):
     '''
@@ -605,7 +606,7 @@ def tream(_id, text, lang=None):
         Edit the original text in the field
     '''
     update_fields = {}
-    if lang == None:
+    if lang is None:
         update_fields['desc'] = text
     else:
         update_fields[lang] = text

@@ -1,6 +1,5 @@
 import re
 from flask import g, request
-from flask_babel import Babel
 from gtts import gTTS
 from googletrans import Translator
 
@@ -8,9 +7,10 @@ from googletrans import Translator
 translator = Translator()
 
 
-
-
 def get_locale():
+    '''
+    get the user locale
+    '''
     user = getattr(g, 'user', None)
     if user is not None:
         print(f'user: {user}')
@@ -19,7 +19,6 @@ def get_locale():
     return request.accept_languages.best_match(
         ['ar', 'bn', 'zh-CN', 'en', 'es', 'fr', 'hi', 'id', 'pt', 'ru', 'tr', 'ur']
     )
-
 
 
 # def get_timezone():
@@ -45,7 +44,6 @@ def text_translator(text, lang):
     translates the text to a language specified as lang
     '''
     text = translator.translate(text=text, src='en', dest=lang).text
-    # print(text)
     return text
 
 

@@ -1,9 +1,13 @@
 import re
 from flask import g, request
+from flask_babel import Babel
 from gtts import gTTS
 from googletrans import Translator
 
+
 translator = Translator()
+
+
 
 
 def get_locale():
@@ -14,6 +18,7 @@ def get_locale():
     return request.accept_languages.best_match(
         ['ar', 'bn', 'zh-CN', 'en', 'es', 'fr', 'hi', 'id', 'pt', 'ru', 'tr', 'ur']
     )
+
 
 
 # def get_timezone():

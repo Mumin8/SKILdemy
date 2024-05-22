@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, session
+from flask_babel import Babel, gettext
 from flask_login import current_user
 from learning_platform import db
 from learning_platform.models.models import Course
-from learning_platform.google_translations import get_locale
+# from learning_platform.google_translations import get_locale
 from learning_platform._helpers import exchange_rate, time_
-home_bp = Blueprint('home', __name__, static_folder='static',
-                    template_folder='templates')
+home_bp = Blueprint( 'home', __name__, static_folder='static', template_folder='templates')
 
 
 welcome_message = {
@@ -23,17 +23,21 @@ welcome_message = {
     'ur': 'Urdu stuff'}
 
 
+
 @home_bp.route('/')
 def home():
     '''
     home:
         the page visited when the site is visited
     '''
-
     
-
-    user_locale = get_locale()
+    welc = gettext('Welcome to SKILdemy')
+    # user_locale = get_locale()
+    print(welc)
     courses = Course.query.all()
+
+    for course in courses:
+        gettext(course.description)
 
 
     status, t = time_()
@@ -51,15 +55,15 @@ def home():
         auth = True
    
 
-    lang=session.get('lang')
-    if lang is None:
-        lang = user_locale
-    lang = lang + '.jpg'
+    # lang=session.get('lang')
+    # if lang is None:
+    #     lang = user_locale
+    # lang = lang + '.jpg'
     
     return render_template(
         'home/home.html',
         courses=courses,
-        welcome=welcome_message[user_locale], auth=auth, lang=lang)
+        welcome='Hello', auth=auth, lang='fr', welc=welc)
 
 
 @home_bp.route('/<string:course_id>/', methods=["GET"])

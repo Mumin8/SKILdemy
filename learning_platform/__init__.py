@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_babel import Babel
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -6,16 +7,27 @@ from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_pymongo import PyMongo
 from flask_wtf.csrf import CSRFProtect
-import os
-# from learning_platform.google_translations import get_locale, get_timezone
+import os, sys
+from learning_platform.google_translations import get_locale
+
+
+
+abs_pkg_path = os.path.dirname(sys.modules['learning_platform'].__file__)
+pkg_path = os.path.join(abs_pkg_path, "translations")
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_CODE_FOLDER = os.path.join(basedir, 'static/default/code')
 
+
 db = SQLAlchemy()
 app = Flask(__name__)
 
+
+babel = Babel(app, locale_selector=get_locale)
+
+
+app.config['BABEL_TRANSLATION_DIRECTORIES'] = pkg_path
 
 app.config['UPLOAD_CODE_FOLDER'] = UPLOAD_CODE_FOLDER
 
@@ -36,6 +48,7 @@ db.init_app(app)
 
 # app.permanent_session_lifetime = timedelta(minutes=60)
 # the csrf attack
+
 app.config['SECRET_KEY'] = os.urandom(24)
 csrf = CSRFProtect(app)
 

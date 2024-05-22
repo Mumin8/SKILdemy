@@ -36,14 +36,14 @@
             <div >
                 <div class="" id="register">
                     <a class="btn btn-info fs-3" href="{{ url_for('users.register') }} " id="auth">
-                        Register
+                        {{ _('Register') }}
                     </a>
                 </div>
             </div>
             <div >
                 <div class="" id="sign-in">
                     <a class="btn btn-info fs-3" href="{{ url_for('users.login') }}" id="auth">
-                        Login
+                        {{ _('login') }}
                     </a>
                 </div>
               </div>
@@ -51,7 +51,7 @@
             </nav>
     
        </div>
-       <p class="text-light">{{ welcome }}</p>
+       <p class="text-light">{{ welc }}</p>
        <div class="row ">
         {% if topics %} 
         
@@ -85,7 +85,7 @@
     <div class="text-light" id="course">
         <div class="d-flex justify-content-end">
             <a class="btn btn-info m-2" id="enrol" href="{{ url_for('users.make_payment', course_id=course.id) }}" >
-                Enroll now
+                {{ _('Enrol now') }}
             </a>
         </div>
         <div class="col">
@@ -95,7 +95,7 @@
                     {{ course.description}}...
                     <span>
                         <a class="text-dark"  style="text-decoration: none;" href="{{ url_for('home.home_', course_id=course.id) }}">
-                            see more
+                            {{ _('see more') }}
                         </a>
                     </span>
                     

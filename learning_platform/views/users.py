@@ -14,6 +14,7 @@ from learning_platform._helpers import (
     validate_time_task,
     user_courses,
     get_ref,
+    presigned_url,
     vid_ids,
     verify_payment,
     completed_course)
@@ -267,14 +268,16 @@ def gptplus_vid(course_id, topic_id):
 
     status, state = validate_time_task(current_user.id, topic_id, topic)
     if status and state == "Not timely":
-        vid_path = os.path.join(app.static_folder, 'myvideo', file)
-        dest_path = os.path.join(app.static_folder, 'user_output')
+        # vid_path = os.path.join(app.static_folder, 'myvideo', file)
+        # dest_path = os.path.join(app.static_folder, 'user_output')
 
-        name = copy_ai_video(vid_path, dest_path)
+        # name = copy_ai_video(vid_path, dest_path)
+        url = presigned_url(file)
+        print(url)
         not_time = state
         return render_template(
             'user/learn_page.html',
-            path=name,
+            path=url,
             course_id=course_id,
             not_time=not_time)
 

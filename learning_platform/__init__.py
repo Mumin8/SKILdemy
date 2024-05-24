@@ -11,7 +11,6 @@ import os, sys
 from learning_platform.google_translations import get_locale
 
 
-
 abs_pkg_path = os.path.dirname(sys.modules['learning_platform'].__file__)
 pkg_path = os.path.join(abs_pkg_path, "translations")
 
@@ -25,7 +24,7 @@ app = Flask(__name__)
 
 
 # babel things
-babel = Babel(app, locale_selector=get_locale)
+babel = Babel(app, locale_selector=get_locale, default_locale='en')
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = pkg_path
 
 app.config['UPLOAD_CODE_FOLDER'] = UPLOAD_CODE_FOLDER

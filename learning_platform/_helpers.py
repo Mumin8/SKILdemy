@@ -156,7 +156,7 @@ def presigned_url(video_name):
     url = client.generate_presigned_url(
         ClientMethod="get_object",
         Params={"Bucket": os.getenv(
-            "AWS_STORAGE_BUCKET_NAME"), "Key": video_name},
+            f"AWS_STORAGE_BUCKET_NAME{get_lang()}"), "Key": video_name},
         ExpiresIn=3600)
     return url
 
@@ -355,7 +355,7 @@ def join_clips(res_clips, lang):
 
     final_c.write_videofile(output_p)
 
-    print(f' the output file : {output_p}')
+
     upload_s3vid_languages(output_p, comp_file, lang)
 
     return output_p
@@ -502,6 +502,7 @@ def validate_time_task(user_id, task_id, task_name):
         else:
             flash('please request for the solution')
             return False, "request"
+
 
 
 def vid_ids(rel_vid):
@@ -672,6 +673,6 @@ def completed_course(course):
     check if the user is ready to retrieve certificate
     '''
     elapsed_time = datetime.now() - course.enrolled_at
-    if elapsed_time >= timedelta(days=120):
+    if elapsed_time >= timedelta(days=90):
         return True
     return False

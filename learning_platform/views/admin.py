@@ -34,7 +34,6 @@ from learning_platform._helpers import (
     delete_display_text_byID,
     tream)
 
-
 admin_bp = Blueprint(
     'admin', __name__, static_folder='static', template_folder='templates')
 
@@ -502,7 +501,7 @@ def get_published_Video():
     '''
     vid_content = live_vid_content()
     url = presigned_url('3957dc2fc92e347daa1d388e5b9b71eb.mp4')
-    # print(f'the url {vid_content}')
+    print(f'the url {vid_content}')
     return render_template(
         'content_management/preview_shared_videos.html',
         url=url)

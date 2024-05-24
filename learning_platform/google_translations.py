@@ -1,5 +1,5 @@
 import re
-from flask import g, request
+from flask import g, request, session
 from gtts import gTTS
 from googletrans import Translator
 
@@ -11,9 +11,13 @@ def get_locale():
     '''
     get the user locale
     '''
+    lang = session.get('lang')
+    if lang:
+        print(f'language: {lang}')
+        return lang
+    
     user = getattr(g, 'user', None)
     if user is not None:
-        print(f'user: {user}')
         return user.locale
 
     return request.accept_languages.best_match(

@@ -65,9 +65,8 @@
                 </div>
                 {% elif path and not_time %}
                 <div class="col-md-4">
-                  <video controls class="col-md-12">
-                    <source src="{{ url_for('static', filename='user_output/' + path ) }}"
-                     type="video/mp4">
+                  <video width="640" controls>
+                    <source src="{{ path }}" type="video/mp4">
                   </video>
                 </div>
 

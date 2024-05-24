@@ -4,7 +4,7 @@ from flask_login import current_user
 from learning_platform import db
 from learning_platform.models.models import Course
 from learning_platform.google_translations import get_locale
-from learning_platform._helpers import exchange_rate, time_
+from learning_platform._helpers import exchange_rate, time_, get_lang
 home_bp = Blueprint(
     'home',
     __name__,
@@ -62,7 +62,7 @@ def home():
     return render_template(
         'home/home.html',
         courses=courses,
-        welcome='Hello', auth=auth, lang=lang, welc=welc)
+        auth=auth, lang=lang, welc=welc)
 
 
 @home_bp.route('/<string:course_id>/', methods=["GET"])

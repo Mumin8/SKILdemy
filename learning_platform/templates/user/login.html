@@ -6,13 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% extends "base.html" %}
     <title>{% block title %} login {% endblock %}</title>
-
 </head>
     
 <body>
   
   {% block main %}
-  <nav class="text-info fs-1 text-center mt-5">login</nav>
+  <nav class="text-info fs-1 text-center mt-5">{{_('login')}}</nav>
   
   <div class="container-fluid">
     <div class="row align-items-start">
@@ -25,9 +24,13 @@
     {{ render_field(form.email, class="form-control fs-4", placeholder="email@example.com") }}
     {{ render_field(form.password, class="form-control fs-4", placeholder="password...") }}
   </div>
-  <p class="text-center m-3"><input type=submit value='Login' class="btn btn-primary btn-lg"></p>
+  <p class="text-center m-3"><input type=submit value="{{_('Login')}}" class="btn btn-primary btn-lg"></p>
   
-  <div class="text-center"><a href="{{ url_for('users.forgot_password')}}" style="text-decoration-line: none;">Forgot Password</a></div>
+  <div class="text-center">
+    <a href="{{ url_for('users.forgot_password')}}" style="text-decoration-line: none;">
+      {{_('Forgot Password')}}
+    </a>
+  </div>
   
 </form>
       </div>

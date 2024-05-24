@@ -4,7 +4,8 @@ from flask_login import current_user
 from learning_platform import db
 from learning_platform.models.models import Course
 from learning_platform.google_translations import get_locale
-from learning_platform._helpers import exchange_rate, time_, get_lang
+from learning_platform._helpers import exchange_rate, time_, get_lang, _auth
+
 home_bp = Blueprint(
     'home',
     __name__,
@@ -37,7 +38,6 @@ def home():
 
     welc = gettext('Welcome to SKILdemy')
 
-    user_locale = get_locale()
     courses = Course.query.all()
 
     status, t = time_()
@@ -49,14 +49,10 @@ def home():
             c.rate = rate
         db.session.commit()
 
-    auth = False
-    if current_user.is_authenticated:
-        auth = True
+    auth = _auth()
 
-    # for getting certificate
-    lang = session.get('lang')
-    if lang is None:
-        lang = user_locale
+    # for getting locale flag
+    lang = get_lang()
     lang = lang + '.jpg'
 
     return render_template(
@@ -71,10 +67,15 @@ def home_(course_id):
     home:
         the page visited when a course is clicked
     '''
+
+    auth = _auth()
+    lang = get_lang()
+    lang = lang + '.jpg'
+    
     course = Course.query.get(course_id)
 
     if course is not None:
 
         topics = course.topics
-        return render_template('home/home.html', topics=topics, course=course)
-    return render_template('home/home.html', course=course)
+        return render_template('home/home.html', topics=topics, course=course, lang=lang, auth=auth)
+    return render_template('home/home.html', course=course, lang=lang, auth=auth)

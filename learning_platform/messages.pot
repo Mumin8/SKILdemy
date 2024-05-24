@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-22 10:26+0000\n"
+"POT-Creation-Date: 2024-05-24 22:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,79 +25,191 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: templates/home/home.html:46
+#: templates/home/home.html:46 templates/user/login.html:14
 msgid "login"
 msgstr ""
 
-#: templates/home/home.html:73
+#: templates/home/home.html:71
 msgid "course content"
 msgstr ""
 
-#: templates/home/home.html:84
+#: templates/home/home.html:82
 msgid "click on course for more information"
 msgstr ""
 
-#: templates/home/home.html:95
+#: templates/home/home.html:93
 msgid "Enrol now"
 msgstr ""
 
-#: views/home.py:33
+#: templates/user/certificate.html:6
+msgid "certificate"
+msgstr ""
+
+#: templates/user/certificate.html:9
+msgid "congratulations"
+msgstr ""
+
+#: templates/user/certificate.html:12
+msgid "proceed for certificate"
+msgstr ""
+
+#: templates/user/learn_page.html:80
+msgid "Cancel Request"
+msgstr ""
+
+#: templates/user/learn_page.html:87
+msgid "keep learning while we prepare the answers for you"
+msgstr ""
+
+#: templates/user/learn_page.html:97
+msgid "Request Solution"
+msgstr ""
+
+#: templates/user/locale.html:20
+msgid "Choose a language:"
+msgstr ""
+
+#: templates/user/locale.html:22
+msgid "select Language"
+msgstr ""
+
+#: templates/user/locale.html:23
+msgid "Arabic"
+msgstr ""
+
+#: templates/user/locale.html:24
+msgid "Bengali"
+msgstr ""
+
+#: templates/user/locale.html:25
+msgid "Chinese"
+msgstr ""
+
+#: templates/user/locale.html:26
+msgid "English"
+msgstr ""
+
+#: templates/user/locale.html:27
+msgid "French"
+msgstr ""
+
+#: templates/user/locale.html:28
+msgid "Hindi"
+msgstr ""
+
+#: templates/user/locale.html:29
+msgid "Indonesian"
+msgstr ""
+
+#: templates/user/locale.html:30
+msgid "Portuguese"
+msgstr ""
+
+#: templates/user/locale.html:31
+msgid "Russia"
+msgstr ""
+
+#: templates/user/locale.html:32
+msgid "Spanish"
+msgstr ""
+
+#: templates/user/locale.html:33
+msgid "Turkish"
+msgstr ""
+
+#: templates/user/locale.html:34
+msgid "Urdu"
+msgstr ""
+
+#: templates/user/login.html:27
+msgid "Login"
+msgstr ""
+
+#: templates/user/login.html:31
+msgid "Forgot Password"
+msgstr ""
+
+#: templates/user/profile.html:35
+msgid "My courses"
+msgstr ""
+
+#: templates/user/profile.html:46
+msgid "Get certificate"
+msgstr ""
+
+#: templates/user/register.html:13
+msgid "Sign up"
+msgstr ""
+
+#: templates/user/reset_password.html:22
+msgid "submit email"
+msgstr ""
+
+#: templates/user/view_cert.html:17
+msgid "download"
+msgstr ""
+
+#: views/home.py:39
 msgid "Welcome to SKILdemy"
 msgstr ""
 
-#: views/users.py:42
+#: views/users.py:45
 msgid "please login first"
 msgstr ""
 
-#: views/users.py:63
+#: views/users.py:66
 msgid "Thank you for Registering"
 msgstr ""
 
-#: views/users.py:82
+#: views/users.py:85
 msgid "Happy Coding!  😊"
 msgstr ""
 
-#: views/users.py:84
+#: views/users.py:87
 msgid "Invalid Credentials"
 msgstr ""
 
 #: views/users.py:126
+msgid "Password Reset Request"
+msgstr ""
+
+#: views/users.py:135
 msgid "Check your email for the password reset link."
 msgstr ""
 
-#: views/users.py:129
+#: views/users.py:138
 msgid "Email not found"
 msgstr ""
 
-#: views/users.py:147
+#: views/users.py:156
 msgid "successfully reset password"
 msgstr ""
 
-#: views/users.py:177
+#: views/users.py:186
 msgid "You have successfully enrolled in"
 msgstr ""
 
-#: views/users.py:184
-msgid "unsuccessful, please check your details or contact paystack support"
+#: views/users.py:193
+msgid "unsuccessful, please check your details or contact SKILdemy support"
 msgstr ""
 
-#: views/users.py:232
-msgid "successfully associate timely task for your request"
+#: views/users.py:241
+msgid "successfully requested for solution"
 msgstr ""
 
-#: views/users.py:293
+#: views/users.py:304
 msgid "You can request for the solution"
 msgstr ""
 
-#: views/users.py:309
+#: views/users.py:320
 msgid "Already enrolled, login and start learning"
 msgstr ""
 
-#: views/users.py:383
+#: views/users.py:394
 msgid "Your certificate is ready for download"
 msgstr ""
 
-#: views/users.py:389
-msgid "certificate will be ready after completion"
+#: views/users.py:400
+msgid "The certificate will be ready after you complete the course"
 msgstr ""
 

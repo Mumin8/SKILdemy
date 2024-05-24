@@ -77,14 +77,14 @@
                   </video>
                   <div class="text-end ">
                     <a class="btn btn-danger text-info fs-3" href="">
-                      Cancel Request
+                      {{_('Cancel Request')}}
                     </a>
                   </div>
                 </div>
 
                 {% elif path and ask %}
                 <p class="fs-3 text-light">
-                  while waiting, try learning more to broaden your knowledge on this topic
+                  {{_('keep learning while we prepare the answers for you')}}
                 </p>
                 <div class="col-md-4">
                   
@@ -94,7 +94,7 @@
                   <div class="text-end ">
                     <a class="btn btn-success text-info fs-3" href="{{ url_for('users.request_task_solution', topic_id=topic_id) }}">
                       
-                      Request Solution
+                      {{_('Request Solution')}}
                     </a>
                   </div>
                 </div>

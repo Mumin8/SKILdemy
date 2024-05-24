@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>certificate</title>
+    <title>{{_('certificate')}}</title>
 </head>
 <body>
-    <h1>congratulations 🎉🎉🎉  🥇</h1>
+    <h1>{{_('congratulations')}} 🎉🎉🎉  🥇</h1>
     <p>
         <a href="{{url_for('users.download_cert', course_id=course_id)}}">
-            proceed for {{name}} certificate
+            {{_('proceed for certificate')}}
         </a>
     </p>
 </body>

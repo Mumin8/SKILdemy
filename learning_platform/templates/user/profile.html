@@ -32,7 +32,7 @@
     <div class="row">
         <div class="col bg-secondary" >
             <p class="text-light fs-2">
-              My courses
+              {{_('My courses')}}
             </p>
             {% for c in user_courses %}
             <div class="profile-info m-3 ">
@@ -43,7 +43,7 @@
               </div>
               <div style="background-color: bisque;">
                 <a href="{{ url_for('users.cert_of_completion', course_id=c.id) }}">
-                   Get certificate <span style="font-size: 26px;">🎓</span>
+                   {{_('Get certificate')}} <span style="font-size: 26px;">🎓</span>
                 </a>
               </div>
               

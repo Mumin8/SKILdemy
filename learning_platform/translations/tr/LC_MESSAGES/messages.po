@@ -1,4 +1,4 @@
-# Arabic translations for PROJECT.
+# Turkish translations for PROJECT.
 # Copyright (C) 2024 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
@@ -8,12 +8,11 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2024-05-24 22:01+0000\n"
-"PO-Revision-Date: 2024-05-22 10:28+0000\n"
+"PO-Revision-Date: 2024-05-24 04:46+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: ar\n"
-"Language-Team: ar <LL@li.org>\n"
-"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : "
-"n%100>=3 && n%100<=10 ? 3 : n%100>=0 && n%100<=2 ? 4 : 5);\n"
+"Language: tr\n"
+"Language-Team: tr <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,197 +20,197 @@ msgstr ""
 
 #: templates/home/home.html:24
 msgid "Dashboard"
-msgstr "لوحة القيادة"
+msgstr "Gösterge Paneli"
 
 #: templates/home/home.html:39
 msgid "Register"
-msgstr "تسجيل"
+msgstr "Kayıt Ol"
 
 #: templates/home/home.html:46 templates/user/login.html:14
 msgid "login"
-msgstr "تسجيل الدخول"
+msgstr "giriş"
 
 #: templates/home/home.html:71
 msgid "course content"
-msgstr "محتوى الدورة"
+msgstr "kurs içeriği"
 
 #: templates/home/home.html:82
 msgid "click on course for more information"
-msgstr "انقر على الدورة للمزيد من المعلومات"
+msgstr "daha fazla bilgi için kursa tıklayın"
 
 #: templates/home/home.html:93
 msgid "Enrol now"
-msgstr "سجل الآن"
+msgstr "Şimdi kaydolun"
 
 #: templates/user/certificate.html:6
 msgid "certificate"
-msgstr "شهادة"
+msgstr ""
 
 #: templates/user/certificate.html:9
 msgid "congratulations"
-msgstr "تهانينا"
+msgstr ""
 
 #: templates/user/certificate.html:12
 msgid "proceed for certificate"
-msgstr "الحصول على الشهادة"
+msgstr "sertifika için ilerleyin"
 
 #: templates/user/learn_page.html:80
 msgid "Cancel Request"
-msgstr "إلغاء الطلب"
+msgstr "İsteği İptal Et"
 
 #: templates/user/learn_page.html:87
 msgid "keep learning while we prepare the answers for you"
-msgstr "استمر في التعلم بينما نحضر الإجابات لك"
+msgstr "cevapları sizin için hazırlarken öğrenmeye devam edin"
 
 #: templates/user/learn_page.html:97
 msgid "Request Solution"
-msgstr "طلب الحل"
+msgstr "Çözüm İsteği"
 
 #: templates/user/locale.html:20
 msgid "Choose a language:"
-msgstr "اختر لغة"
+msgstr "Bir dil seçin:"
 
 #: templates/user/locale.html:22
 msgid "select Language"
-msgstr "اختار اللغة"
+msgstr "Dil Seçin"
 
 #: templates/user/locale.html:23
 msgid "Arabic"
-msgstr "العربية"
+msgstr "Arapça"
 
 #: templates/user/locale.html:24
 msgid "Bengali"
-msgstr "البنغالية"
+msgstr "Bengalce"
 
 #: templates/user/locale.html:25
 msgid "Chinese"
-msgstr "الصينية"
+msgstr "Çince"
 
 #: templates/user/locale.html:26
 msgid "English"
-msgstr "الإنجليزية"
+msgstr "İngilizce"
 
 #: templates/user/locale.html:27
 msgid "French"
-msgstr "الفرنسية"
+msgstr "Fransızca"
 
 #: templates/user/locale.html:28
 msgid "Hindi"
-msgstr "الهندية"
+msgstr "Hintçe"
 
 #: templates/user/locale.html:29
 msgid "Indonesian"
-msgstr "الإندونيسية"
+msgstr "Endonezce"
 
 #: templates/user/locale.html:30
 msgid "Portuguese"
-msgstr "البرتغالية"
+msgstr "Portekizce"
 
 #: templates/user/locale.html:31
 msgid "Russia"
-msgstr "الروسية"
+msgstr "Rusça"
 
 #: templates/user/locale.html:32
 msgid "Spanish"
-msgstr "الإسبانية"
+msgstr "İspanyolca"
 
 #: templates/user/locale.html:33
 msgid "Turkish"
-msgstr "التركية"
+msgstr "Türkçe"
 
 #: templates/user/locale.html:34
 msgid "Urdu"
-msgstr "الأردية"
+msgstr "Urduca"
 
 #: templates/user/login.html:27
 msgid "Login"
-msgstr "تسجيل الدخول"
+msgstr "Giriş Yap"
 
 #: templates/user/login.html:31
 msgid "Forgot Password"
-msgstr "نسيت كلمة المرور"
+msgstr "Şifremi Unuttum"
 
 #: templates/user/profile.html:35
 msgid "My courses"
-msgstr "دوراتي"
+msgstr "kurslarım"
 
 #: templates/user/profile.html:46
 msgid "Get certificate"
-msgstr "الحصول على الشهادة"
+msgstr "Sertifika Al"
 
 #: templates/user/register.html:13
 msgid "Sign up"
-msgstr "سجل"
+msgstr "Kayıt Ol"
 
 #: templates/user/reset_password.html:22
 msgid "submit email"
-msgstr "إرسال البريد الإلكتروني"
+msgstr "e-postayı gönder"
 
 #: templates/user/view_cert.html:17
 msgid "download"
-msgstr "تحميل"
+msgstr "indir"
 
 #: views/home.py:39
 msgid "Welcome to SKILdemy"
-msgstr "SKILdemy مرحبًا بكم في"
+msgstr "SKILdemy'ye hoş geldiniz"
 
 #: views/users.py:45
 msgid "please login first"
-msgstr "يرجى تسجيل الدخول أولاً"
+msgstr "lütfen önce giriş yapın"
 
 #: views/users.py:66
 msgid "Thank you for Registering"
-msgstr "شكرًا لتسجيلك"
+msgstr "Kayıt olduğunuz için teşekkürler"
 
 #: views/users.py:85
 msgid "Happy Coding!  😊"
-msgstr "😊 برمجة سعيدة!"
+msgstr "Mutlu Kodlamalar!  😊"
 
 #: views/users.py:87
 msgid "Invalid Credentials"
-msgstr "بيانات الاعتماد غير صالحة"
+msgstr "Geçersiz Kimlik Bilgileri"
 
 #: views/users.py:126
 msgid "Password Reset Request"
-msgstr "طلب إعادة تعيين كلمة المرور"
+msgstr "Şifre Sıfırlama İsteği"
 
 #: views/users.py:135
 msgid "Check your email for the password reset link."
-msgstr "تحقق من بريدك الإلكتروني للحصول على رابط إعادة تعيين كلمة المرور"
+msgstr "Şifre sıfırlama bağlantısı için e-postanızı kontrol edin."
 
 #: views/users.py:138
 msgid "Email not found"
-msgstr "البريد الإلكتروني غير موجود"
+msgstr "E-posta bulunamadı"
 
 #: views/users.py:156
 msgid "successfully reset password"
-msgstr "إعادة تعيين كلمة المرور بنجاح"
+msgstr "başarıyla şifre sıfırlama"
 
 #: views/users.py:186
 msgid "You have successfully enrolled in"
-msgstr "لقد قمت بالتسجيل بنجاح في"
+msgstr "Başarıyla kayıt oldunuz"
 
 #: views/users.py:193
 msgid "unsuccessful, please check your details or contact SKILdemy support"
-msgstr "SKILdemy لم تنجح، يرجى التحقق من التفاصيل الخاصة بك أو الاتصال بدعم"
+msgstr "başarısız, lütfen bilgilerinizi kontrol edin veya SKILdemy destek ile iletişime geçin"
 
 #: views/users.py:241
 msgid "successfully requested for solution"
-msgstr "تم طلب الحل بنجاح"
+msgstr "Başarıyla çözüm talebinde bulundunuz"
 
 #: views/users.py:304
 msgid "You can request for the solution"
-msgstr "يمكنك طلب الحل"
+msgstr "Çözüm talebinde bulunabilirsiniz"
 
 #: views/users.py:320
 msgid "Already enrolled, login and start learning"
-msgstr "تم التسجيل بالفعل، قم بتسجيل الدخول وابدأ التعلم"
+msgstr "Zaten kayıtlısınız, giriş yapın ve öğrenmeye başlayın"
 
 #: views/users.py:394
 msgid "Your certificate is ready for download"
-msgstr "شهادتك جاهزة للتحميل"
+msgstr "Sertifikanız indirmeye hazır"
 
 #: views/users.py:400
 msgid "The certificate will be ready after you complete the course"
-msgstr "ستكون الشهادة جاهزة بعد إكمال الدورة"
+msgstr "Sertifika kursu tamamladıktan sonra hazır olacak"
 

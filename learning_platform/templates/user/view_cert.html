@@ -14,7 +14,7 @@
         <img src="{{ url_for('static', filename='student_certificates/' + dest) }}"
          alt=""
          height="540">
-         <button><a href="{{ url_for('users.download_your_cert')}}">download</a></button>
+         <button><a href="{{ url_for('users.download_your_cert')}}">{{_('download')}}</a></button>
     </div>
     {% endblock %}
 </body>

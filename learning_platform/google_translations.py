@@ -13,7 +13,6 @@ def get_locale():
     '''
     lang = session.get('lang')
     if lang:
-        print(f'language: {lang}')
         return lang
     
     user = getattr(g, 'user', None)

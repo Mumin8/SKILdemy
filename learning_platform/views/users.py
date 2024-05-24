@@ -7,6 +7,7 @@ from flask_mail import Message
 from learning_platform import bcrypt, db, app, mail
 from learning_platform.forms.form import Registration, LoginForm, ResetForm, NewPasswordForm
 from learning_platform.models.models import User, Course, SubTopic, TimeTask, YouTube
+from learning_platform.google_translations import text_translator
 from learning_platform._helpers import (
     c_and_topics,
     read_content,
@@ -14,6 +15,7 @@ from learning_platform._helpers import (
     validate_time_task,
     user_courses,
     get_ref,
+    get_lang,
     presigned_url,
     vid_ids,
     verify_payment,
@@ -112,14 +114,20 @@ def forgot_password():
         email = form.email.data
         # check if password exists in the database first
         user = User.query.filter_by(email=email).first()
+
+        lnk_ms = 'Click this link to reset your password'
+        if get_lang() != 'en':
+            lnk_ms = text_translator(lnk_ms, get_lang())
+
         if user:
             token = get_ref()
             user.reset_token = token
             db.session.commit()
-            msg = Message('Password Reset Request',
-                          'masschusse@gmail.com', recipients=[email])
+            msg = Message(_('Password Reset Request'),
+                          sender='masschusse@gmail.com', 
+                          recipients=[email])
             msg.body = f'''
-            Click this link to reset your password:
+            {lnk_ms}
             {url_for('users.reset_password', token=token, _external=True)}
             '''
             mail.send(msg)
@@ -182,7 +190,7 @@ def enroll_course(course_id):
             return render_template('payment/success.html')
     else:
         flash(
-            _('unsuccessful, please check your details or contact paystack support'),
+            _('unsuccessful, please check your details or contact SKILdemy support'),
             category='info')
         return render_template('payment/unsuccessful.html')
 
@@ -230,7 +238,7 @@ def request_task_solution(topic_id):
     user = User.query.get(current_user.id)
     user.time_task.append(usertask)
     db.session.commit()
-    flash(_('successfully associate timely task for your request'))
+    flash(_('successfully requested for solution'))
     return 'added to time tasks'
 
 
@@ -389,7 +397,7 @@ def cert_of_completion(course_id):
                     'user/certificate.html', course_id=c.id, name=c.name)
             else:
                 flash(
-                    _("certificate will be ready after completion"),
+                    _("The certificate will be ready after you complete the course"),
                     category='info')
                 return redirect(url_for('users.userprofile'))
     return redirect(url_for('users.userprofile'))

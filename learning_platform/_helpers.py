@@ -252,6 +252,13 @@ def get_lang():
         lang = user_locale
     return lang
 
+def _auth():
+    auth = False
+    if current_user.is_authenticated:
+        auth = True
+    return auth
+    
+
 
 def insert_text(code='f.PNG', desc=''):
     '''

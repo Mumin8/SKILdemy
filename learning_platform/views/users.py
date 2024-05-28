@@ -58,12 +58,19 @@ def register():
         fullname = form.fullname.data
         username = form.username.data
         email = form.email.data
+        moderator = False
         hashed_password = bcrypt.generate_password_hash(form.password.data)
-        user = User(fullname=fullname, username=username, email=email,
-                    password=hashed_password)
-        db.session.add(user)
-        db.session.commit()
-        flash(_("Thank you for Registering"), category='success')
+        if current_user.moderator == True:
+            moderator = True
+        if not User.query.filter_by(email=email).first():
+            user = User(fullname=fullname, username=username, email=email,
+                        password=hashed_password, moderator=moderator)
+            db.session.add(user)
+            db.session.commit()
+            if moderator:
+                flash(f"you have successfully registered {fullname} as admin", category='success')
+            else:
+                flash(_("Thank you for Registering"), category='success')
         return redirect(url_for('users.register_auth'))
     return render_template('user/register.html', form=form)
 
@@ -77,9 +84,11 @@ def login():
             if user and bcrypt.check_password_hash(
                     user.password, form.password.data):
                 user.authenticated = True
+                print(f'initial {user.moderator}')
                 db.session.add(user)
                 db.session.commit()
                 login_user(user)
+                print(f'next {user.moderator} current {current_user.moderator}')
                 next = request.args.get(
                     'next_url') or url_for('users.userprofile')
                 flash(_('Happy Coding!  😊'), category='success')

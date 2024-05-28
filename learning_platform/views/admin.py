@@ -1,5 +1,6 @@
 from bson import ObjectId
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session, jsonify
+from flask_babel import gettext as _
 from flask_login import login_required, current_user, logout_user, login_user
 from learning_platform import bcrypt, db
 from werkzeug.utils import secure_filename
@@ -7,6 +8,7 @@ from learning_platform.forms.form import (
     Registration, LoginForm, CourseForm, TopicForm, SubjectForm, SubTopicForm)
 from learning_platform.models.models import (
     User, Video, Course, SubTopic, Subject, YouTube, Topic, TimeTask)
+from functools import wraps
 from learning_platform._helpers import (
     hash_filename,
     live_vid_content,
@@ -105,30 +107,44 @@ def index():
     return render_template('admin/index.html', videos=approved_videos)
 
 
-@admin_bp.route("/admin_login", methods=["GET", "POST"])
-def admin_login():
-    '''
-    admin_login:
-        this will log the admin in
-    '''
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(
-                user.password, form.password.data):
-            user.authenticated = True
-            user.moderator = True
-            db.session.add(user)
-            db.session.commit()
-            login_user(user)
-            profile_ = user.profile
-            if current_user:
-                flash('Happy Coding!  😊', category='success')
-                return redirect(url_for('admin.index'))
-            else:
-                flash("login and access this page", category='warning')
-                return redirect(url_for('users.login', user_id=user.id))
-    return render_template('user/login.html', form=form)
+
+def admin_required(f):
+    @wraps(f)
+    def dec_func(*args, **kwargs):
+        if not current_user.is_authenticated or current_user.moderator != True:
+            flash('Only admins allowed here', category='danger')
+            return redirect(url_for('users.login'))
+        return f(*args, **kwargs)
+    return dec_func
+
+@admin_bp.route('/reg_admin')
+def reg_admin():
+    username = 'Mumin8'
+    fullname = 'Alhassan Mumin'
+    email = 'alhassanmumin@gmail.com'
+    admin_password = "my_pass_word"
+    hashed = bcrypt.generate_password_hash(admin_password)
+    moderator = True
+    main_admin = User(fullname=fullname, username=username, email=email,
+                    password=hashed, moderator=moderator)
+    db.session.add(main_admin)
+    db.session.commit()
+    
+    return "admin created successfully"
+
+@admin_bp.route('/admin')
+@admin_required
+def admin():
+    return redirect(url_for('admin.index'))
+
+
+@admin_bp.route('/create_user', methods=["GET"])
+@login_required
+@admin_required
+def create_user():
+    form = Registration(request.form)
+    return render_template('user/register.html', form=form)
+
 
 
 @admin_bp.route('/admin_av', methods=['GET', 'POST'])

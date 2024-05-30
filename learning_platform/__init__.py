@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_babel import Babel
 from flask_bcrypt import Bcrypt
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_mail import Mail
@@ -28,6 +30,12 @@ babel = Babel(app, locale_selector=get_locale, default_locale='en')
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = pkg_path
 
 app.config['UPLOAD_CODE_FOLDER'] = UPLOAD_CODE_FOLDER
+
+
+limiter = Limiter(get_remote_address, 
+                  app=app, 
+                  default_limits=['7 per second'],
+                  storage_uri="memory://")
 
 app.config["MONGO_URI"] = 'mongodb+srv://alhassanmumin8:Mumin2121@cluster0.tmjnuoz.mongodb.net/video_names?retryWrites=true&w=majority'
 mongo = PyMongo(app)

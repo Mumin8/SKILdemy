@@ -1,19 +1,19 @@
 import os
 from datetime import datetime, timedelta
-from flask import Blueprint, render_template, redirect, url_for, request, flash, session, send_from_directory
+from flask import (Blueprint, render_template, redirect, url_for, request, jsonify, flash, session, send_from_directory)
 from flask_babel import gettext as _
+from flask_limiter.errors import RateLimitExceeded
 from flask_login import login_required, current_user, logout_user, login_user
 from flask_mail import Message
-from learning_platform import bcrypt, db, app, mail
+from learning_platform import bcrypt, db, app, mail, limiter
 from learning_platform.forms.form import Registration, LoginForm, ResetForm, NewPasswordForm
-from learning_platform.models.models import User, Course, SubTopic, TimeTask, YouTube
+from learning_platform.models.models import User, Course, SubTopic, TimeTask
 from learning_platform.google_translations import text_translator
 from learning_platform._helpers import (
     c_and_topics,
     read_content,
-    copy_ai_video,
+    cached,
     validate_time_task,
-    user_courses,
     get_ref,
     get_lang,
     presigned_url,
@@ -45,6 +45,9 @@ def user_enrolled_courses(course_id):
     flash(_('please login first'), category='info')
     return redirect(url_for('home.home'))
 
+@user_bp.errorhandler(RateLimitExceeded)
+def rateLimit_handler(e):
+    return jsonify(error='something went wrong. try again')
 
 @user_bp.route("/auth")
 def register_auth():
@@ -88,7 +91,6 @@ def login():
                 db.session.add(user)
                 db.session.commit()
                 login_user(user)
-                print(f'next {user.moderator} current {current_user.moderator}')
                 next = request.args.get(
                     'next_url') or url_for('users.userprofile')
                 flash(_('Happy Coding!  😊'), category='success')
@@ -250,17 +252,31 @@ def request_task_solution(topic_id):
     flash(_('successfully requested for solution'))
     return 'added to time tasks'
 
+@user_bp.route('/est')
+def test():
+    print(datetime.now())
+    for i in range(100):
+        if i%10 ==0:
+            print(i)
+            print(datetime.now())
+        topic_by_course('1', '1d5c31e1-b556-422c-9e55-4b5b9c7ac47a')
+    print(datetime.now())
+    return 'completed'
+
 
 @user_bp.route('/mat/<string:course_id>/<string:topic_id>',
                methods=['GET', 'POST'])
+@limiter.limit('10 per second')
 def topic_by_course(course_id, topic_id):
     '''
     gets and displays the reading content for the user
     '''
+    
     course = Course.query.get(course_id).name
     topic = SubTopic.query.get(topic_id).name
     if course:
-        mat = read_content(course, topic)
+        # mat = read_content(course, topic)
+        mat = cached(course, topic)
     return render_template(
         'user/learn_page.html',
         mat=mat,

@@ -20,7 +20,10 @@ from learning_platform.models.models import Course, TimeTask, User
 
 my_audio_video = 'output_folder/'
 
+cache = {}
 
+def get_dict():
+    return cache
 def get_ref():
     return secrets.token_urlsafe(50)
 
@@ -223,11 +226,53 @@ def c_and_topics(course):
     return c_dict
 
 
+
+def cached(course, topic):
+    cache = get_dict()
+    
+    
+    if course not in cache.keys():
+        cache[course] = {}
+        cache[course][get_lang()] = {}
+        cache[course][get_lang()][topic] = {}
+        cache[course][get_lang()][topic]['desc'] = read_content(course, topic)
+
+        if len(cache) > 10:
+            for key in cache:
+                        del cache[key]
+                        break
+    else:
+        if get_lang() not in cache[course].keys():
+            cache[course][get_lang()] = {}
+            cache[course][get_lang()][topic] = {}
+            cache[course][get_lang()][topic]['desc'] = read_content(course, topic)
+
+            if len(cache[course]) > 10:
+                for key in cache[course]:
+                        del cache[course][key]
+                        break
+        else:
+            if topic not in cache[course][get_lang()].keys():
+                cache[course][get_lang()][topic] = {}
+                cache[course][get_lang()][topic]['desc'] = read_content(course, topic)
+
+                if len(cache[course][get_lang()]) > 10:
+                    for key in cache[course][get_lang()]:
+                        del cache[course][get_lang()][key]
+                        break
+
+    print(f'the cached {cache}')        
+    return cache[course][get_lang()][topic]['desc']
+
+
+
 def read_content(course, topic):
     '''
     text_data:
         the approved videos will be handled by this
     '''
+
+
     my_list = []
     content_ = db.text_display.find(
         {
@@ -240,7 +285,6 @@ def read_content(course, topic):
     my_list.append(list(content_))
 
     if my_list[0]:
-        # this is assuming a subtopic will only have 1 record
         return my_list[0][0][get_lang()]
     return 'Nothing published. stay tuned'
 

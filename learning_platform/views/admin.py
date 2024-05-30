@@ -5,7 +5,7 @@ from flask_login import login_required, current_user, logout_user, login_user
 from learning_platform import bcrypt, db
 from werkzeug.utils import secure_filename
 from learning_platform.forms.form import (
-    Registration, LoginForm, CourseForm, TopicForm, SubjectForm, SubTopicForm)
+    Registration, CourseForm, TopicForm, SubjectForm, SubTopicForm)
 from learning_platform.models.models import (
     User, Video, Course, SubTopic, Subject, YouTube, Topic, TimeTask)
 from functools import wraps
@@ -35,6 +35,7 @@ from learning_platform._helpers import (
     get_display_text_byID,
     delete_display_text_byID,
     tream)
+
 
 admin_bp = Blueprint(
     'admin', __name__, static_folder='static', template_folder='templates')

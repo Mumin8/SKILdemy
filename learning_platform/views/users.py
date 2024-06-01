@@ -35,7 +35,6 @@ def pop_ref():
 
 def user_enrolled_courses(course_id):
     if current_user.is_authenticated:
-        # user = User.query.get(current_user.id)
         for c in current_user.enrolling:
             if c.id == course_id:
                 return True

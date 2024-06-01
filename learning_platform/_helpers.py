@@ -288,7 +288,6 @@ def read_content(course, topic):
         the approved videos will be handled by this
     '''
 
-
     my_list = []
     content_ = db.text_display.find(
         {

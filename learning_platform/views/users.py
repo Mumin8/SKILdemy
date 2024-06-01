@@ -11,7 +11,6 @@ from learning_platform.models.models import User, Course, SubTopic, TimeTask
 from learning_platform.google_translations import text_translator
 from learning_platform._helpers import (
     c_and_topics,
-    read_content,
     cached,
     validate_time_task,
     get_ref,

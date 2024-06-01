@@ -22,6 +22,11 @@ my_audio_video = 'output_folder/'
 
 cache = {}
 
+
+def update_dict(_cache):
+    cache = _cache
+    print(f'also cache: {cache}')
+
 def get_dict():
     return cache
 def get_ref():
@@ -225,11 +230,19 @@ def c_and_topics(course):
 
     return c_dict
 
+def deque_dict(orig_dic, first):
+    mod_dic = {}
+    mod_dic[first] = orig_dic[first]
+    l = list(orig_dic)
+    print(l)
+    for i in l:
+        mod_dic[i] = orig_dic[i]
 
+
+    return mod_dic
 
 def cached(course, topic):
-    cache = get_dict()
-    
+    global cache
     
     if course not in cache.keys():
         cache[course] = {}
@@ -238,30 +251,33 @@ def cached(course, topic):
         cache[course][get_lang()][topic]['desc'] = read_content(course, topic)
 
         if len(cache) > 10:
-            for key in cache:
-                        del cache[key]
-                        break
+            idx = list(cache)[-1]
+            cache.pop(idx)
     else:
+        cache = deque_dict(cache, course)
         if get_lang() not in cache[course].keys():
             cache[course][get_lang()] = {}
             cache[course][get_lang()][topic] = {}
             cache[course][get_lang()][topic]['desc'] = read_content(course, topic)
 
             if len(cache[course]) > 10:
-                for key in cache[course]:
-                        del cache[course][key]
-                        break
+                idx = list(cache[course])[-1]
+                cache[course].pop(idx)
         else:
+            cache[course] = deque_dict(cache[course], get_lang())
             if topic not in cache[course][get_lang()].keys():
                 cache[course][get_lang()][topic] = {}
                 cache[course][get_lang()][topic]['desc'] = read_content(course, topic)
 
                 if len(cache[course][get_lang()]) > 10:
-                    for key in cache[course][get_lang()]:
-                        del cache[course][get_lang()][key]
-                        break
+                    idx = list(cache[course][get_lang()])[-1]
+                    cache[course][get_lang()].pop(idx)
 
-    print(f'the cached {cache}')        
+            else:
+                cache[course][get_lang()] = deque_dict(cache[course][get_lang()], topic)
+
+    update_dict(cache)
+    print(f'the cached {cache}')       
     return cache[course][get_lang()][topic]['desc']
 
 

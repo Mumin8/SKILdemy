@@ -27,8 +27,11 @@ def update_dict(_cache):
     cache = _cache
     print(f'also cache: {cache}')
 
+
 def get_dict():
     return cache
+
+
 def get_ref():
     return secrets.token_urlsafe(50)
 
@@ -183,19 +186,36 @@ def upload_s3vid_languages(uploaded_file, filename, lang):
 
 
 def get_byID(_id):
-    video_ = db.python_text_processing.find_one({'_id': _id})
+
+    video_ = db.ai_video_text.find_one({'_id': _id})
     return video_
 
 
 def update_by_id(_id, code, desc):
     update_fields = {}
+
     if desc is not None:
         update_fields['desc'] = desc
     if code != '' and code is not None:
         update_fields['code'] = code
 
-    print(f'result: {update_fields}')
-    result = db.python_text_processing.update_one(
+    result = db.ai_video_text.update_one(
+        {'_id': _id},
+        {'$set': update_fields}
+    )
+
+    return result
+
+
+def update_trans_by_id(_id, desc):
+    update_fields = {}
+    lang = session.get('lang')
+
+    if desc is not None:
+        update_fields[lang] = text_translator(desc, lang)
+    print(update_fields)
+
+    result = db.ai_video_text.update_one(
         {'_id': _id},
         {'$set': update_fields}
     )
@@ -230,6 +250,7 @@ def c_and_topics(course):
 
     return c_dict
 
+
 def deque_dict(orig_dic, first):
     mod_dic = {}
     mod_dic[first] = orig_dic[first]
@@ -238,12 +259,12 @@ def deque_dict(orig_dic, first):
     for i in l:
         mod_dic[i] = orig_dic[i]
 
-
     return mod_dic
+
 
 def cached(course, topic):
     global cache
-    
+
     if course not in cache.keys():
         cache[course] = {}
         cache[course][get_lang()] = {}
@@ -267,19 +288,20 @@ def cached(course, topic):
             cache[course] = deque_dict(cache[course], get_lang())
             if topic not in cache[course][get_lang()].keys():
                 cache[course][get_lang()][topic] = {}
-                cache[course][get_lang()][topic]['desc'] = read_content(course, topic)
+                cache[course][get_lang()][topic]['desc'] = read_content(
+                    course, topic)
 
                 if len(cache[course][get_lang()]) > 10:
                     idx = list(cache[course][get_lang()])[-1]
                     cache[course][get_lang()].pop(idx)
 
             else:
-                cache[course][get_lang()] = deque_dict(cache[course][get_lang()], topic)
+                cache[course][get_lang()] = deque_dict(
+                    cache[course][get_lang()], topic)
 
     update_dict(cache)
-    print(f'the cached {cache}')       
+    print(f'the cached {cache}')
     return cache[course][get_lang()][topic]['desc']
-
 
 
 def read_content(course, topic):
@@ -311,28 +333,46 @@ def get_lang():
         lang = user_locale
     return lang
 
+
 def _auth():
     auth = False
     if current_user.is_authenticated:
         auth = True
     return auth
-    
 
 
-def insert_text(code='f.PNG', desc=''):
+def insert_text(code='f.PNG', desc=None, en=None,
+                ru=None, es=None, hi=None, ar=None, fr=None,
+                ur=None, bn=None, pt=None, ch=None, tr=None,
+                id=None):
     '''
     insert_text:
         this will insert text to a collection
     '''
     course = session.get('course')
     subject = session.get('subject')
-    topic_name = session.get('subtopic')
+    topic = session.get('subtopic')
     text_details = {
-        "code": code, "desc": desc, "course": course,
-        "subject": subject, "topic": topic_name
+        "code": code,
+        "desc": desc,
+        "course": course,
+        "language": subject,
+        "topic": topic,
+        "en": en,
+        "ar": ar,
+        "bn": bn,
+        'fr': fr,
+        "tr": tr,
+        "es": es,
+        "pt": pt,
+        "ur": ur,
+        "ru": ru,
+        "hi": hi,
+        "zh-CN": ch,
+        "id": id
     }
 
-    db.python_text_processing.insert_one(text_details)
+    db.ai_video_text.insert_one(text_details)
 
 
 def get_text_desc():
@@ -344,7 +384,7 @@ def get_text_desc():
     _topic = session.get('topic')
     print(f'the course name {_course} and the topic name {_topic}')
 
-    video_ = db.python_text_processing.find(
+    video_ = db.ai_video_text.find(
         {
             "$and": [
                 {"course": _course},
@@ -420,7 +460,6 @@ def join_clips(res_clips, lang):
     final_c = concatenate_videoclips(clips_list, method="compose")
 
     final_c.write_videofile(output_p)
-
 
     upload_s3vid_languages(output_p, comp_file, lang)
 
@@ -508,7 +547,7 @@ def matched_dic(matched, text_list):
 
 def live_text_Display_AI_content():
     all_videos = []
-    col_content = db.python_text_processing.find()
+    col_content = db.ai_video_text.find()
     all_videos.append(list(col_content))
 
     _list = _json(all_videos[0])
@@ -570,7 +609,6 @@ def validate_time_task(user_id, task_id, task_name):
             return False, "request"
 
 
-
 def vid_ids(rel_vid):
     ids_list = []
     for v in rel_vid:
@@ -619,12 +657,13 @@ def delete_byID(_id):
     '''
         Delete the field with the _id
     '''
-    db.python_text_processing.delete_one({'_id': ObjectId(_id)})
+    db.ai_video_text.delete_one({'_id': ObjectId(_id)})
 
 
 def text_data(course, subject, topic, desc=None, en=None,
               ru=None, es=None, hi=None, ar=None, fr=None,
-              ur=None, bn=None, pt=None, ch=None, tr=None):
+              ur=None, bn=None, pt=None, ch=None, tr=None,
+              id=None):
     '''
     text_data:
         structure of the reading text
@@ -644,7 +683,8 @@ def text_data(course, subject, topic, desc=None, en=None,
         "ur": ur,
         "ru": ru,
         "hi": hi,
-        "zh-CN": ch}
+        "zh-CN": ch,
+        "id": id}
     db.text_display.insert_one(file_details)
 
 
@@ -695,6 +735,22 @@ def update_display_text(_id, desc):
     update_fields[lang] = text_translator(desc, lang)
 
     result = db.text_display.update_one(
+        {'_id': _id},
+        {'$set': update_fields}
+    )
+
+    return result
+
+
+def update_ai_text(_id, desc):
+    '''
+        populate other fields with the described text
+    '''
+    lang = session.get('lang')
+    update_fields = {}
+    update_fields[lang] = desc
+
+    result = db.ai_video_text.update_one(
         {'_id': _id},
         {'$set': update_fields}
     )

@@ -23,7 +23,9 @@ from learning_platform._helpers import (
     _file,
     delete_byID,
     unlink_file,
+    update_ai_text,
     update_by_id,
+    update_trans_by_id,
     live_text_Display_AI_content,
     user_courses,
     get_text_desc,
@@ -108,7 +110,6 @@ def index():
     return render_template('admin/index.html', videos=approved_videos)
 
 
-
 def admin_required(f):
     @wraps(f)
     def dec_func(*args, **kwargs):
@@ -117,6 +118,7 @@ def admin_required(f):
             return redirect(url_for('users.login'))
         return f(*args, **kwargs)
     return dec_func
+
 
 @admin_bp.route('/reg_admin')
 def reg_admin():
@@ -127,11 +129,12 @@ def reg_admin():
     hashed = bcrypt.generate_password_hash(admin_password)
     moderator = True
     main_admin = User(fullname=fullname, username=username, email=email,
-                    password=hashed, moderator=moderator)
+                      password=hashed, moderator=moderator)
     db.session.add(main_admin)
     db.session.commit()
-    
+
     return "admin created successfully"
+
 
 @admin_bp.route('/admin')
 @admin_required
@@ -145,7 +148,6 @@ def admin():
 def create_user():
     form = Registration(request.form)
     return render_template('user/register.html', form=form)
-
 
 
 @admin_bp.route('/admin_av', methods=['GET', 'POST'])
@@ -566,6 +568,7 @@ def gptplus(language, course_id, topic_id):
 @admin_bp.route('/admin_courses', methods=['GET', 'POST'])
 def admin_all_course():
     language = request.form.get('language')
+    session['lang'] = language
     user_c = user_courses()
     c_and_t = course_topic(user_c)
     return render_template(
@@ -580,11 +583,13 @@ def get_published_AI():
     get_published_AI:
         this will get the AI content for analysis
     '''
+    lang = session.get('lang')
     contents = live_text_Display_AI_content()
 
     return render_template(
         'content_management/preview_ai_content.html',
-        contents=contents)
+        contents=contents,
+        lang=lang)
 
 
 @admin_bp.route('/updatePAI/<string:_id>', methods=['GET', 'POST'])
@@ -795,6 +800,39 @@ def update_text(_id):
     return render_template(
         'content_management/update_display_text.html',
         vid=vid)
+
+
+@admin_bp.route('/t_ai_update/<string:_id>', methods=['GET', 'POST'])
+def update_ai_translated_text(_id):
+    '''
+        It will update a particular field
+    '''
+
+    if request.method == 'POST':
+        desc = request.form.get('desc')
+        update_ai_text(ObjectId(_id), desc)
+        flash('text updated successfully', category='success')
+        return render_template('admin/index.html')
+
+    vid = get_byID(ObjectId(_id))
+    lang = session.get('lang')
+
+    return render_template(
+        'content_management/update_ai_transl.html',
+        vid=vid,
+        lang=lang)
+
+
+@admin_bp.route('/ai_t_update/<string:_id>', methods=['GET', 'POST'])
+def translate_ai_text(_id):
+    '''
+        It will update a particular field
+    '''
+
+    desc = get_byID(ObjectId(_id))
+    update_trans_by_id(ObjectId(_id), desc['desc'])
+    flash('text updated successfully', category='success')
+    return render_template('admin/index.html')
 
 
 @admin_bp.route('/del_txt_d/<string:_id>', methods=['GET'])

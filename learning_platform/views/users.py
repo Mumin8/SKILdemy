@@ -1,6 +1,15 @@
 import os
 from datetime import datetime, timedelta
-from flask import (Blueprint, render_template, redirect, url_for, request, jsonify, flash, session, send_from_directory)
+from flask import (
+    Blueprint,
+    render_template,
+    redirect,
+    url_for,
+    request,
+    jsonify,
+    flash,
+    session,
+    send_from_directory)
 from flask_babel import gettext as _
 from flask_limiter.errors import RateLimitExceeded
 from flask_login import login_required, current_user, logout_user, login_user
@@ -43,9 +52,11 @@ def user_enrolled_courses(course_id):
     flash(_('please login first'), category='info')
     return redirect(url_for('home.home'))
 
+
 @user_bp.errorhandler(RateLimitExceeded)
 def rateLimit_handler(e):
     return jsonify(error='something went wrong. try again')
+
 
 @user_bp.route("/auth")
 def register_auth():
@@ -61,7 +72,7 @@ def register():
         email = form.email.data
         moderator = False
         hashed_password = bcrypt.generate_password_hash(form.password.data)
-        if current_user.moderator == True:
+        if current_user.moderator:
             moderator = True
         if not User.query.filter_by(email=email).first():
             user = User(fullname=fullname, username=username, email=email,
@@ -69,7 +80,9 @@ def register():
             db.session.add(user)
             db.session.commit()
             if moderator:
-                flash(f"you have successfully registered {fullname} as admin", category='success')
+                flash(
+                    f"you have successfully registered {fullname} as admin",
+                    category='success')
             else:
                 flash(_("Thank you for Registering"), category='success')
         return redirect(url_for('users.register_auth'))
@@ -133,7 +146,7 @@ def forgot_password():
             user.reset_token = token
             db.session.commit()
             msg = Message(_('Password Reset Request'),
-                          sender='masschusse@gmail.com', 
+                          sender='masschusse@gmail.com',
                           recipients=[email])
             msg.body = f'''
             {lnk_ms}
@@ -250,17 +263,6 @@ def request_task_solution(topic_id):
     flash(_('successfully requested for solution'))
     return 'added to time tasks'
 
-@user_bp.route('/est')
-def test():
-    print(datetime.now())
-    for i in range(100):
-        if i%10 ==0:
-            print(i)
-            print(datetime.now())
-        topic_by_course('1', '1d5c31e1-b556-422c-9e55-4b5b9c7ac47a')
-    print(datetime.now())
-    return 'completed'
-
 
 @user_bp.route('/mat/<string:course_id>/<string:topic_id>',
                methods=['GET', 'POST'])
@@ -269,7 +271,7 @@ def topic_by_course(course_id, topic_id):
     '''
     gets and displays the reading content for the user
     '''
-    
+
     course = Course.query.get(course_id).name
     topic = SubTopic.query.get(topic_id).name
     if course:

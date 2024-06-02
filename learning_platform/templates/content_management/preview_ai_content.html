@@ -9,21 +9,38 @@
 <body>
     {% block main %}
     
-    
         <div class="container">
             <div class="row">
                 
                 <div class="col bg-dark">
                     {% for content in contents %}
+
+                    {% if content[lang] %}
+                    <a href="{{ url_for('admin.update_ai_translated_text', _id = content['_id'])}}" class="btn btn-info ">
+                        Edit text
+                    </a>
+                    <p class="text-light fs-3">
+                        {{ content[lang] }}
+                    </p>
+                    
+                    {% else %}
+                    <p class="text-light">Nothing yet</p>
+                    <div>
+                        <a href="{{ url_for('admin.translate_ai_text', _id = content['_id'])}}">
+                            Proceed to translate
+                        </a>
+                    </div>
+                    {% endif %}
+
                     <div class="mb-5" style="background-color: #080808;">
-                    <div class="btn btn-outline-success m-1">{{content['course']}}</div>
+                    <div class="btn btn-outline-success m-1">
+                        {{content['course']}}
+                    </div>
                     <br>
                     <div class="btn btn-outline-success m-1">{{content['topic']}}</div>
                     <br>
                     
                     {% if content['code'] %}
-
-                    
                         <p class="text-light">{{ content['code'] }}</p>
                     <img src="{{ url_for('static', filename='default/code/' + content['code']) }}" alt="">
     

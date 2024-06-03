@@ -554,8 +554,8 @@ def gptplus(language, course_id, topic_id):
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 
-    user_c = sorted(user_courses(current_user.id))
-    c_and_t = course_topic(user_c)
+    # user_c = sorted(user_courses(current_user.id))
+    # c_and_t = course_topic(user_c)
     session['course'] = Course.query.get(course_id).name
     session['topic'] = SubTopic.query.get(topic_id).name
     path = aud_vid(language)

@@ -13,22 +13,6 @@ home_bp = Blueprint(
     template_folder='templates')
 
 
-welcome_message = {
-    'ar': 'Arabic stuff',
-    'bn': 'Bengali stuff',
-    'zh-CN': 'Chinese stuff',
-    'en': 'English stuff',
-    'es': 'Spanish stuff',
-    'fr': 'French stuff',
-    'hi': 'Hindi stuff',
-    'id': 'Indonesia stuff',
-    'pt': 'Portuguese stuff',
-    'ru': 'Russian stuff',
-    'tr': 'Turkish stuff',
-    'ur': 'Urdu stuff'
-}
-
-
 @home_bp.route('/')
 def home():
     '''

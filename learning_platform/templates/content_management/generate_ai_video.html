@@ -8,22 +8,28 @@
 </head>
 <body>
   {% block main %}
-  <div class="container">
+  
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
         <div class="container-fluid">
+          <div class="row align-items-center btn btn-outline-primary fs-5 m-4">
+            <a href="{{ url_for('admin.get_published_AI')}}" class=" " id="admin">
+                Preview Live AI Content
+            </a>
+        </div>
+          <p  class=" btn btn-outline-success" style="display: block; font-size: large;" >
+            Generate AI video
+          </p>
             
               <div class="btn-group">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                  AI Assistant
-                </button>
-                <ul class="dropdown-menu">
-                    <div class="col-3" id="aid">
+                
+                <ul class="">
+                    <div class="col" id="aid" >
                         {% for k, v in dict_v.items() %}
-                        <p class="btn btn-secondary m-4">{{k}}</p>
+                        <p class="btn btn-secondary m-4 " style="display: block;">{{k}}</p>
                         {% for _t in v %}
                 <li>
-                  <a class="btn btn-primary" 
+                  <a class="" 
                   href="{{ url_for('admin.gptplus', language=language,  course_id=_t[1], topic_id=_t[2]) }}">
                     {{ _t[0] }}
                   </a>
@@ -36,17 +42,11 @@
                
               </div>
 
-              <div class="row align-items-start btn btn-outline-primary fs-5">
-                <a href="{{ url_for('admin.get_published_AI')}}" class=" " id="admin">
-                    Preview Live AI Content
-                </a>
-            </div>
+              
            
             
         </div>
-      </nav>
-       
-  </div>
+      
 {% endblock %}
 </body>
 </html>

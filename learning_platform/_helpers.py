@@ -14,7 +14,7 @@ from moviepy.editor import (AudioFileClip, concatenate_videoclips,
                             VideoFileClip, ImageClip)
 from werkzeug.utils import secure_filename
 from learning_platform.google_translations import (
-    text_translator, find_matched_words, process_for_nonEnglish,
+    text_translator, find_matched_words, process_for_nonArabic,
     process_for_arabic_vid, get_locale)
 from learning_platform.models.models import Course, TimeTask, User
 
@@ -503,16 +503,24 @@ def recieve_displayed_text(vid_list, lang):
         video_path = os.path.join(my_audio_video, video_file)
 
         arabic_alphabet = {'ar', 'urdu'}
-        if lang == "en":
-            create_audio_clip(_d["desc"], audio_path)
+        matched = find_matched_words(_d["desc"], _d[lang])
+        if lang in arabic_alphabet:
+            process_for_arabic_vid(_d[lang], matched, audio_path, lang)
         else:
-            trans = text_translator(_d["desc"], lang)
-            matched = find_matched_words(_d["desc"], trans)
+            process_for_nonArabic(_d[lang], matched, audio_path, lang)
 
-            if lang in arabic_alphabet:
-                process_for_arabic_vid(trans, matched, audio_path, lang)
-            else:
-                process_for_nonEnglish(trans, matched, audio_path, lang)
+            
+        
+        # if lang == "en":
+        #     create_audio_clip(_d["desc"], audio_path)
+        # else:
+        #     trans = text_translator(_d["desc"], lang)
+        #     matched = find_matched_words(_d["desc"], trans)
+
+        #     if lang in arabic_alphabet:
+        #         process_for_arabic_vid(trans, matched, audio_path, lang)
+        #     else:
+        #         process_for_nonEnglish(trans, matched, audio_path, lang)
 
         slide_audio_clip = AudioFileClip(audio_path)
 
@@ -798,3 +806,5 @@ def completed_course(course):
     if elapsed_time >= timedelta(days=90):
         return True
     return False
+
+recieve_displayed_text

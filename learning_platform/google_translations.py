@@ -66,14 +66,14 @@ def process_for_arabic_vid(trans, matched, audio_path, lang):
         process the text to arabic  language
     '''
     _trans = reorganize(trans)
-    process_for_nonEnglish(_trans, matched, audio_path, lang)
+    process_for_nonArabic(trans, matched, audio_path, lang)
 
 
-def process_for_nonEnglish(trans, matched, audio_path, lang):
+def process_for_nonArabic(trans, matched, audio_path, lang):
     '''
     processes the text to aanother language
     '''
-    latin_alphabet = {'pt', 'fr', 'es', 'id', 'tr'}
+    latin_alphabet = {'pt', 'fr', 'es', 'id', 'tr', 'en'}
     ls = dict()
 
     if isinstance(trans, list):

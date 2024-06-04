@@ -343,7 +343,7 @@ def _auth():
 
 def insert_text(code='f.PNG', desc=None, en=None,
                 ru=None, es=None, hi=None, ar=None, fr=None,
-                ur=None, bn=None, pt=None, ch=None, tr=None,
+                ur=None, bn=None, pt=None, zh=None, tr=None,
                 id=None):
     '''
     insert_text:
@@ -368,7 +368,7 @@ def insert_text(code='f.PNG', desc=None, en=None,
         "ur": ur,
         "ru": ru,
         "hi": hi,
-        "zh-CN": ch,
+        "zh": zh,
         "id": id
     }
 
@@ -471,15 +471,32 @@ def tts(text, output_path):
     tts:
         this will instance text to speech and set the properties
     '''
+    lang = session.get('lang')
+
+    print(f'the language: {session.get("lang")}')
+    if lang == "en":
+        v = 'Microsoft David Desktop - English (United States)'
+    elif lang == 'es':
+        v = "Microsoft Helena Desktop - Spanish (Spain)"
+    elif lang == 'pt':
+        v = "Microsoft Helia - Portuguese (Portugal)"
+    elif lang == 'id':
+        v = "Microsoft Andika - Indonesian (Indonesia)"
+    elif lang == 'tr':
+        v = "Microsoft Tolga - Turkish (Turkey)"
+    elif lang == 'fr':
+        v = "Microsoft Hortense Desktop - French"
+    
     engine = pyttsx3.init()
-    voices = engine.getProperty('voices')
-    # Change the voice index as needed
+    voices = engine.getProperty('voices')  
+    for voice in voices:
+        if voice.name == v:
+            engine.setProperty(voice, voice.id)
+            break
     engine.setProperty('rate', 150)
     engine.setProperty('volume', 0.9)
-    engine.setProperty('voice', 'english+f3')
     engine.setProperty('pitch', 50)
     engine = pyttsx3.init()
-    voices = engine.getProperty('voices')
     engine.save_to_file(text, output_path)
     engine.runAndWait()
 
@@ -502,12 +519,18 @@ def recieve_displayed_text(vid_list, lang):
         audio_path = os.path.join(my_audio_video, audio_file)
         video_path = os.path.join(my_audio_video, video_file)
 
-        arabic_alphabet = {'ar', 'urdu'}
+        # arabic_alphabet = {'ar', 'urdu'}
+        latin_alphabet = {'ru', 'hi', 'bn', 'zh'}
+        sp_lat_alphabet = {'pt', 'fr', 'es', 'id', 'tr', 'en'}
         matched = find_matched_words(_d["desc"], _d[lang])
-        if lang in arabic_alphabet:
-            process_for_arabic_vid(_d[lang], matched, audio_path, lang)
-        else:
+        if lang in latin_alphabet:
             process_for_nonArabic(_d[lang], matched, audio_path, lang)
+            
+        elif lang in sp_lat_alphabet:
+            create_audio_clip(_d[lang], audio_path)
+        else:
+            process_for_arabic_vid(_d[lang], matched, audio_path, lang)
+            
 
             
         
@@ -670,7 +693,7 @@ def delete_byID(_id):
 
 def text_data(course, subject, topic, desc=None, en=None,
               ru=None, es=None, hi=None, ar=None, fr=None,
-              ur=None, bn=None, pt=None, ch=None, tr=None,
+              ur=None, bn=None, pt=None, zh=None, tr=None,
               id=None):
     '''
     text_data:
@@ -691,7 +714,7 @@ def text_data(course, subject, topic, desc=None, en=None,
         "ur": ur,
         "ru": ru,
         "hi": hi,
-        "zh-CN": ch,
+        "zh": zh,
         "id": id}
     db.text_display.insert_one(file_details)
 

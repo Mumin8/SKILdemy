@@ -20,7 +20,7 @@ def get_locale():
         return user.locale
 
     return request.accept_languages.best_match(
-        ['ar', 'bn', 'zh-CN', 'en', 'es', 'fr', 'hi', 'id', 'pt', 'ru', 'tr', 'ur']
+        ['ar', 'bn', 'zh', 'en', 'es', 'fr', 'hi', 'id', 'pt', 'ru', 'tr', 'ur']
     )
 
 
@@ -50,42 +50,42 @@ def text_translator(text, lang):
     return text
 
 
-def reorganize(trans):
-    '''
-    reorganize the arabic to read like the rest of the languages
-    '''
-    lines = trans.split('\n')
-    organized = []
-    for line in lines:
-        organized.extend(reversed(line.split()))
-    return organized
+# def reorganize(trans):
+#     '''
+#     reorganize the arabic to read like the rest of the languages
+#     '''
+#     lines = trans.split('\n')
+#     organized = []
+#     for line in lines:
+#         organized.extend(reversed(line.split()))
+#     return organized
 
 
 def process_for_arabic_vid(trans, matched, audio_path, lang):
     '''
         process the text to arabic  language
     '''
-    _trans = reorganize(trans)
+    
     process_for_nonArabic(trans, matched, audio_path, lang)
 
 
 def process_for_nonArabic(trans, matched, audio_path, lang):
     '''
-    processes the text to aanother language
+    processes the text to another language
     '''
     latin_alphabet = {'pt', 'fr', 'es', 'id', 'tr', 'en'}
-    ls = dict()
+    
 
-    if isinstance(trans, list):
-        lis = trans
-    elif lang not in latin_alphabet:
-        lis = trans.split()
+    
 
     if lang in latin_alphabet:
         tts_ = gTTS(trans, lang=lang)
         tts_.save(audio_path)
     else:
+        ls = dict()
+        lis = trans.split()
         start = 0
+
         for idx, word in enumerate(lis):
             if word.lower() in matched:
                 ls[f'{idx}{lang}'] = ' '.join(

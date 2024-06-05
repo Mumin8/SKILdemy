@@ -691,7 +691,7 @@ def delete_byID(_id):
     db.ai_video_text.delete_one({'_id': ObjectId(_id)})
 
 
-def text_data(course, subject, topic, desc=None, en=None,
+def text_data(course, topic, desc=None, en=None,
               ru=None, es=None, hi=None, ar=None, fr=None,
               ur=None, bn=None, pt=None, zh=None, tr=None,
               id=None):
@@ -701,7 +701,6 @@ def text_data(course, subject, topic, desc=None, en=None,
     '''
     file_details = {
         "course": course,
-        "language": subject,
         "topic": topic,
         "desc": desc,
         "en": en,

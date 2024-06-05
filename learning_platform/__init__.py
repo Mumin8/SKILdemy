@@ -1,4 +1,5 @@
 from flask import Flask
+from dotenv import load_dotenv
 from flask_babel import Babel
 from flask_bcrypt import Bcrypt
 from flask_limiter import Limiter
@@ -20,6 +21,7 @@ pkg_path = os.path.join(abs_pkg_path, "translations")
 basedir = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_CODE_FOLDER = os.path.join(basedir, 'static/default/code')
 
+load_dotenv()
 
 db = SQLAlchemy()
 app = Flask(__name__)
@@ -46,6 +48,7 @@ bcrypt = Bcrypt(app)
 
 
 migrate = Migrate(app, db)
+
 
 
 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///mydb.db'

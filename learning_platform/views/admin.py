@@ -5,9 +5,9 @@ from flask_login import login_required, current_user, logout_user, login_user
 from learning_platform import bcrypt, db
 from werkzeug.utils import secure_filename
 from learning_platform.forms.form import (
-    Registration, CourseForm, TopicForm, SubjectForm, SubTopicForm)
+    Registration, CourseForm, TopicForm, SubTopicForm)
 from learning_platform.models.models import (
-    User, Video, Course, SubTopic, Subject, YouTube, Topic, TimeTask)
+    User, Video, Course, SubTopic, Topic, TimeTask)
 from functools import wraps
 from learning_platform._helpers import (
     hash_filename,
@@ -46,12 +46,12 @@ admin_bp = Blueprint(
 v_id = []
 
 
-def validate_topic_for_subject(subject_id, topic_id):
-    subject = Subject.query.get(subject_id)
-    for t in subject.topics:
-        if t.id == topic_id:
-            return False
-    return True
+# def validate_topic_for_subject(subject_id, topic_id):
+#     subject = Subject.query.get(subject_id)
+#     for t in subject.topics:
+#         if t.id == topic_id:
+#             return False
+#     return True
 
 
 def validate_subtopic_for_topic(course_id, topic_id):
@@ -239,30 +239,30 @@ def cs_avail():
     return render_template('content_management/delete_course.html', cst=cst)
 
 
-@admin_bp.route('/add_subject', methods=['GET', 'POST'])
-def add_subject():
-    '''
-    add_subject:
-        this will add a subject or language to the subject table
-    '''
-    form = SubjectForm(request.form)
-    if form.validate_on_submit():
-        name = form.name.data
-        new_subject = Subject(name=name)
-        db.session.add(new_subject)
-        db.session.commit()
-        flash(f'{name} added to the subjects', category='info')
-    return render_template('content_management/add_subject.html', form=form)
+# @admin_bp.route('/add_subject', methods=['GET', 'POST'])
+# def add_subject():
+#     '''
+#     add_subject:
+#         this will add a subject or language to the subject table
+#     '''
+#     form = SubjectForm(request.form)
+#     if form.validate_on_submit():
+#         name = form.name.data
+#         new_subject = Subject(name=name)
+#         db.session.add(new_subject)
+#         db.session.commit()
+#         flash(f'{name} added to the subjects', category='info')
+#     return render_template('content_management/add_subject.html', form=form)
 
 
-@admin_bp.route('/ss_avail', methods=['GET'])
-def ss_avail():
-    '''
-    ss_avail:
-        this will get all available subjects
-    '''
-    cst = Subject.query.all()
-    return render_template('content_management/delete_language.html', cst=cst)
+# @admin_bp.route('/ss_avail', methods=['GET'])
+# def ss_avail():
+#     '''
+#     ss_avail:
+#         this will get all available subjects
+#     '''
+#     cst = Subject.query.all()
+#     return render_template('content_management/delete_language.html', cst=cst)
 
 
 @admin_bp.route('/add_topic', methods=['GET', 'POST'])
@@ -352,43 +352,43 @@ def add_tc():
         topics=topics)
 
 
-@admin_bp.route('/add_sc', methods=['GET', 'POST'])
-def add_sc():
-    '''
-    add_sc:
-        this will add a particular subject to a particular course
-    '''
-    courses = Course.query.all()
-    subjects = Subject.query.all()
-    if request.method == "POST":
-        course_id = request.form.get('course_id')
-        subject_id = request.form.get('subject_id')
-        subject = Subject.query.get(subject_id)
-        course = Course.query.get(course_id)
-        status = validate_subject(course_id, subject_id)
-        if status:
-            course = Course.query.get(course_id)
-            course.subjects.append(subject)
-            db.session.commit()
-            flash(
-                f'successfully added {subject} to {course}',
-                category='success')
-            return render_template(
-                'content_management/subject_to_course.html',
-                courses=courses,
-                subjects=subjects)
-        else:
-            flash('this subject is associated with this course already',
-                  category='info')
-            return render_template(
-                'content_management/subject_to_course.html',
-                courses=courses,
-                subjects=subjects)
+# @admin_bp.route('/add_sc', methods=['GET', 'POST'])
+# def add_sc():
+#     '''
+#     add_sc:
+#         this will add a particular subject to a particular course
+#     '''
+#     courses = Course.query.all()
+#     subjects = Subject.query.all()
+#     if request.method == "POST":
+#         course_id = request.form.get('course_id')
+#         subject_id = request.form.get('subject_id')
+#         subject = Subject.query.get(subject_id)
+#         course = Course.query.get(course_id)
+#         status = validate_subject(course_id, subject_id)
+#         if status:
+#             course = Course.query.get(course_id)
+#             course.subjects.append(subject)
+#             db.session.commit()
+#             flash(
+#                 f'successfully added {subject} to {course}',
+#                 category='success')
+#             return render_template(
+#                 'content_management/subject_to_course.html',
+#                 courses=courses,
+#                 subjects=subjects)
+#         else:
+#             flash('this subject is associated with this course already',
+#                   category='info')
+#             return render_template(
+#                 'content_management/subject_to_course.html',
+#                 courses=courses,
+#                 subjects=subjects)
 
-    return render_template(
-        'content_management/subject_to_course.html',
-        courses=courses,
-        subjects=subjects)
+#     return render_template(
+#         'content_management/subject_to_course.html',
+#         courses=courses,
+#         subjects=subjects)
 
 
 @admin_bp.route('/add_subtt', methods=['GET', 'POST'])
@@ -429,49 +429,49 @@ def add_subtt():
         topics=topics)
 
 
-@admin_bp.route('/add_ts', methods=['GET', 'POST'])
-def add_topic_to_subject():
-    '''
-    add_tc:
-        this will add a particular topic to a particular subject
-    '''
-    subjects = Subject.query.all()
-    topics = Topic.query.all()
-    if request.method == "POST":
-        subject_id = request.form.get('subject_id')
-        topic_id = request.form.get('topic_id')
+# @admin_bp.route('/add_ts', methods=['GET', 'POST'])
+# def add_topic_to_subject():
+#     '''
+#     add_tc:
+#         this will add a particular topic to a particular subject
+#     '''
+#     subjects = Subject.query.all()
+#     topics = Topic.query.all()
+#     if request.method == "POST":
+#         subject_id = request.form.get('subject_id')
+#         topic_id = request.form.get('topic_id')
 
-        topic = Topic.query.get(topic_id)
+#         topic = Topic.query.get(topic_id)
 
-        status = validate_topic_for_subject(subject_id, topic_id)
-        if status:
-            subject = Subject.query.get(subject_id)
-            subject.topics.append(topic)
-            db.session.commit()
-            flash(
-                f'successfully added {topic} to {subject}', category='success')
-            return render_template(
-                'content_management/topic_to_subject.html',
-                subjects=subjects,
-                topics=topics)
-        else:
-            flash('the topic is associated with this course', category='info')
-            return render_template(
-                'content_management/topic_to_subject.html',
-                subjects=subjects,
-                topics=topics)
+#         status = validate_topic_for_subject(subject_id, topic_id)
+#         if status:
+#             subject = Subject.query.get(subject_id)
+#             subject.topics.append(topic)
+#             db.session.commit()
+#             flash(
+#                 f'successfully added {topic} to {subject}', category='success')
+#             return render_template(
+#                 'content_management/topic_to_subject.html',
+#                 subjects=subjects,
+#                 topics=topics)
+#         else:
+#             flash('the topic is associated with this course', category='info')
+#             return render_template(
+#                 'content_management/topic_to_subject.html',
+#                 subjects=subjects,
+#                 topics=topics)
 
-    return render_template(
-        'content_management/topic_to_subject.html',
-        subjects=subjects,
-        topics=topics)
+#     return render_template(
+#         'content_management/topic_to_subject.html',
+#         subjects=subjects,
+#         topics=topics)
 
 
 @admin_bp.route('/c_s_st', methods=['GET', 'POST'])
 def add_c_s_st():
     ''' this will add course, subject and sub topic to online ai content'''
     course = Course.query.all()
-    subject = Subject.query.all()
+    # subject = Subject.query.all()
     subtopic = SubTopic.query.all()
     if request.method == "POST":
         session['course'] = request.form.get("course")
@@ -482,7 +482,7 @@ def add_c_s_st():
     return render_template(
         'content_management/course_subject_subtopic.html',
         course=course,
-        subject=subject,
+        # subject=subject,
         subtopic=subtopic)
 
 
@@ -493,23 +493,26 @@ def add_reading_text():
         this will add the skeleton of the reading text
     '''
     courses = Course.query.all()
-    subjects = Subject.query.all()
+    # subjects = Subject.query.all()
     topics = SubTopic.query.all()
 
     if request.method == "POST":
         c_name = Course.query.get(request.form.get('course_id')).name
-        s_name = Subject.query.get(request.form.get('subject_id')).name
+        # s_name = Subject.query.get(request.form.get('subject_id')).name
         t_name = SubTopic.query.get(request.form.get('topic_id')).name
-        text_data(c_name, s_name, t_name)
+        # text_data(c_name, s_name, t_name)
+        text_data(c_name, t_name)
         flash('added content ')
         return render_template(
             'content_management/reading_text.html',
             courses=courses,
-            subjects=subjects,
+            # subjects=subjects,
             topics=topics)
 
     return render_template('content_management/reading_text.html',
-                           courses=courses, subjects=subjects, topics=topics)
+                           courses=courses,
+                            #  subjects=subjects,
+                               topics=topics)
 
 
 @admin_bp.route('/gpvid', methods=['GET'])
@@ -634,31 +637,31 @@ def add_tt():
         avail_tasks=avail_tasks)
 
 
-@admin_bp.route('/you-tube', methods=['GET', 'POST'])
-def add_youtube_vid():
-    subtopic = SubTopic.query.all()
-    if request.method == 'POST':
-        subtopic_id = request.form.get('subtopic_id')
-        if not subtopic_id:
-            flash('select the topic', category='warning')
-            return redirect(url_for('admin.add_youtube_vid'))
+# @admin_bp.route('/you-tube', methods=['GET', 'POST'])
+# def add_youtube_vid():
+#     subtopic = SubTopic.query.all()
+#     if request.method == 'POST':
+#         subtopic_id = request.form.get('subtopic_id')
+#         if not subtopic_id:
+#             flash('select the topic', category='warning')
+#             return redirect(url_for('admin.add_youtube_vid'))
 
-        content = request.form.get('iframe_content')
-        if not content:
-            flash('you did not include the content', category='warning')
+#         content = request.form.get('iframe_content')
+#         if not content:
+#             flash('you did not include the content', category='warning')
 
-        youtube = YouTube()
-        youtube.subtopic_id = subtopic_id
+#         youtube = YouTube()
+#         youtube.subtopic_id = subtopic_id
 
-        f, s = content.split("src=")
-        youtube_link, trash = s.split('title')
-        youtube.link = youtube_link
-        db.session.add(youtube)
-        db.session.commit()
-        flash('you have added a link to a youtube video', category='success')
-    return render_template(
-        'content_management/add_youtube_video.html',
-        subtopic=subtopic)
+#         f, s = content.split("src=")
+#         youtube_link, trash = s.split('title')
+#         youtube.link = youtube_link
+#         db.session.add(youtube)
+#         db.session.commit()
+#         flash('you have added a link to a youtube video', category='success')
+#     return render_template(
+#         'content_management/add_youtube_video.html',
+#         subtopic=subtopic)
 
 
 @admin_bp.route('/del_course/<string:c_id>', methods=['GET'])
@@ -676,19 +679,19 @@ def del_course(c_id):
         return "something went wrong"
 
 
-@admin_bp.route('/del_lang/<string:s_id>', methods=['GET'])
-def del_lang(s_id):
-    '''
-    del_lang:
-        this will delete the language or subject with id = s_id from the database
-    '''
-    try:
-        language = Subject.query.filter_by(id=s_id).first()
-        db.session.delete(language)
-        db.session.commit()
-        return render_template('admin/index.html')
-    except BaseException:
-        return 'something went wrong'
+# @admin_bp.route('/del_lang/<string:s_id>', methods=['GET'])
+# def del_lang(s_id):
+#     '''
+#     del_lang:
+#         this will delete the language or subject with id = s_id from the database
+#     '''
+#     try:
+#         language = Subject.query.filter_by(id=s_id).first()
+#         db.session.delete(language)
+#         db.session.commit()
+#         return render_template('admin/index.html')
+#     except BaseException:
+#         return 'something went wrong'
 
 
 @admin_bp.route('/del_topic/<string:t_id>', methods=['GET'])

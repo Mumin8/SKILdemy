@@ -36,7 +36,7 @@
                             Select subject
                         </a>
 
-                        <ul class="dropdown-menu " aria-labelledby="dropdownMenuLink1">
+                        <!-- <ul class="dropdown-menu " aria-labelledby="dropdownMenuLink1">
                             {% for s in subjects %}
                             <li>
                                 <a class="dropdown-item" href="#" onclick="setSubjectId('{{ s.id }}')">
@@ -44,7 +44,7 @@
                                 </a>
                             </li>
                             {% endfor %}
-                        </ul>
+                        </ul> -->
                     </div>
                 </div>
                 <div class="col">
@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="course_id" id="course_id" value="">
-                <input type="hidden" name="subject_id" id="subject_id" value="">
+                <!-- <input type="hidden" name="subject_id" id="subject_id" value=""> -->
                 <input type="hidden" name="topic_id" id="topic_id" value="">
                 <button type="submit" class="btn btn-primary mt-3">Submit</button>
             </form>
@@ -74,9 +74,9 @@
             document.getElementById('course_id').value = id;
         }
         
-        function setSubjectId(id) {
-            document.getElementById('subject_id').value = id;
-        }
+        // function setSubjectId(id) {
+        //     document.getElementById('subject_id').value = id;
+        // }
 
         function setTopicId(id) {
             document.getElementById('topic_id').value = id;

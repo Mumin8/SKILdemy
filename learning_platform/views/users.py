@@ -276,7 +276,7 @@ def topic_by_course(course_id, topic_id):
     topic = SubTopic.query.get(topic_id).name
     if course:
         # mat = read_content(course, topic)
-        mat = cached(course, topic)
+        mat, iframes = cached(course, topic)
     return render_template(
         'user/learn_page.html',
         mat=mat,

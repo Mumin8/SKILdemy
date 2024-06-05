@@ -664,6 +664,8 @@ def add_tt():
 #         subtopic=subtopic)
 
 
+
+
 @admin_bp.route('/del_course/<string:c_id>', methods=['GET'])
 def del_course(c_id):
     '''

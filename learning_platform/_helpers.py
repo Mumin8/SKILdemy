@@ -1,4 +1,4 @@
-import os
+import os, re
 import boto3
 import secrets
 import shutil
@@ -25,7 +25,7 @@ cache = {}
 
 def update_dict(_cache):
     cache = _cache
-    print(f'also cache: {cache}')
+    
 
 
 def get_dict():
@@ -262,7 +262,15 @@ def deque_dict(orig_dic, first):
     return mod_dic
 
 
+
+def vid_iframes(text):
+    pattern = r'(<iframe\s+[^>]*src=["\']https?://(?:www\.)?youtube\.com/embed/[^"\']+["\'][^>]*></iframe>)'
+    frames_l = re.findall(pattern, text)
+    modified_text = re.sub(pattern, '', text)
+    return modified_text, frames_l
+
 def cached(course, topic):
+    
     global cache
 
     if course not in cache.keys():
@@ -299,9 +307,12 @@ def cached(course, topic):
                 cache[course][get_lang()] = deque_dict(
                     cache[course][get_lang()], topic)
 
-    update_dict(cache)
-    print(f'the cached {cache}')
-    return cache[course][get_lang()][topic]['desc']
+    # update_dict(cache)
+    text = cache[course][get_lang()][topic]['desc']
+    _text, iframes = vid_iframes(text)
+    print(f'the text {_text} and the list {iframes}')
+  
+    return _text, iframes
 
 
 def read_content(course, topic):

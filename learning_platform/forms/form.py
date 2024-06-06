@@ -21,12 +21,6 @@ class SubTopicForm(FlaskForm):
     submit = SubmitField('Add Topic')
 
 
-# class SubjectForm(FlaskForm):
-#     name = StringField('Subject or Language', [
-#                        validators.DataRequired("Topic is required")])
-#     submit = SubmitField('Add Sub Topic')
-
-
 class CourseForm(FlaskForm):
     name = StringField('Course Name', [validators.DataRequired(
         "The name of the course is required")])

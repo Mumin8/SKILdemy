@@ -23,8 +23,8 @@ my_audio_video = 'output_folder/'
 cache = {}
 
 
-def update_dict(_cache):
-    cache = _cache
+# def update_dict(_cache):
+#     cache = _cache
     
 
 
@@ -268,7 +268,7 @@ def vid_iframes(text):
     pattern = r'(<iframe\s+[^>]*src=["\']https?://(?:www\.)?youtube\.com/embed/[^"\']+["\'][^>]*></iframe>)'
     frames_l = re.findall(pattern, text)
     modified_text = re.sub(pattern, '', text)
-    
+
     for l in frames_l:
         f, s = l.split("src=")
         _link, trash = s.split('title')

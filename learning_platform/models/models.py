@@ -19,15 +19,6 @@ user_course = db.Table('user_course',
                        )
 
 
-# join course and subjects
-# course_subjects = db.Table('course_subjects',
-#                            db.Column('course_id', db.String(36), db.ForeignKey(
-#                                'course.id'), primary_key=True),
-#                            db.Column('subject_id', db.String(36), db.ForeignKey(
-#                                'subject.id'), primary_key=True)
-#                            )
-
-
 # join couse and topics
 course_topics = db.Table('course_topics',
                          db.Column('course_id', db.String(36), db.ForeignKey(
@@ -35,15 +26,6 @@ course_topics = db.Table('course_topics',
                          db.Column('topic_id', db.String(36), db.ForeignKey(
                              'topic.id'), primary_key=True)
                          )
-
-
-# join subject and topics
-# subject_topics = db.Table('subject_topics',
-#                           db.Column('subject_id', db.String(36), db.ForeignKey(
-#                               'subject.id'), primary_key=True),
-#                           db.Column('topic_id', db.String(36), db.ForeignKey(
-#                               'topic.id'), primary_key=True)
-#                           )
 
 
 class User(db.Model, UserMixin):
@@ -114,10 +96,6 @@ class Course(db.Model):
     def update_enrolled_at(self, enrolled):
         self.enrolled_at = enrolled
         db.session.commit()
-        
-
-    # subjects = db.relationship(
-    #     'Subject', secondary=course_subjects, backref=db.backref('courses', lazy=True))
 
     topics = db.relationship('Topic', secondary=course_topics,
                              lazy='subquery', backref=db.backref('courses', lazy=True))
@@ -139,16 +117,6 @@ class SubTopic(db.Model):
     name = db.Column(db.String(80), nullable=False)
     desc = db.Column(db.String(250), nullable=True)
     topic_id = db.Column(db.String(36), db.ForeignKey('topic.id'))
-    # youtube_videos = db.relationship('YouTube', backref='subtopic', lazy='dynamic')
-
-
-# class Subject(db.Model):
-#     __tablename__ = "subject"
-
-#     id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
-#     name = db.Column(db.String(255), nullable=False)
-#     topics = db.relationship('Topic', secondary=subject_topics,
-#                                         backref=db.backref('subjects', lazy=True))
 
 
 class TimeTask(db.Model):
@@ -157,13 +125,6 @@ class TimeTask(db.Model):
     usertask = db.Column(db.String(80), nullable=True)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
-
-
-# class YouTube(db.Model):
-#     __tablename__= 'youtube'
-#     id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
-#     subtopic_id = db.Column(db.String(36), db.ForeignKey('subtopic.id'))
-#     link = db.Column(db.String(80), nullable=True)
 
 
 

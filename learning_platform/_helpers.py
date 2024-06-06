@@ -255,7 +255,7 @@ def deque_dict(orig_dic, first):
     mod_dic = {}
     mod_dic[first] = orig_dic[first]
     l = list(orig_dic)
-    print(l)
+
     for i in l:
         mod_dic[i] = orig_dic[i]
 
@@ -264,10 +264,18 @@ def deque_dict(orig_dic, first):
 
 
 def vid_iframes(text):
+    iframe = []
     pattern = r'(<iframe\s+[^>]*src=["\']https?://(?:www\.)?youtube\.com/embed/[^"\']+["\'][^>]*></iframe>)'
     frames_l = re.findall(pattern, text)
     modified_text = re.sub(pattern, '', text)
-    return modified_text, frames_l
+    
+    for l in frames_l:
+        f, s = l.split("src=")
+        _link, trash = s.split('title')
+        _, l = _link.split('embed/')
+        iframe.append(l)
+    
+    return modified_text, iframe
 
 def cached(course, topic):
     

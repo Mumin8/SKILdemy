@@ -280,6 +280,7 @@ def topic_by_course(course_id, topic_id):
     return render_template(
         'user/learn_page.html',
         mat=mat,
+        path=iframes,
         course_id=course_id,
         topic_id=topic_id)
 

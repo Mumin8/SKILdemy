@@ -1,11 +1,9 @@
 from wtforms import (
-    Form, BooleanField, StringField, PasswordField,
+    StringField, PasswordField,
     validators, SubmitField, ValidationError, SelectField,
     TextAreaField, DecimalField, SubmitField
 )
-from flask_wtf.file import (
-    FileRequired, FileAllowed, FileField
-)
+from flask_wtf.file import FileAllowed, FileField
 from flask_wtf import FlaskForm
 from ..models.models import User
 

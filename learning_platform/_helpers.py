@@ -36,11 +36,6 @@ def get_ref():
     return secrets.token_urlsafe(50)
 
 
-# def generate_reset_token():
-#     # Generate a secure token for the password reset link
-#     return secrets.token_urlsafe(32)
-
-
 def get_db():
     db = getattr(g, "_database", None)
 
@@ -549,20 +544,6 @@ def recieve_displayed_text(vid_list, lang):
             create_audio_clip(_d[lang], audio_path)
         else:
             process_for_arabic_vid(_d[lang], matched, audio_path, lang)
-            
-
-            
-        
-        # if lang == "en":
-        #     create_audio_clip(_d["desc"], audio_path)
-        # else:
-        #     trans = text_translator(_d["desc"], lang)
-        #     matched = find_matched_words(_d["desc"], trans)
-
-        #     if lang in arabic_alphabet:
-        #         process_for_arabic_vid(trans, matched, audio_path, lang)
-        #     else:
-        #         process_for_nonEnglish(trans, matched, audio_path, lang)
 
         slide_audio_clip = AudioFileClip(audio_path)
 
@@ -847,5 +828,3 @@ def completed_course(course):
     if elapsed_time >= timedelta(days=90):
         return True
     return False
-
-recieve_displayed_text

@@ -2,7 +2,7 @@ from learning_platform import app, db, login_manager, bcrypt
 from flask_login import UserMixin
 from sqlalchemy import func
 from datetime import datetime
-import json, uuid
+import uuid
 
 
 @login_manager.user_loader

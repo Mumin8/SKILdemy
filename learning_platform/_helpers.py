@@ -1,4 +1,5 @@
-import os, re
+import os
+import re
 import boto3
 import secrets
 import shutil
@@ -14,8 +15,7 @@ from moviepy.editor import (AudioFileClip, concatenate_videoclips,
                             VideoFileClip, ImageClip)
 from werkzeug.utils import secure_filename
 from learning_platform.google_translations import (
-    text_translator, find_matched_words, process_for_nonArabic,
-    process_for_arabic_vid, get_locale)
+    text_translator, find_matched_words, process_for_nonLatin, get_locale)
 from learning_platform.models.models import Course, TimeTask, User
 
 my_audio_video = 'output_folder/'
@@ -25,7 +25,6 @@ cache = {}
 
 # def update_dict(_cache):
 #     cache = _cache
-    
 
 
 def get_dict():
@@ -257,7 +256,6 @@ def deque_dict(orig_dic, first):
     return mod_dic
 
 
-
 def vid_iframes(text):
     iframe = []
     pattern = r'(<iframe\s+[^>]*src=["\']https?://(?:www\.)?youtube\.com/embed/[^"\']+["\'][^>]*></iframe>)'
@@ -269,11 +267,12 @@ def vid_iframes(text):
         _link, trash = s.split('title')
         _, l = _link.split('embed/')
         iframe.append(l)
-    
+
     return modified_text, iframe
 
+
 def cached(course, topic):
-    
+
     global cache
 
     if course not in cache.keys():
@@ -314,7 +313,7 @@ def cached(course, topic):
     text = cache[course][get_lang()][topic]['desc']
     _text, iframes = vid_iframes(text)
     print(f'the text {_text} and the list {iframes}')
-  
+
     return _text, iframes
 
 
@@ -487,27 +486,32 @@ def tts(text, output_path):
     '''
     lang = session.get('lang')
 
-    print(f'the language: {session.get("lang")}')
     if lang == "en":
         v = 'Microsoft David Desktop - English (United States)'
+        rate = 150
     elif lang == 'es':
         v = "Microsoft Helena Desktop - Spanish (Spain)"
+        rate = 150
     elif lang == 'pt':
         v = "Microsoft Helia - Portuguese (Portugal)"
+        rate = 150
     elif lang == 'id':
         v = "Microsoft Andika - Indonesian (Indonesia)"
+        rate = 150
     elif lang == 'tr':
         v = "Microsoft Tolga - Turkish (Turkey)"
+        rate = 130
     elif lang == 'fr':
         v = "Microsoft Hortense Desktop - French"
-    
+        rate = 150
+
     engine = pyttsx3.init()
-    voices = engine.getProperty('voices')  
+    voices = engine.getProperty('voices')
     for voice in voices:
         if voice.name == v:
             engine.setProperty(voice, voice.id)
             break
-    engine.setProperty('rate', 150)
+    engine.setProperty('rate', rate)
     engine.setProperty('volume', 0.9)
     engine.setProperty('pitch', 50)
     engine = pyttsx3.init()
@@ -533,17 +537,13 @@ def recieve_displayed_text(vid_list, lang):
         audio_path = os.path.join(my_audio_video, audio_file)
         video_path = os.path.join(my_audio_video, video_file)
 
-        # arabic_alphabet = {'ar', 'urdu'}
-        latin_alphabet = {'ru', 'hi', 'bn', 'zh'}
-        sp_lat_alphabet = {'pt', 'fr', 'es', 'id', 'tr', 'en'}
-        matched = find_matched_words(_d["desc"], _d[lang])
+        latin_alphabet = {'pt', 'fr', 'es', 'id', 'tr', 'en'}
+        
         if lang in latin_alphabet:
-            process_for_nonArabic(_d[lang], matched, audio_path, lang)
-            
-        elif lang in sp_lat_alphabet:
             create_audio_clip(_d[lang], audio_path)
         else:
-            process_for_arabic_vid(_d[lang], matched, audio_path, lang)
+            matched = find_matched_words(_d[lang])
+            process_for_nonLatin(_d[lang], matched, audio_path, lang)
 
         slide_audio_clip = AudioFileClip(audio_path)
 

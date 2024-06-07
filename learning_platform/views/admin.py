@@ -231,7 +231,6 @@ def cs_avail():
     return render_template('content_management/delete_course.html', cst=cst)
 
 
-
 @admin_bp.route('/add_topic', methods=['GET', 'POST'])
 def add_topic():
     '''
@@ -319,7 +318,6 @@ def add_tc():
         topics=topics)
 
 
-
 @admin_bp.route('/add_subtt', methods=['GET', 'POST'])
 def add_subtt():
     '''
@@ -396,8 +394,8 @@ def add_reading_text():
 
     return render_template('content_management/reading_text.html',
                            courses=courses,
-                            #  subjects=subjects,
-                               topics=topics)
+                           #  subjects=subjects,
+                           topics=topics)
 
 
 @admin_bp.route('/gpvid', methods=['GET'])
@@ -442,11 +440,10 @@ def gptplus(language, course_id, topic_id):
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 
-    
     session['course'] = Course.query.get(course_id).name
     session['topic'] = SubTopic.query.get(topic_id).name
     aud_vid(language)
-    
+
     flash('video generated successfully', category='success')
 
     return render_template('admin/index.html')
@@ -519,7 +516,6 @@ def add_tt():
     return render_template(
         'content_management/timely_task.html',
         avail_tasks=avail_tasks)
-
 
 
 @admin_bp.route('/del_course/<string:c_id>', methods=['GET'])

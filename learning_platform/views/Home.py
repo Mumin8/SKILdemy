@@ -55,11 +55,20 @@ def home_(course_id):
     auth = _auth()
     lang = get_lang()
     lang = lang + '.jpg'
-    
+
     course = Course.query.get(course_id)
 
     if course is not None:
 
         topics = course.topics
-        return render_template('home/home.html', topics=topics, course=course, lang=lang, auth=auth)
-    return render_template('home/home.html', course=course, lang=lang, auth=auth)
+        return render_template(
+            'home/home.html',
+            topics=topics,
+            course=course,
+            lang=lang,
+            auth=auth)
+    return render_template(
+        'home/home.html',
+        course=course,
+        lang=lang,
+        auth=auth)

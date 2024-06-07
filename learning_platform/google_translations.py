@@ -14,7 +14,7 @@ def get_locale():
     lang = session.get('lang')
     if lang:
         return lang
-    
+
     user = getattr(g, 'user', None)
     if user is not None:
         return user.locale
@@ -24,22 +24,18 @@ def get_locale():
     )
 
 
-# def get_timezone():
-#     user = getattr(g, 'user', None)
-#     if user is not None:
-#         return user.timezone
-
 def lang_detector(text):
     return translator.detect(text).lang
 
 
-def find_matched_words(text1, text2):
+def find_matched_words(text):
     '''
     find the words that have not been translated
     '''
-    words_text1 = re.findall(r'\b\w+\b', text1.lower())
-    words_text2 = re.findall(r'\b\w+\b', text2.lower())
-    return set(words_text1) & set(words_text2)
+    pattern = r'\b[a-zA-Z]+\b'
+    english_words = re.findall(pattern, text)
+    print(english_words)
+    return english_words
 
 
 def text_translator(text, lang):
@@ -50,54 +46,28 @@ def text_translator(text, lang):
     return text
 
 
-# def reorganize(trans):
-#     '''
-#     reorganize the arabic to read like the rest of the languages
-#     '''
-#     lines = trans.split('\n')
-#     organized = []
-#     for line in lines:
-#         organized.extend(reversed(line.split()))
-#     return organized
-
-
-def process_for_arabic_vid(trans, matched, audio_path, lang):
-    '''
-        process the text to arabic  language
-    '''
-    
-    process_for_nonArabic(trans, matched, audio_path, lang)
-
-
-def process_for_nonArabic(trans, matched, audio_path, lang):
+def process_for_nonLatin(trans, matched, audio_path, lang):
     '''
     processes the text to another language
     '''
-    latin_alphabet = {'pt', 'fr', 'es', 'id', 'tr', 'en'}
-    
 
-    
+    ls = dict()
+    lis = trans.split()
+    start = 0
 
-    if lang in latin_alphabet:
-        tts_ = gTTS(trans, lang=lang)
-        tts_.save(audio_path)
-    else:
-        ls = dict()
-        lis = trans.split()
-        start = 0
+    for idx, word in enumerate(lis):
+        if word.lower() in matched:
+            ls[f'{idx}{lang}'] = ' '.join(
+                w for w in lis[start:idx]).strip()
+            ls[f'{idx}en'] = word.lower()
+            start = idx + 1
+            lis[idx] = ''
 
-        for idx, word in enumerate(lis):
-            if word.lower() in matched:
-                ls[f'{idx}{lang}'] = ' '.join(
-                    w for w in lis[start:idx]).strip()
-                ls[f'{idx}en'] = word.lower()
-                start = idx + 1
-                lis[idx] = ''
-        if lis[start::]:
-            ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start::]).strip()
+    if lis[start::]:
+        ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start::]).strip()
 
-        with open(audio_path, 'wb') as f:
-            for k, v in ls.items():
-                if v:
-                    tts_ = gTTS(v, lang=k[-2::])
-                    tts_.write_to_fp(f)
+    with open(audio_path, 'wb') as f:
+        for k, v in ls.items():
+            if v:
+                tts_ = gTTS(v, lang=k[-2::])
+                tts_.write_to_fp(f)

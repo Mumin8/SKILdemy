@@ -186,10 +186,6 @@ def enroll_course(course_id):
     '''
     the student will enroll in the course
     '''
-    # this will be used in admin to know the number of users for a particular course
-    # course_enrollers(course_id)
-
-    # user = User.query.get(current_user.id)
 
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
@@ -275,7 +271,6 @@ def topic_by_course(course_id, topic_id):
     course = Course.query.get(course_id).name
     topic = SubTopic.query.get(topic_id).name
     if course:
-        # mat = read_content(course, topic)
         mat, iframes = cached(course, topic)
     return render_template(
         'user/learn_page.html',
@@ -302,10 +297,6 @@ def gptplus_vid(course_id, topic_id):
 
     status, state = validate_time_task(current_user.id, topic_id, topic)
     if status and state == "Not timely":
-        # vid_path = os.path.join(app.static_folder, 'myvideo', file)
-        # dest_path = os.path.join(app.static_folder, 'user_output')
-
-        # name = copy_ai_video(vid_path, dest_path)
         url = presigned_url(file)
         print(url)
         not_time = state

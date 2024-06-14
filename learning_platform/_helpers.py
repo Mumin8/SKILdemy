@@ -812,11 +812,13 @@ def time_():
     '''
     courses = Course.query.all()
 
-    course = next(iter(courses))
+    if courses:
+        course = next(iter(courses))
+        print(f'previous rate: {course.rate}')
 
-    elapsed_time = datetime.now() - course.get_updated()
-    if elapsed_time >= timedelta(hours=1):
-        return True, datetime.now()
+        elapsed_time = datetime.now() - course.get_updated()
+        if elapsed_time >= timedelta(hours=1):
+            return True, datetime.now()
     return False, datetime.now()
 
 
@@ -828,3 +830,4 @@ def completed_course(course):
     if elapsed_time >= timedelta(days=90):
         return True
     return False
+

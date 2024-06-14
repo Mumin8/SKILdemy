@@ -69,8 +69,21 @@
             <p>
                 <ul>   
                         <h3 class="text-info">{{_('course content')}}</h3>
-                        {% for topic in topics %}
-                         <li class="fs-3 text-success">{{ topic.name  }}</li>
+                        {% for topic in topics|sort(attribute='created_at') %}
+                         <li class="fs-3 text-success">
+                            {{ topic.name  }}
+                            <ol style="background-color: rgb(248, 251, 252);" class="fs-5">
+                                {% for subt in topic.sub_topics%}
+                                <li class="text-dark">
+                                    <p style="font-size: larger;">
+                                        {{subt.name}}
+                                    </p>
+                                </li>
+
+                                {% endfor %}
+
+                            </ol>
+                        </li>
                         {% endfor %}
                 </ul>
     

@@ -27,7 +27,6 @@ def home():
     status, t = time_()
     if status:
         rate = exchange_rate()
-
         for c in courses:
             c.update(t)
             c.rate = rate

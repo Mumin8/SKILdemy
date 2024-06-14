@@ -107,6 +107,7 @@ class Topic(db.Model):
     id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
     name = db.Column(db.String(255), nullable=False)
     desc = db.Column(db.String(500), nullable=True)
+    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     sub_topics = db.relationship('SubTopic', backref='topic', lazy='dynamic')
     
 
@@ -116,6 +117,7 @@ class SubTopic(db.Model):
     id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
     name = db.Column(db.String(80), nullable=False)
     desc = db.Column(db.String(250), nullable=True)
+    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     topic_id = db.Column(db.String(36), db.ForeignKey('topic.id'))
 
 

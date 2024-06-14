@@ -22,6 +22,7 @@ from learning_platform._helpers import (
     course_topic,
     _file,
     delete_byID,
+    exchange_rate,
     unlink_file,
     update_ai_text,
     update_by_id,
@@ -211,7 +212,8 @@ def register_course():
         name = form.name.data
         desc = form.description.data
         price = form.price.data
-        new_course = Course(name=name, description=desc, price=price)
+        rate = exchange_rate()
+        new_course = Course(name=name, description=desc, price=price, rate=rate)
         db.session.add(new_course)
         db.session.commit()
         return jsonify({'message': 'Course created successfully'}), 201

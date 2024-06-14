@@ -146,7 +146,7 @@ def forgot_password():
             user.reset_token = token
             db.session.commit()
             msg = Message(_('Password Reset Request'),
-                          sender='masschusse@gmail.com',
+                          sender='skildemycontact@gmail.com',
                           recipients=[email])
             msg.body = f'''
             {lnk_ms}

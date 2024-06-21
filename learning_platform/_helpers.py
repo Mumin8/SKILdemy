@@ -12,7 +12,8 @@ from flask_login import current_user
 from learning_platform import mongo, app
 from datetime import datetime, timedelta
 from moviepy.editor import (AudioFileClip, concatenate_videoclips,
-                            VideoFileClip, ImageClip)
+                            VideoFileClip, ImageClip, TextClip, CompositeVideoClip)
+from moviepy.video.tools.subtitles import SubtitlesClip
 from werkzeug.utils import secure_filename
 from learning_platform.google_translations import (
     text_translator, find_matched_words, process_for_nonLatin, get_locale)
@@ -60,6 +61,18 @@ def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# def durations_(l, r):
+#     start = 0
+#     my_tup = []
+#     for idx, n in enumerate(r):
+#         my_tup.append(((start, n), l[idx]))
+#         start = n
+
+#     return my_tup
+        
+
 
 
 def _file(files, _dir):
@@ -129,7 +142,6 @@ def all_vids():
     '''
     course = session.get('course')
     topic = session.get('topic')
-    print(f'lan {course} and top {topic}')
 
     video_ = db.student_shared_videos.find(
         {
@@ -174,9 +186,14 @@ def upload_s3vid(uploaded_file, filename):
 
 def upload_s3vid_languages(uploaded_file, filename, lang):
     client = s3_client()
-    with open(uploaded_file, 'rb') as file_obj:
-        client.upload_fileobj(file_obj, os.getenv(
-            f"AWS_STORAGE_BUCKET_NAME{lang}"), filename)
+    client.upload_fileobj(uploaded_file, os.getenv(
+        f"AWS_STORAGE_BUCKET_NAME{lang}"), filename)
+
+# def upload_s3vid_languages(uploaded_file, filename, lang):
+#     client = s3_client()
+#     with open(uploaded_file, 'rb') as file_obj:
+#         client.upload_fileobj(file_obj, os.getenv(
+#             f"AWS_STORAGE_BUCKET_NAME{lang}"), filename)
 
 
 def get_byID(_id):
@@ -207,7 +224,6 @@ def update_trans_by_id(_id, desc):
 
     if desc is not None:
         update_fields[lang] = text_translator(desc, lang)
-    print(update_fields)
 
     result = db.ai_video_text.update_one(
         {'_id': _id},
@@ -312,7 +328,6 @@ def cached(course, topic):
     # update_dict(cache)
     text = cache[course][get_lang()][topic]['desc']
     _text, iframes = vid_iframes(text)
-    print(f'the text {_text} and the list {iframes}')
 
     return _text, iframes
 
@@ -395,7 +410,6 @@ def get_text_desc():
     '''
     _course = session.get('course')
     _topic = session.get('topic')
-    print(f'the course name {_course} and the topic name {_topic}')
 
     video_ = db.ai_video_text.find(
         {
@@ -447,7 +461,7 @@ def create_video_clip(text, output_path, duration, folder):
 
     video_clip = video_clip.set_audio(AudioFileClip(path_aud))
 
-    # Write the final video clip to the specified output path
+   
     video_clip.write_videofile(
         output_path, codec='libx264', audio_codec='aac', fps=24)
 
@@ -462,7 +476,7 @@ def join_clips(res_clips, lang):
         the final output path
     '''
     root_path = app.root_path
-    comp_file = f'{session.get("course")}_{session.get("topic")}.mp4'
+    comp_file = f'{session.get("course")}_{session.get("topic").strip("?")}.mp4'
     output_p = os.path.join(root_path, 'static', 'myvideo', comp_file)
 
     clips_list = []
@@ -474,7 +488,7 @@ def join_clips(res_clips, lang):
 
     final_c.write_videofile(output_p)
 
-    upload_s3vid_languages(output_p, comp_file, lang)
+    # upload_s3vid_languages(output_p, comp_file, lang)
 
     return output_p
 
@@ -540,13 +554,15 @@ def recieve_displayed_text(vid_list, lang):
         latin_alphabet = {'pt', 'fr', 'es', 'id', 'tr', 'en'}
         
         if lang in latin_alphabet:
-            create_audio_clip(_d[lang], audio_path)
+            text = _d[lang]
+            create_audio_clip(text, audio_path)
         else:
-            matched = find_matched_words(_d[lang])
-            process_for_nonLatin(_d[lang], matched, audio_path, lang)
+            text = _d[lang]
+            matched = find_matched_words(text)
+            process_for_nonLatin(text, matched, audio_path, lang)
 
         slide_audio_clip = AudioFileClip(audio_path)
-
+        
         final_clip_duration = slide_audio_clip.duration
         create_video_clip(
             f'{root_path}/static/default/code/{vid_list[i]["code"]}',
@@ -650,7 +666,6 @@ def vid_ids(rel_vid):
 
 def task_pending(user_id):
     user = User.query.get(user_id)
-    print('never called')
     for tt in user.time_task:
         elapsed_time = datetime.now() - tt.updated_at
         waiting_period = timedelta(days=1)
@@ -830,4 +845,3 @@ def completed_course(course):
     if elapsed_time >= timedelta(days=90):
         return True
     return False
-

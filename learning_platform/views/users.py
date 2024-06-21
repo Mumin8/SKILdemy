@@ -43,14 +43,16 @@ def pop_ref():
 
 
 def user_enrolled_courses(course_id):
-    if current_user.is_authenticated:
-        for c in current_user.enrolling:
-            if c.id == course_id:
-                return True
-        return False
+    if not current_user.is_authenticated:
+        flash(_('please login first'), category='info')
+        return redirect(url_for('home.home'))
+    for c in current_user.enrolling:
+        print(f'{c.name} and {c.id}')
+        if c.id == course_id:
+            return True
+    return False
 
-    flash(_('please login first'), category='info')
-    return redirect(url_for('home.home'))
+    
 
 
 @user_bp.errorhandler(RateLimitExceeded)
@@ -98,7 +100,6 @@ def login():
             if user and bcrypt.check_password_hash(
                     user.password, form.password.data):
                 user.authenticated = True
-                print(f'initial {user.moderator}')
                 db.session.add(user)
                 db.session.commit()
                 login_user(user)
@@ -267,7 +268,14 @@ def topic_by_course(course_id, topic_id):
     '''
     gets and displays the reading content for the user
     '''
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.login'))
+    
 
+    if not user_enrolled_courses(course_id):
+        flash('You have not enrolled in this course', category='warning')
+        return redirect(url_for('home.home'))
+        
     course = Course.query.get(course_id).name
     topic = SubTopic.query.get(topic_id).name
     if course:
@@ -290,7 +298,7 @@ def gptplus_vid(course_id, topic_id):
     '''
     course = Course.query.get(course_id).name
     topic = SubTopic.query.get(topic_id).name
-    file = f'{course}_{topic}.mp4'
+    file = f'{course}_{topic.strip("?")}.mp4'
 
     if not current_user.is_authenticated:
         return redirect(url_for('users.logn'))
@@ -298,7 +306,6 @@ def gptplus_vid(course_id, topic_id):
     status, state = validate_time_task(current_user.id, topic_id, topic)
     if status and state == "Not timely":
         url = presigned_url(file)
-        print(url)
         not_time = state
         return render_template(
             'user/learn_page.html',
@@ -438,8 +445,6 @@ def download_cert(course_id):
     img = img.resize(resize)
     img = img.convert('RGB')
     original_size = img.size
-
-    print(f'the original size {original_size}')
 
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype('arial.ttf', 32)

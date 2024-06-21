@@ -33,6 +33,16 @@
                   href="{{ url_for('admin.gptplus', language=language,  course_id=_t[1], topic_id=_t[2]) }}">
                     {{ _t[0] }}
                   </a>
+                  <form action="{{ url_for('admin.upload', language=language,  course_id=_t[1], topic_id=_t[2]) }}" method="post" enctype=multipart/form-data>
+                    <input  type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                      
+                  <div class="col-4 fs-5 bg-info">
+                    <label for="file">Select video</label><br>
+                    <input type="file" id="file" name="file">
+                  </div>
+                  
+                  <input type="submit" value="Upload video">
+                </form>
                 </li>
             {% endfor %}
                  

@@ -10,6 +10,7 @@ from learning_platform.models.models import (
     User, Video, Course, SubTopic, Topic, TimeTask)
 from functools import wraps
 from learning_platform._helpers import (
+    upload_s3vid_languages,
     hash_filename,
     live_vid_content,
     find_missing_vid,
@@ -97,11 +98,6 @@ def validate_list():
         v_id.pop()
 
 
-@admin_bp.route('/index')
-def index():
-    approved_videos = Video.query.filter_by(status='approved').all()
-    return render_template('admin/index.html', videos=approved_videos)
-
 
 def admin_required(f):
     @wraps(f)
@@ -111,6 +107,14 @@ def admin_required(f):
             return redirect(url_for('users.login'))
         return f(*args, **kwargs)
     return dec_func
+
+
+
+@admin_bp.route('/index')
+@admin_required
+def index():
+    approved_videos = Video.query.filter_by(status='approved').all()
+    return render_template('admin/index.html', videos=approved_videos)
 
 
 @admin_bp.route('/reg_admin')
@@ -130,7 +134,6 @@ def reg_admin():
 
 
 @admin_bp.route('/admin')
-@admin_required
 def admin():
     return redirect(url_for('admin.index'))
 
@@ -163,42 +166,44 @@ def admin_add_vid():
         topics=topics)
 
 
-@admin_bp.route('/upload', methods=['GET', 'POST'])
-def upload():
+@admin_bp.route('/upload/<string:language>/<string:course_id>/<string:topic_id>', methods=['GET', 'POST'])
+def upload(language, course_id, topic_id):
     validate_list()
 
-    course = session.get('course')
-    topic = session.get('topic')
 
-    video_ = all_vids()
-    v_id.append(video_)
+    # video_ = all_vids()
+    # v_id.append(video_)
 
-    if len(v_id[0]) > 3:
-        flash(
-            'the number of videos is up to 4 alread, you will be notified if  a slop is available',
-            category='success')
-        return redirect(url_for('learn_skills'))
-    else:
-        if request.method == 'POST':
-            if 'file' not in request.files:
-                flash('No file part')
-                return redirect(request.url)
-            file = request.files['file']
-            if file.filename == '':
-                flash('No selected file')
-                return redirect(request.url)
-            if file and acceptable(file.filename):
-                filename = secure_filename(file.filename)
-                name = hash_filename(filename)
-                _vid = find_missing_vid(v_id[0])
-                file_details = {"video_id": str(
-                    _vid), "name": name, "course": course, "topic": topic}
-                upload_s3vid(file, name)
-                # file.save(os.path.join(app.config['UPLOAD_FOLDER'], name))
-                insertone(file_details)
+    # if len(v_id[0]) > 3:
+    #     flash(
+    #         'the number of videos is up to 4 alread, you will be notified if  a slop is available',
+    #         category='success')
+    #     return redirect(url_for('learn_skills'))
+    
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and acceptable(file.filename):
+            # filename = secure_filename(file.filename)
+            # name = hash_filename(filename)
+            course = Course.query.get(course_id).name
+            topic = SubTopic.query.get(topic_id).name
+            name = f'{course}_{topic.strip("?")}.mp4'
+            # _vid = find_missing_vid(v_id[0])
+            # file_details = {"video_id": str(
+            #     _vid), "name": name, "course": course, "topic": topic}
+            upload_s3vid_languages(file, name, language)
+            # upload_s3vid(file, name)
+            # file.save(os.path.join(app.config['UPLOAD_FOLDER'], name))
+            # insertone(file_details)
 
-                flash('successfully added the video', category='success')
-        return render_template('admin/upload_vid.html')
+            flash('successfully added the video', category='success')
+        return redirect(url_for('admin.index'))
 
 
 @admin_bp.route('/reg_course', methods=['GET', 'POST'])
@@ -605,7 +610,7 @@ def tream_original(_id):
     if request.method == 'POST':
         desc = request.form.get('desc')
         tream(ObjectId(_id), desc)
-        flash('text updated successfully')
+        flash('text updated successfully', category='success')
         return redirect(url_for('admin.get_reading_text'))
     val = get_display_text_byID(ObjectId(_id))
     return render_template(
@@ -621,7 +626,7 @@ def edit_translation(_id):
     if request.method == 'POST':
         desc = request.form.get('desc')
         tream(ObjectId(_id), desc, lang)
-        flash('text updated successfully')
+        flash('text updated successfully', category='success')
         return redirect(url_for('admin.get_reading_text'))
     val = get_display_text_byID(ObjectId(_id))
     return render_template(

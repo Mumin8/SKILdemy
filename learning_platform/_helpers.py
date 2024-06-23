@@ -63,15 +63,40 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-# def durations_(l, r):
-#     start = 0
-#     my_tup = []
-#     for idx, n in enumerate(r):
-#         my_tup.append(((start, n), l[idx]))
-#         start = n
-
-#     return my_tup
+def durations_(l, r):
+    start = 0
+    my_tup = []
+    for idx, n in enumerate(r):
         
+        v = " ".join(l[idx])
+        
+        my_tup.append(((start, n), l[idx]))
+        start = n
+    
+    return my_tup
+        
+
+def split_WC(text, max_length=38):
+    words = text.split()
+    substrings = []
+    current_substring = ""
+
+    for word in words:
+        if len(current_substring) + len(word) + 1 > max_length:
+            substrings.append(current_substring.strip())
+            current_substring = word
+        else:
+            current_substring += " " + word
+    if current_substring:
+        substrings.append(current_substring.strip())
+
+    return substrings
+
+
+def ranges(text_list, t): 
+    _r = []
+
+    
 
 
 
@@ -178,10 +203,10 @@ def presigned_url(video_name):
     return url
 
 
-def upload_s3vid(uploaded_file, filename):
-    client = s3_client()
-    client.upload_fileobj(uploaded_file, os.getenv(
-        "AWS_STORAGE_BUCKET_NAME"), filename)
+# def upload_s3vid(uploaded_file, filename):
+#     client = s3_client()
+#     client.upload_fileobj(uploaded_file, os.getenv(
+#         "AWS_STORAGE_BUCKET_NAME"), filename)
 
 
 def upload_s3vid_languages(uploaded_file, filename, lang):
@@ -442,11 +467,13 @@ def create_audio_clip(text, output_path):
     tts(text, output_path)
 
 
-def create_video_clip(text, output_path, duration, folder):
+def create_video_clip(img, output_path, duration, folder, subs):
     '''
     create_video_clip:
         this will create the video clip
     '''
+
+    
     if not current_user.is_authenticated:
         return redirect(url_for('users.admin_login'))
 
@@ -455,15 +482,30 @@ def create_video_clip(text, output_path, duration, folder):
 
     path_aud = os.path.join(folder, audio_clip_path)
 
-    create_audio_clip(text, path_aud)
+    create_audio_clip(img, path_aud)
 
-    video_clip = ImageClip(text, duration=duration)
+    video_clip = ImageClip(img, duration=duration)
 
     video_clip = video_clip.set_audio(AudioFileClip(path_aud))
+
+
+
+    generator = lambda txt: TextClip(txt, fontsize=24, color='red', method='caption', size=(640, None), align='South')
+    
+    subtitles = SubtitlesClip(subs, generator)
+
+    
+    video_clip = CompositeVideoClip([video_clip, subtitles.set_position(('center', 'bottom'))])
 
    
     video_clip.write_videofile(
         output_path, codec='libx264', audio_codec='aac', fps=24)
+    
+    # slide = VideoFileClip(output_path)
+
+    # result = CompositeVideoClip([slide, subtitles.set_position(('center', 'bottom'))])
+    # result.write_videofile(
+    #     output_path, codec='libx264', audio_codec='aac', fps=24)
 
     os.remove(path_aud)
 
@@ -561,13 +603,29 @@ def recieve_displayed_text(vid_list, lang):
             matched = find_matched_words(text)
             process_for_nonLatin(text, matched, audio_path, lang)
 
+
         slide_audio_clip = AudioFileClip(audio_path)
+
+
         
         final_clip_duration = slide_audio_clip.duration
+
+        _text = split_WC(text)
+       
+        _range = []
+        for j in range(len(_text)):
+            r_file = f'temp_r{j}.mp3'
+            r_path = os.path.join(my_audio_video, r_file)
+            create_audio_clip(" ".join(_text[:j+1]), r_path)
+            _range.append(AudioFileClip(r_path).duration)
+       
+        subtitles = durations_(_text, _range)
         create_video_clip(
             f'{root_path}/static/default/code/{vid_list[i]["code"]}',
-            video_path, final_clip_duration, my_audio_video
+            video_path, final_clip_duration, my_audio_video, subtitles
         )
+
+        
         slide_video_clip = VideoFileClip(video_path)
 
         slide_audio_clip = slide_audio_clip.set_duration(final_clip_duration)

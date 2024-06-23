@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% extends "base.html" %}
+    <title>{% block title %} selection {% endblock %}</title>
+
+</head>
+    
+<body>
+  
+  {% block main %}
+  <nav class="text-info fs-1 text-center mt-5"> publish </nav>
+  
+  <div class="container-fluid">
+    <div class="row align-items-start">
+      <div class="col-2"></div>
+      <div class="col-8" style="background-color: antiquewhite;">
+        {% from "_formhelpers.html" import render_field %}
+        <form action="" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label for="course">Select a course:</label>
+            <select name="course" id="course">
+                <option value=""></option>
+                {% for c in course %}
+                <option value="{{ c.name }}">{{ c.name }}</option>
+                {% endfor %}
+            </select>
+         
+            <br>
+            <br>
+            <label for="subtopic">Select a subtopic:</label>
+            <select name="subtopic" id="subtopic">
+                <option value=""></option>
+                {% for st in subtopic %}
+                <option value="{{ st.name }}">{{ st.name }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <br>
+            <button type="submit">Submit</button>
+        </form>
+      </div>
+      <div class="col-2"></div>
+      
+    </div>
+  </div>
+{% endblock %}
+</body>
+</html>

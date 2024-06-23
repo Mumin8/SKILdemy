@@ -17,7 +17,6 @@ from learning_platform._helpers import (
     all_vids,
     acceptable,
     insertone,
-    upload_s3vid,
     insert_text,
     presigned_url,
     course_topic,
@@ -373,9 +372,9 @@ def add_c_s_st():
         session['subject'] = request.form.get("subject")
         session['subtopic'] = request.form.get("subtopic")
         insert_text()
-        flash('successfully added content for ai video')
+        flash('successfully added content for ai video', category='success')
     return render_template(
-        'content_management/course_subject_subtopic.html',
+        'content_management/course_subtopic.html',
         course=course,
         subtopic=subtopic)
 

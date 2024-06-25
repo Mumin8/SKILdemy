@@ -32,6 +32,7 @@ def find_matched_words(text):
     '''
     find the words that have not been translated
     '''
+    print('nothing here is added')
     pattern = r'\b[a-zA-Z]+\b'
     english_words = re.findall(pattern, text)
     print(english_words)
@@ -45,29 +46,45 @@ def text_translator(text, lang):
     text = translator.translate(text=text, src='en', dest=lang).text
     return text
 
+def get_duration(audio_path, text, lang):
+    with open(audio_path, 'wb') as f:
+        speech = gTTS(text, lang=lang)
+        speech.write_to_fp(f)
+    return audio_path
+       
 
-def process_for_nonLatin(trans, matched, audio_path, lang):
+def process_for_nonLatin(text, audio_path, lang):
     '''
     processes the text to another language
     '''
-
-    ls = dict()
-    lis = trans.split()
-    start = 0
-
-    for idx, word in enumerate(lis):
-        if word.lower() in matched:
-            ls[f'{idx}{lang}'] = ' '.join(
-                w for w in lis[start:idx]).strip()
-            ls[f'{idx}en'] = word.lower()
-            start = idx + 1
-            lis[idx] = ''
-
-    if lis[start::]:
-        ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start::]).strip()
+    print(f'the file {audio_path}')
 
     with open(audio_path, 'wb') as f:
-        for k, v in ls.items():
-            if v:
-                tts_ = gTTS(v, lang=k[-2::])
-                tts_.write_to_fp(f)
+        tts_ = gTTS(text, lang=lang)
+        tts_.write_to_fp(f)
+
+    # with open(audio_path, 'wb') as f:
+    #     speech = gTTS(text, lang=lang)
+    #     speech.save(f)
+
+    
+
+    # ls = dict()
+    # lis = trans.split()
+    # start = 0
+
+    # for idx, word in enumerate(lis):
+    #     if word.lower() in matched:
+    #         ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start:idx]).strip()
+    #         ls[f'{idx}en'] = word.lower()
+    #         start = idx + 1
+    #         lis[idx] = ''
+
+    # if lis[start::]:
+    #     ls[f'{idx}{lang}'] = ' '.join(w for w in lis[start::]).strip()
+
+    # with open(audio_path, 'wb') as f:
+    #     for k, v in ls.items():
+    #         if v:
+    #             tts_ = gTTS(v, lang=k[-2::])
+    #             tts_.write_to_fp(f)

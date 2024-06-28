@@ -50,7 +50,7 @@ def get_duration(audio_path, text, lang):
     with open(audio_path, 'wb') as f:
         speech = gTTS(text, lang=lang)
         speech.write_to_fp(f)
-    return audio_path
+    # return audio_path
        
 
 def process_for_nonLatin(text, audio_path, lang):

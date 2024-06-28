@@ -64,32 +64,21 @@ def allowed_file(filename):
 
 
 def _voices(language): 
+    rate = 138
     _lang = {
-        'en':'Microsoft David Desktop - English (United States)',
-        'es':"Microsoft Helena Desktop - Spanish (Spain)",
-        'pt':"Microsoft Helia - Portuguese (Portugal)",
-        'id':"Microsoft Andika - Indonesian (Indonesia)",
+        'en':'Microsoft David Desktop - English (United States)'
+        # 'es':"Microsoft Helena Desktop - Spanish (Spain)",
+        # 'pt':"Microsoft Helia - Portuguese (Portugal)",
+        # 'id':"Microsoft Andika - Indonesian (Indonesia)",
         # 'tr':"Microsoft Tolga - Turkish (Turkey)", 
-        'fr':"Microsoft Hortense Desktop - French", 
+        # 'fr':"Microsoft Hortense Desktop - French", 
         # 'ar':"Microsoft Naayf - Arabic (Saudi)",
-        'hi':"Microsoft Hemant - Hindi (India)",
+        # 'hi':"Microsoft Hemant - Hindi (India)",
         # 'ru':"Microsoft Irina - Russian (Russia)",
-        'zh':"Microsoft Huihui - Chinese (Simplified, PRC)"
+        # 'zh':"Microsoft Huihui - Chinese (Simplified, PRC)"
             }
-    return _lang[language], 150
-
-# def duration(lang, text):
-#     word_count = len(text.split())
-#     v, r = _voices(lang)
-     
-#     engine = pyttsx3.init()
-#     voices = engine.getProperty('voices')
-#     for voice in voices:
-#         if voice.name == v:
-#             engine.setProperty(voice, voice.id)
-#             break
-#     dur = (word_count/r)*60
-#     return dur
+    
+    return _lang[language], rate
 
 
 def durations_(l, r):
@@ -507,9 +496,8 @@ def create_video_clip(img, output_path, duration, folder, subs, lang):
 
     path_aud = os.path.join(folder, audio_clip_path)
 
-    _gtts_speech = {'ar', 'tr', 'ru'}
     
-    if lang not in _gtts_speech:
+    if lang == "en":
         create_audio_clip(img, path_aud)
     else:
         process_for_nonLatin(img, path_aud, lang)
@@ -604,12 +592,12 @@ def tts(text, output_path):
     voices = engine.getProperty('voices')
     for voice in voices:
         if voice.name == v:
+            print(f"is this {v}")
             engine.setProperty(voice, voice.id)
             break
     engine.setProperty('rate', rate)
     engine.setProperty('volume', 0.9)
-    engine.setProperty('pitch', 50)
-    # engine = pyttsx3.init()
+    engine.setProperty('pitch', rate+50)
     engine.save_to_file(text, output_path)
     engine.runAndWait()
 
@@ -632,16 +620,17 @@ def recieve_displayed_text(vid_list, lang):
         audio_path = os.path.join(my_audio_video, audio_file)
         video_path = os.path.join(my_audio_video, video_file)
 
-        latin_alphabet = {'zh', 'hi', 'pt', 'fr', 'es', 'id', 'en'}
-
-        slide_audio_clip  = AudioFileClip(get_duration(audio_path, _d[lang], lang))
-
-        text = _d[lang]
-        if lang in latin_alphabet:
-            create_audio_clip(text, audio_path)
-
+        latin_alphabet = {'en'}
 
         
+
+        text = _d[lang]
+        if lang == "en":
+            create_audio_clip(text, audio_path)
+        else:
+            get_duration(audio_path, _d[lang], lang)
+
+        slide_audio_clip  = AudioFileClip(audio_path)
         final_clip_duration = slide_audio_clip.duration
 
         _text = split_WC(text)

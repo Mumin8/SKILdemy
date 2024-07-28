@@ -100,6 +100,11 @@ class Course(db.Model):
     topics = db.relationship('Topic', secondary=course_topics,
                              lazy='subquery', backref=db.backref('courses', lazy=True))
 
+class Level(db.Model):
+    pass
+
+
+
 
 class Topic(db.Model):
     __tablename__ = "topic"

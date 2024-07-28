@@ -1,4 +1,4 @@
-import os
+import os, uuid
 from datetime import datetime, timedelta
 from flask import (
     Blueprint,
@@ -14,7 +14,7 @@ from flask_babel import gettext as _
 from flask_limiter.errors import RateLimitExceeded
 from flask_login import login_required, current_user, logout_user, login_user
 from flask_mail import Message
-from learning_platform import bcrypt, db, app, mail, limiter
+from learning_platform import bcrypt, db, app, mail, limiter, r
 from learning_platform.forms.form import Registration, LoginForm, ResetForm, NewPasswordForm
 from learning_platform.models.models import User, Course, SubTopic, TimeTask
 from learning_platform.google_translations import text_translator
@@ -53,7 +53,37 @@ def user_enrolled_courses(course_id):
     return False
 
     
+'''
+SESSION_LIMIT = 3
 
+def get_user_sessions(user_id):
+    return r.lrange(f"user_sessions:{user_id}", 0, -1)
+
+def add_user_session(user_id, session_id):
+    r.lpush(f"user_sessions:{user_id}", session_id)
+    r.ltrim(f"user_sessions:{user_id}", 0, SESSION_LIMIT - 1)
+
+def remove_user_session(user_id, session_id):
+    r.lrem(f"user_sessions:{user_id}", 0, session_id)
+
+@app.before_request
+def limit_concurrent_sessions():
+    user_id = session.get('user_id')
+    if user_id:
+        current_session_id = session.get('session_id')
+        if not current_session_id:
+            current_session_id = str(uuid.uuid4())
+            session['session_id'] = current_session_id
+
+        user_sessions = get_user_sessions(user_id)
+
+        if current_session_id not in user_sessions:
+            if len(user_sessions) >= SESSION_LIMIT:
+                session.clear()
+                return "Session limit reached. Please log out from other devices.", 403
+            else:
+                add_user_session(user_id, current_session_id)
+'''
 
 @user_bp.errorhandler(RateLimitExceeded)
 def rateLimit_handler(e):

@@ -100,8 +100,7 @@ class Course(db.Model):
     topics = db.relationship('Topic', secondary=course_topics,
                              lazy='subquery', backref=db.backref('courses', lazy=True))
 
-class Level(db.Model):
-    pass
+
 
 
 
@@ -119,6 +118,7 @@ class Topic(db.Model):
 
 class SubTopic(db.Model):
     __tablename__ = "subtopic"
+
     id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
     name = db.Column(db.String(80), nullable=False)
     desc = db.Column(db.String(250), nullable=True)
@@ -132,6 +132,7 @@ class TimeTask(db.Model):
     usertask = db.Column(db.String(80), nullable=True)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
+    
 
 
 

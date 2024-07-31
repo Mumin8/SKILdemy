@@ -47,15 +47,15 @@ admin_bp = Blueprint(
 v_id = []
 
 
-def validate_subtopic_for_topic(course_id, topic_id):
+def validate_subtopic_for_topic(topic_id, subtopic_id):
     '''
     validate_topic:
         this ensures there is no topic with the same name
     '''
 
-    topics = Topic.query.get(course_id)
+    topics = Topic.query.get(topic_id)
     for t in topics.sub_topics:
-        if t.id == topic_id:
+        if t.id == subtopic_id:
             return False
     return True
 
@@ -165,7 +165,23 @@ def admin_add_vid():
         topics=topics)
 
 
-@admin_bp.route('/upload/<string:language>/<string:course_id>/<string:topic_id>', methods=['GET', 'POST'])
+
+
+@admin_bp.route('/level/<string:course_id>/<string:subtopic_id>', methods=['GET', 'POST'])
+def level(course_id, subtopic_id):
+    if not current_user.is_authenticated:
+        flash(_('please login first'), category='info')
+        return redirect(url_for('home.home'))
+
+    for c in current_user.enrolling:
+        if c.id == course_id:
+            subtopic = SubTopic.query.get(subtopic_id)
+            c.user_level.append(subtopic)
+    
+
+
+@admin_bp.route('/upload/<string:language>/<string:course_id>/<string:topic_id>',
+                 methods=['GET', 'POST'])
 def upload(language, course_id, topic_id):
     validate_list()
 

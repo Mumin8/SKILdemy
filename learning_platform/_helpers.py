@@ -11,8 +11,13 @@ from flask import g, session, flash, redirect, url_for, request
 from flask_login import current_user
 from learning_platform import mongo, app
 from datetime import datetime, timedelta
-from moviepy.editor import (AudioFileClip, concatenate_videoclips,
-                            VideoFileClip, ImageClip, TextClip, CompositeVideoClip)
+from moviepy.editor import (
+    AudioFileClip,
+    concatenate_videoclips,
+    VideoFileClip,
+    ImageClip,
+    TextClip,
+    CompositeVideoClip)
 from moviepy.video.tools.subtitles import SubtitlesClip
 from werkzeug.utils import secure_filename
 from learning_platform.google_translations import (
@@ -22,10 +27,6 @@ from learning_platform.models.models import Course, TimeTask, User
 my_audio_video = 'output_folder/'
 
 cache = {}
-
-
-# def update_dict(_cache):
-#     cache = _cache
 
 
 def get_dict():
@@ -63,33 +64,24 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def _voices(language): 
+def _voices(language):
     rate = 138
     _lang = {
-        'en':'Microsoft David Desktop - English (United States)'
-        # 'es':"Microsoft Helena Desktop - Spanish (Spain)",
-        # 'pt':"Microsoft Helia - Portuguese (Portugal)",
-        # 'id':"Microsoft Andika - Indonesian (Indonesia)",
-        # 'tr':"Microsoft Tolga - Turkish (Turkey)", 
-        # 'fr':"Microsoft Hortense Desktop - French", 
-        # 'ar':"Microsoft Naayf - Arabic (Saudi)",
-        # 'hi':"Microsoft Hemant - Hindi (India)",
-        # 'ru':"Microsoft Irina - Russian (Russia)",
-        # 'zh':"Microsoft Huihui - Chinese (Simplified, PRC)"
-            }
-    
+        'en': 'Microsoft David Desktop - English (United States)'
+    }
+
     return _lang[language], rate
 
 
 def durations_(l, r):
     start = 0
-    initial = round(r/len(l), 2)
+    initial = round(r / len(l), 2)
     my_tup = []
     for n in l:
-        my_tup.append(((start, start+initial), n))
+        my_tup.append(((start, start + initial), n))
         start += initial
     return my_tup
-        
+
 
 def split_WC(text, max_length=38):
     words = text.split()
@@ -106,12 +98,6 @@ def split_WC(text, max_length=38):
         substrings.append(current_substring.strip())
 
     return substrings
-
-
-
-
-    
-
 
 
 def _file(files, _dir):
@@ -168,7 +154,6 @@ def hash_filename(filename):
 
 def _json(l):
     for i, o in enumerate(l):
-        print(f"the description {o}")
         l[i]['_id'] = str(o['_id'])
     return l
 
@@ -215,12 +200,6 @@ def presigned_url(video_name):
             f"AWS_STORAGE_BUCKET_NAME{get_lang()}"), "Key": video_name},
         ExpiresIn=3600)
     return url
-
-
-# def upload_s3vid(uploaded_file, filename):
-#     client = s3_client()
-#     client.upload_fileobj(uploaded_file, os.getenv(
-#         "AWS_STORAGE_BUCKET_NAME"), filename)
 
 
 def upload_s3vid_languages(uploaded_file, filename, lang):
@@ -300,6 +279,8 @@ def c_and_topics(course):
     return c_dict
 
 
+
+
 def deque_dict(orig_dic, first):
     mod_dic = {}
     mod_dic[first] = orig_dic[first]
@@ -324,6 +305,7 @@ def vid_iframes(text):
         iframe.append(l)
 
     return modified_text, iframe
+
 
 
 def cached(course, topic):
@@ -487,7 +469,6 @@ def create_video_clip(img, output_path, duration, folder, subs, lang):
         this will create the video clip
     '''
 
-    
     if not current_user.is_authenticated:
         return redirect(url_for('users.admin_login'))
 
@@ -496,7 +477,6 @@ def create_video_clip(img, output_path, duration, folder, subs, lang):
 
     path_aud = os.path.join(folder, audio_clip_path)
 
-    
     if lang == "en":
         create_audio_clip(img, path_aud)
     else:
@@ -506,19 +486,24 @@ def create_video_clip(img, output_path, duration, folder, subs, lang):
 
     video_clip = video_clip.set_audio(AudioFileClip(path_aud))
 
+    def generator(txt): return TextClip(
+        txt,
+        font='Arial',
+        fontsize=30,
+        color='aqua',
+        method='caption',
+        size=(
+            640,
+            None),
+        align='South')
 
-
-    generator = lambda txt: TextClip(txt, font='Arial', fontsize=30, color='aqua', method='caption', size=(640, None), align='South')
-    
     subtitles = SubtitlesClip(subs, generator)
 
-    
-    video_clip = CompositeVideoClip([video_clip, subtitles.set_position(('center', 'bottom'))])
+    video_clip = CompositeVideoClip(
+        [video_clip, subtitles.set_position(('center', 'bottom'))])
 
-   
     video_clip.write_videofile(
         output_path, codec='libx264', audio_codec='aac', fps=24)
-    
 
     os.remove(path_aud)
 
@@ -554,50 +539,17 @@ def tts(text, output_path):
         this will instance text to speech and set the properties
     '''
     lang = session.get('lang')
-    
 
-    # if lang == "en":
-    #     v = 'Microsoft David Desktop - English (United States)'
-    #     rate = 150
-    # elif lang == 'es':
-    #     v = "Microsoft Helena Desktop - Spanish (Spain)"
-    #     rate = 150
-    # elif lang == 'pt':
-    #     v = "Microsoft Helia - Portuguese (Portugal)"
-    #     rate = 150
-    # elif lang == 'id':
-    #     v = "Microsoft Andika - Indonesian (Indonesia)"
-    #     rate = 150
-    # elif lang == 'tr':
-    #     v = "Microsoft Tolga - Turkish (Turkey)"
-    #     rate = 130
-    # elif lang == 'fr':
-    #     v = "Microsoft Hortense Desktop - French"
-    #     rate = 150
-    # elif lang == 'ar':
-    #     v = "Microsoft Naayf - Arabic (Saudi)"
-    #     rate = 150
-    # elif lang == 'hi':
-    #     v = "Microsoft Hemant - Hindi (India)"
-    #     rate = 150
-    # elif lang == 'ru':
-    #     v = "Microsoft Irina - Russian (Russia)"
-    #     rate = 150
-    # elif lang == 'zh':
-    #     v = "Microsoft Huihui - Chinese (Simplified, PRC)"
-    #     rate = 150
-        
     v, rate = _voices(lang)
     engine = pyttsx3.init()
     voices = engine.getProperty('voices')
     for voice in voices:
         if voice.name == v:
-            print(f"is this {v}")
             engine.setProperty(voice, voice.id)
             break
     engine.setProperty('rate', rate)
     engine.setProperty('volume', 0.9)
-    engine.setProperty('pitch', rate+50)
+    engine.setProperty('pitch', rate + 50)
     engine.save_to_file(text, output_path)
     engine.runAndWait()
 
@@ -622,26 +574,23 @@ def recieve_displayed_text(vid_list, lang):
 
         latin_alphabet = {'en'}
 
-        
-
         text = _d[lang]
         if lang == "en":
             create_audio_clip(text, audio_path)
         else:
             get_duration(audio_path, _d[lang], lang)
 
-        slide_audio_clip  = AudioFileClip(audio_path)
+        slide_audio_clip = AudioFileClip(audio_path)
         final_clip_duration = slide_audio_clip.duration
 
         _text = split_WC(text)
-       
+
         subtitles = durations_(_text, final_clip_duration)
         create_video_clip(
             f'{root_path}/static/default/code/{vid_list[i]["code"]}',
             video_path, final_clip_duration, my_audio_video, subtitles, lang
         )
 
-        
         slide_video_clip = VideoFileClip(video_path)
 
         slide_audio_clip = slide_audio_clip.set_duration(final_clip_duration)

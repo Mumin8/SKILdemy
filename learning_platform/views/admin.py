@@ -11,12 +11,8 @@ from learning_platform.models.models import (
 from functools import wraps
 from learning_platform._helpers import (
     upload_s3vid_languages,
-    hash_filename,
     live_vid_content,
-    find_missing_vid,
-    all_vids,
     acceptable,
-    insertone,
     insert_text,
     presigned_url,
     course_topic,
@@ -97,7 +93,6 @@ def validate_list():
         v_id.pop()
 
 
-
 def admin_required(f):
     @wraps(f)
     def dec_func(*args, **kwargs):
@@ -106,7 +101,6 @@ def admin_required(f):
             return redirect(url_for('users.login'))
         return f(*args, **kwargs)
     return dec_func
-
 
 
 @admin_bp.route('/index')
@@ -165,9 +159,8 @@ def admin_add_vid():
         topics=topics)
 
 
-
-
-@admin_bp.route('/level/<string:course_id>/<string:subtopic_id>', methods=['GET', 'POST'])
+@admin_bp.route('/level/<string:course_id>/<string:subtopic_id>',
+                methods=['GET', 'POST'])
 def level(course_id, subtopic_id):
     if not current_user.is_authenticated:
         flash(_('please login first'), category='info')
@@ -177,14 +170,12 @@ def level(course_id, subtopic_id):
         if c.id == course_id:
             subtopic = SubTopic.query.get(subtopic_id)
             c.user_level.append(subtopic)
-    
 
 
 @admin_bp.route('/upload/<string:language>/<string:course_id>/<string:topic_id>',
-                 methods=['GET', 'POST'])
+                methods=['GET', 'POST'])
 def upload(language, course_id, topic_id):
     validate_list()
-
 
     # video_ = all_vids()
     # v_id.append(video_)
@@ -194,7 +185,7 @@ def upload(language, course_id, topic_id):
     #         'the number of videos is up to 4 alread, you will be notified if  a slop is available',
     #         category='success')
     #     return redirect(url_for('learn_skills'))
-    
+
     if request.method == 'POST':
         if 'file' not in request.files:
             flash('No file part')
@@ -233,7 +224,11 @@ def register_course():
         desc = form.description.data
         price = form.price.data
         rate = exchange_rate()
-        new_course = Course(name=name, description=desc, price=price, rate=rate)
+        new_course = Course(
+            name=name,
+            description=desc,
+            price=price,
+            rate=rate)
         db.session.add(new_course)
         db.session.commit()
         return jsonify({'message': 'Course created successfully'}), 201

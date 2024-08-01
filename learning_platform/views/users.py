@@ -1,4 +1,5 @@
-import os, uuid
+import os
+import uuid
 from datetime import datetime, timedelta
 from flask import (
     Blueprint,
@@ -52,7 +53,7 @@ def user_enrolled_courses(course_id):
             return True
     return False
 
-    
+
 '''
 SESSION_LIMIT = 3
 
@@ -84,6 +85,7 @@ def limit_concurrent_sessions():
             else:
                 add_user_session(user_id, current_session_id)
 '''
+
 
 @user_bp.errorhandler(RateLimitExceeded)
 def rateLimit_handler(e):
@@ -258,19 +260,22 @@ def userprofile():
     next_url = request.url
     return redirect(url_for('home.home', next_url=next_url))
 
-@user_bp.route('/next_page/<int:page>/<int:fp>/<int:lp>', methods=['GET', 'POST'])
+
+@user_bp.route('/next_page/<int:page>/<int:fp>/<int:lp>',
+               methods=['GET', 'POST'])
 def paginate(page, fp, lp):
     fk = session.get('c')
     fv = session.get('dict')
     print(fv[str(page)])
 
     return render_template(
-            'user/learn_page.html',
-            fk=fk,
-            fv=fv,
-            page=str(page),
-            fp=fp,
-            lp=lp)
+        'user/learn_page.html',
+        fk=fk,
+        fv=fv,
+        page=str(page),
+        fp=fp,
+        lp=lp)
+
 
 @user_bp.route('/learns/<string:course_id>', methods=['GET', 'POST'])
 def learn_skills(course_id):
@@ -290,7 +295,7 @@ def learn_skills(course_id):
             dict_val[str(i)] = j
 
         session['dict'] = dict_val
-        session['c'] = first_key 
+        session['c'] = first_key
         page = '0'
         first_page = 0
         last_page = len(first_value) - 1
@@ -325,12 +330,11 @@ def topic_by_course(course_id, topic_id):
     '''
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
-    
 
     if not user_enrolled_courses(course_id):
         flash('You have not enrolled in this course', category='warning')
         return redirect(url_for('home.home'))
-        
+
     course = Course.query.get(course_id).name
     topic = SubTopic.query.get(topic_id).name
     if course:
@@ -543,61 +547,3 @@ def download_your_cert():
         cert,
         as_attachment=True,
         download_name=name)
-
-
-
-@user_bp.route("/start_quiz")
-def start_quiz():
-    '''
-    the quiz will start from when if and only if the user is authenticated
-    '''
-
-    if current_user.is_authenticated:
-        # prev = Quiz.query.filter_by(id=current_user.id).first()
-        questions = [
-            {
-                "question": "What is the capital of France?",
-                "options": ["London", "Paris", "Berlin", "Rome"],
-                "answer": "Paris"
-            },
-            {
-                "question": "Which planet is known as the Red Planet?",
-                "options": ["Venus", "Mars", "Jupiter", "Saturn"],
-                "answer": "Mars"
-            },
-            {
-                "question": "What is the tallest mountain in the world?",
-                "options": ["Mount Everest", "K2", "Mount Kilimanjaro", "Denali"],
-                "answer": "Mount Everest"
-            },
-            {
-                "question": "What is the process by which plants convert sunlight into energy?",
-                "options": ["Cellular respiration", "Meiosis", "Mitosis", "Photosynthesis"],
-                "answer": "Photosynthesis"
-            }
-        ]
-
-        return render_template(
-            'user/quiz.html',
-            questions=questions,
-            # prev=prev.result
-            )
-    return redirect(url_for('users.login'))
-
-
-
-@user_bp.route("/save_result", methods=['GET', 'POST'])
-def save_result():
-    '''
-    the result will be saved from here
-    '''
-
-    # result = request.form['key']
-    # quiz = Quiz.query.filter_by(id=current_user.id).first()
-    # if quiz:
-    #     quiz.update(result)
-    # else:
-    #     quiz_result = Quiz(result=result)
-    #     db.session.add(quiz_result)
-    #     db.session.commit()
-    return jsonify(result='success', data_processed='something here')

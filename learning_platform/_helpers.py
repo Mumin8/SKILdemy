@@ -279,8 +279,6 @@ def c_and_topics(course):
     return c_dict
 
 
-
-
 def deque_dict(orig_dic, first):
     mod_dic = {}
     mod_dic[first] = orig_dic[first]
@@ -305,7 +303,6 @@ def vid_iframes(text):
         iframe.append(l)
 
     return modified_text, iframe
-
 
 
 def cached(course, topic):
@@ -429,6 +426,7 @@ def get_text_desc():
     get_text_desc:
         this will query the mongodb collection for a match
     '''
+
     _course = session.get('course')
     _topic = session.get('topic')
 
@@ -486,16 +484,9 @@ def create_video_clip(img, output_path, duration, folder, subs, lang):
 
     video_clip = video_clip.set_audio(AudioFileClip(path_aud))
 
-    def generator(txt): return TextClip(
-        txt,
-        font='Arial',
-        fontsize=30,
-        color='aqua',
-        method='caption',
-        size=(
-            640,
-            None),
-        align='South')
+    def generator(txt):
+        return TextClip(txt, font='Arial', fontsize=30, color='aqua',
+                        method='caption', size=(640, None), align='South')
 
     subtitles = SubtitlesClip(subs, generator)
 

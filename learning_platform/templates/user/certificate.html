@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% extends "base.html" %}
     <title>{{_('certificate')}}</title>
 </head>
 <body>
-    <h1>{{_('congratulations')}} 🎉🎉🎉  🥇</h1>
-    <p>
-        <a href="{{url_for('users.download_cert', course_id=course_id)}}">
+    {% block main %}
+    <h1 class="fs-2 m-3" style="background-color: rgb(34, 22, 22); color: whitesmoke; text-align: center;">
+        {{_('congratulations')}} 🎉🎉🎉  🥇</h1>
+    <p class="text-center" style="margin: 24px;">
+        <a href="{{url_for('users.download_cert', course_id=course_id)}}" style="text-decoration: none;
+         font-size: x-large; background-color: white; ">
             {{_('proceed for certificate')}}
         </a>
     </p>
+    {% endblock %}
 </body>
 </html>

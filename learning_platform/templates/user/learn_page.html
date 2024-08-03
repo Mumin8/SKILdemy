@@ -8,14 +8,14 @@
 </head>
 <body>
   {% block main %}
-  <nav><a class="btn btn-primary" href="{{url_for('users.userprofile')}}">Home</a></nav>
+  <nav><a class="btn btn-primary" href="{{url_for('users.userprofile')}}">{{_('Home')}}</a></nav>
         <div class="container-fluid">
             <div class="row">
                 {% if fk %}
                 <p class="text-info text-center fs-2 btn btn-light">
-                  progress: <span class="text-success" style="font-weight: bolder; height: 120px; width: 120px; border-radius: 60px;
-                  background-color: black;">
-                    {{ (((page | int +1) / (lp|int + 1))*100) | int }}</span>%
+                    {{_('PROGRESS')}}: <span class="text-success" style="font-weight: bolder; height: 120px; width: 120px;
+                     border-radius: 60px; background-color: black; padding: 3px;">
+                    {{ (((page | int +1) / (lp|int + 1))*100) | int }}</span>
                 </p>
                         
                 <div class="col" style="display: flex; flex-direction: column;">
@@ -35,13 +35,13 @@
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                       {% if page | int > fp   %}
                    <p> <a href="{{ url_for('users.paginate', page= (page | int - 1), fp=fp, lp=lp) }}">
-                    PREVIOUS
+                    {{_('PREVIOUS')}}
                   </a></p>
                    {% endif %}
 
                    {% if lp > page | int %}
                    <p><a href="{{ url_for('users.paginate', page=(page | int + 1), fp=fp, lp=lp) }}">
-                    NEXT
+                    {{_('NEXT')}}
                   </a></p>
                    {% endif %}
                     </div>
@@ -52,18 +52,18 @@
 
                 {% elif mat %}
                 <div class="col fs-3" style="background-color: rgb(214, 255, 159);">
-                    <a class="btn btn-primary" href="{{ url_for('users.learn_skills', course_id=course_id) }}">Back</a>
+                    <a class="btn btn-primary" href="{{ url_for('users.learn_skills', course_id=course_id) }}">{{_('Back')}}</a>
                     <div class="row">
                        <nav id="ai-yt">
                         <div class="col text-success">
                           <a class="btn btn-primary" 
                           href="{{ url_for('users.gptplus_vid', course_id=course_id, topic_id=topic_id) }}">
-                          ai Tutorial
+                          {{_('SKILdemy guide')}}
                         </a>
                         </div>
                         <div class="btn-group">
                           <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            Human Video Explanation
+                            {{_('Suggested Videos')}}
                           </button>
                           <ul class="dropdown-menu" style="background-color: rgb(58, 37, 37);">
                           

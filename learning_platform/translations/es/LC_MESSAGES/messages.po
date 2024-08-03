@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-24 22:01+0000\n"
+"POT-Creation-Date: 2024-08-03 00:13+0000\n"
 "PO-Revision-Date: 2024-05-22 10:28+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -34,38 +34,65 @@ msgstr "iniciar sesión"
 msgid "course content"
 msgstr "contenido del curso"
 
-#: templates/home/home.html:82
+#: templates/home/home.html:95
 msgid "click on course for more information"
 msgstr "haga clic en el curso para más información"
 
-#: templates/home/home.html:93
+#: templates/home/home.html:106
 msgid "Enrol now"
 msgstr "Inscribirse ahora"
 
-#: templates/user/certificate.html:6
+#: templates/user/certificate.html:7
 msgid "certificate"
 msgstr "certificado"
 
-#: templates/user/certificate.html:9
+#: templates/user/certificate.html:12
 msgid "congratulations"
 msgstr "felicidades"
 
-#: templates/user/certificate.html:12
+#: templates/user/certificate.html:16
 msgid "proceed for certificate"
 msgstr "proceder para el certificado"
 
-#: templates/user/learn_page.html:80
+#: templates/user/learn_page.html:11 templates/user/profile.html:21
+msgid "Home"
+msgstr "Inicio"
+
+#: templates/user/learn_page.html:16
+msgid "PROGRESS"
+msgstr "PROGRESO"
+
+#: templates/user/learn_page.html:38
+msgid "PREVIOUS"
+msgstr "Anterior"
+
+#: templates/user/learn_page.html:44
+msgid "NEXT"
+msgstr "Siguiente"
+
+#: templates/user/learn_page.html:55
+msgid "Back"
+msgstr "Atrás"
+
+#: templates/user/learn_page.html:61
+msgid "SKILdemy guide"
+msgstr "Guía de SKILdemy"
+
+#: templates/user/learn_page.html:66
+msgid "Suggested Videos"
+msgstr "Videos Sugeridos"
+
+#: templates/user/learn_page.html:121
 msgid "Cancel Request"
 msgstr "Cancelar Solicitud"
 
-#: templates/user/learn_page.html:87
+#: templates/user/learn_page.html:128
 msgid "keep learning while we prepare the answers for you"
-msgstr "sigue aprendiendo mientras preparamos las respuestas para ti"
+msgstr "Sigue aprendiendo mientras preparamos las respuestas para ti."
 
-#: templates/user/learn_page.html:97
-#, fuzzy
+#: templates/user/learn_page.html:138
 msgid "Request Solution"
-msgstr "Solicitud de solución"
+msgstr "Puedes solicitar la solución"
 
 #: templates/user/locale.html:20
 msgid "Choose a language:"
@@ -131,6 +158,10 @@ msgstr "Iniciar Sesión"
 msgid "Forgot Password"
 msgstr "Olvidó su Contraseña"
 
+#: templates/user/profile.html:27
+msgid "logout"
+msgstr "cerrar la sesión"
+
 #: templates/user/profile.html:35
 msgid "My courses"
 msgstr "Mis cursos"
@@ -147,73 +178,85 @@ msgstr "Regístrate"
 msgid "submit email"
 msgstr "enviar correo electrónico"
 
-#: templates/user/view_cert.html:17
+#: templates/user/view_cert.html:19
 msgid "download"
 msgstr "descargar"
 
-#: views/home.py:39
+#: views/home.py:23
 msgid "Welcome to SKILdemy"
 msgstr "Bienvenido a SKILdemy"
 
-#: views/users.py:45
+#: views/users.py:48
 msgid "please login first"
 msgstr "por favor inicie sesión primero"
 
-#: views/users.py:66
+#: views/users.py:121
 msgid "Thank you for Registering"
 msgstr "Gracias por Registrarse"
 
-#: views/users.py:85
+#: views/users.py:140
 msgid "Happy Coding!  😊"
 msgstr "¡Feliz Codificación!  😊"
 
-#: views/users.py:87
+#: views/users.py:142
 msgid "Invalid Credentials"
 msgstr "Credenciales Inválidas"
 
-#: views/users.py:126
+#: views/users.py:181
 msgid "Password Reset Request"
 msgstr "Solicitud de Restablecimiento de Contraseña"
 
-#: views/users.py:135
+#: views/users.py:190
 msgid "Check your email for the password reset link."
-msgstr ""
-"Revisa tu correo electrónico para el enlace de restablecimiento de "
-"contraseña."
+msgstr "Su tiempo expiró para este curso y está intentando inscribirse de nuevo"
 
-#: views/users.py:138
+#: views/users.py:193
 msgid "Email not found"
 msgstr "Correo electrónico no encontrado"
 
-#: views/users.py:156
+#: views/users.py:211
 msgid "successfully reset password"
 msgstr "contraseña restablecida con éxito"
 
-#: views/users.py:186
+#: views/users.py:237
 msgid "You have successfully enrolled in"
 msgstr "Te has inscrito con éxito en"
 
-#: views/users.py:193
+#: views/users.py:244
 msgid "unsuccessful, please check your details or contact SKILdemy support"
 msgstr "fallido, por favor revisa tus datos o contacta al soporte de SKILdemy"
 
-#: views/users.py:241
+#: views/users.py:320
 msgid "successfully requested for solution"
 msgstr "solicitud de solución exitosa"
 
-#: views/users.py:304
+#: views/users.py:394
 msgid "You can request for the solution"
 msgstr "Puedes solicitar la solución"
 
-#: views/users.py:320
-msgid "Already enrolled, login and start learning"
+#: views/users.py:416
+#, fuzzy
+msgid "Already enrolled, You can still access this course"
 msgstr "Ya inscrito, inicia sesión y comienza a aprender"
 
-#: views/users.py:394
+#: views/users.py:419
+msgid "Your time expired for this course and you are trying to enroll again"
+msgstr ""
+
+#: views/users.py:490
 msgid "Your certificate is ready for download"
 msgstr "Tu certificado está listo para descargar"
 
-#: views/users.py:400
+#: views/users.py:496
 msgid "The certificate will be ready after you complete the course"
 msgstr "El certificado estará listo después de completar el curso."
+
+#~ msgid "Cancel Request"
+#~ msgstr "Cancelar Solicitud"
+
+#~ msgid "keep learning while we prepare the answers for you"
+#~ msgstr "sigue aprendiendo mientras preparamos las respuestas para ti"
+
+#~ msgid "Request Solution"
+#~ msgstr "Solicitud de solución"
 

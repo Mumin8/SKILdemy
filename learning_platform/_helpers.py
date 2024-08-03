@@ -856,6 +856,6 @@ def completed_course(course):
     check if the user is ready to retrieve certificate
     '''
     elapsed_time = datetime.now() - course.enrolled_at
-    if elapsed_time >= timedelta(days=90):
+    if elapsed_time >= timedelta(minutes=course.duration):
         return True
     return False

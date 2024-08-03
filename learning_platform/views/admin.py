@@ -159,17 +159,17 @@ def admin_add_vid():
         topics=topics)
 
 
-@admin_bp.route('/level/<string:course_id>/<string:subtopic_id>',
-                methods=['GET', 'POST'])
-def level(course_id, subtopic_id):
-    if not current_user.is_authenticated:
-        flash(_('please login first'), category='info')
-        return redirect(url_for('home.home'))
+# @admin_bp.route('/level/<string:course_id>/<string:subtopic_id>',
+#                 methods=['GET', 'POST'])
+# def level(course_id, subtopic_id):
+#     if not current_user.is_authenticated:
+#         flash(_('please login first'), category='info')
+#         return redirect(url_for('home.home'))
 
-    for c in current_user.enrolling:
-        if c.id == course_id:
-            subtopic = SubTopic.query.get(subtopic_id)
-            c.user_level.append(subtopic)
+#     for c in current_user.enrolling:
+#         if c.id == course_id:
+#             subtopic = SubTopic.query.get(subtopic_id)
+#             c.user_level.append(subtopic)
 
 
 @admin_bp.route('/upload/<string:language>/<string:course_id>/<string:topic_id>',
@@ -223,11 +223,13 @@ def register_course():
         name = form.name.data
         desc = form.description.data
         price = form.price.data
+        duration = form.duration.data
         rate = exchange_rate()
         new_course = Course(
             name=name,
             description=desc,
             price=price,
+            duration=duration,
             rate=rate)
         db.session.add(new_course)
         db.session.commit()

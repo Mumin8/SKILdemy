@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-24 22:01+0000\n"
+"POT-Creation-Date: 2024-08-03 00:13+0000\n"
 "PO-Revision-Date: 2024-05-24 04:47+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: hi\n"
@@ -20,203 +20,236 @@ msgstr ""
 
 #: templates/home/home.html:24
 msgid "Dashboard"
-msgstr ""
+msgstr "डैशबोर्ड"
 
 #: templates/home/home.html:39
 msgid "Register"
-msgstr ""
+msgstr "रजिस्टर करें"
 
 #: templates/home/home.html:46 templates/user/login.html:14
 msgid "login"
-msgstr ""
+msgstr "लॉगिन"
 
 #: templates/home/home.html:71
 msgid "course content"
-msgstr ""
+msgstr "पाठ्यक्रम सामग्री"
 
-#: templates/home/home.html:82
+#: templates/home/home.html:95
 msgid "click on course for more information"
-msgstr ""
+msgstr "अधिक जानकारी के लिए पाठ्यक्रम पर क्लिक करें"
 
-#: templates/home/home.html:93
+#: templates/home/home.html:106
 msgid "Enrol now"
-msgstr ""
+msgstr "अभी नामांकन करें"
 
-#: templates/user/certificate.html:6
+#: templates/user/certificate.html:7
 msgid "certificate"
-msgstr ""
-
-#: templates/user/certificate.html:9
-msgid "congratulations"
-msgstr ""
+msgstr "प्रमाणपत्र"
 
 #: templates/user/certificate.html:12
+msgid "congratulations"
+msgstr "बधाई हो"
+
+#: templates/user/certificate.html:16
 msgid "proceed for certificate"
-msgstr ""
+msgstr "प्रमाण पत्र के लिए आगे बढ़ें"
 
-#: templates/user/learn_page.html:80
+#: templates/user/learn_page.html:11 templates/user/profile.html:21
+msgid "Home"
+msgstr "मुख्य पृष्ठ"
+
+#: templates/user/learn_page.html:16
+msgid "PROGRESS"
+msgstr "प्रगति"
+
+#: templates/user/learn_page.html:38
+msgid "PREVIOUS"
+msgstr "पिछला"
+
+#: templates/user/learn_page.html:44
+msgid "NEXT"
+msgstr "अगला"
+
+#: templates/user/learn_page.html:55
+msgid "Back"
+msgstr "वापस"
+
+#: templates/user/learn_page.html:61
+msgid "SKILdemy guide"
+msgstr "SKILdemy मार्गदर्शिका"
+
+#: templates/user/learn_page.html:66
+msgid "Suggested Videos"
+msgstr "सुझाए गए वीडियो"
+
+#: templates/user/learn_page.html:121
 msgid "Cancel Request"
-msgstr ""
+msgstr "अनुरोध को रद्द करें"
 
-#: templates/user/learn_page.html:87
+#: templates/user/learn_page.html:128
 msgid "keep learning while we prepare the answers for you"
-msgstr ""
+msgstr "सीखते रहिए, हम आपके लिए उत्तर तैयार करते हैं"
 
-#: templates/user/learn_page.html:97
+#: templates/user/learn_page.html:138
 msgid "Request Solution"
-msgstr ""
+msgstr "समाधान का अनुरोध करें"
 
 #: templates/user/locale.html:20
 msgid "Choose a language:"
-msgstr ""
+msgstr "भाषा चुनें:"
 
 #: templates/user/locale.html:22
 msgid "select Language"
-msgstr ""
+msgstr "भाषा चुने"
 
 #: templates/user/locale.html:23
 msgid "Arabic"
-msgstr ""
+msgstr "अरबी"
 
 #: templates/user/locale.html:24
 msgid "Bengali"
-msgstr ""
+msgstr "बंगाली"
 
 #: templates/user/locale.html:25
 msgid "Chinese"
-msgstr ""
+msgstr "चीनी"
 
 #: templates/user/locale.html:26
 msgid "English"
-msgstr ""
+msgstr "अंग्रेज़ी"
 
 #: templates/user/locale.html:27
 msgid "French"
-msgstr ""
+msgstr "फ़्रेंच"
 
 #: templates/user/locale.html:28
 msgid "Hindi"
-msgstr ""
+msgstr "हिंदी"
 
 #: templates/user/locale.html:29
 msgid "Indonesian"
-msgstr ""
+msgstr "इंडोनेशियाई"
 
 #: templates/user/locale.html:30
 msgid "Portuguese"
-msgstr ""
+msgstr "पुर्तगाली"
 
 #: templates/user/locale.html:31
 msgid "Russia"
-msgstr ""
+msgstr "रूसी"
 
 #: templates/user/locale.html:32
 msgid "Spanish"
-msgstr ""
+msgstr "स्पेनिश"
 
 #: templates/user/locale.html:33
 msgid "Turkish"
-msgstr ""
+msgstr "तुर्की"
 
 #: templates/user/locale.html:34
 msgid "Urdu"
-msgstr ""
+msgstr "उर्दू"
 
 #: templates/user/login.html:27
 msgid "Login"
-msgstr ""
+msgstr "लॉगिन"
 
 #: templates/user/login.html:31
 msgid "Forgot Password"
-msgstr ""
+msgstr "पासवर्ड भूल गए"
+
+#: templates/user/profile.html:27
+msgid "logout"
+msgstr "लॉगआउट"
 
 #: templates/user/profile.html:35
 msgid "My courses"
-msgstr ""
+msgstr "मेरे पाठ्यक्रम"
 
 #: templates/user/profile.html:46
 msgid "Get certificate"
-msgstr ""
+msgstr "प्रमाणपत्र प्राप्त करें"
 
 #: templates/user/register.html:13
 msgid "Sign up"
-msgstr ""
+msgstr "साइन अप करें"
 
 #: templates/user/reset_password.html:22
 msgid "submit email"
-msgstr ""
+msgstr "ईमेल सबमिट करें"
 
-#: templates/user/view_cert.html:17
+#: templates/user/view_cert.html:19
 msgid "download"
-msgstr ""
+msgstr "डाउनलोड करें"
 
-#: views/home.py:39
+#: views/home.py:23
 msgid "Welcome to SKILdemy"
-msgstr ""
+msgstr "SKILdemy में आपका स्वागत है"
 
-#: views/users.py:45
+#: views/users.py:48
 msgid "please login first"
-msgstr ""
+msgstr "कृपया पहले लॉगिन करें"
 
-#: views/users.py:66
+#: views/users.py:121
 msgid "Thank you for Registering"
-msgstr ""
+msgstr "पंजीकरण करने के लिए धन्यवाद"
 
-#: views/users.py:85
+#: views/users.py:140
+#, fuzzy
 msgid "Happy Coding!  😊"
-msgstr ""
+msgstr "कोडिंग का आनंद लें! 😊"
 
-#: views/users.py:87
+#: views/users.py:142
 msgid "Invalid Credentials"
-msgstr ""
+msgstr "अमान्य प्रमाण-पत्र"
 
-#: views/users.py:126
+#: views/users.py:181
 msgid "Password Reset Request"
-msgstr ""
+msgstr "पासवर्ड रीसेट अनुरोध"
 
-#: views/users.py:135
+#: views/users.py:190
 msgid "Check your email for the password reset link."
-msgstr ""
+msgstr "पासवर्ड रीसेट लिंक के लिए अपना ईमेल जांचें।"
 
-#: views/users.py:138
+#: views/users.py:193
 msgid "Email not found"
-msgstr ""
+msgstr "ईमेल नहीं मिला"
 
-#: views/users.py:156
+#: views/users.py:211
 msgid "successfully reset password"
 msgstr ""
 
-#: views/users.py:186
+#: views/users.py:237
 msgid "You have successfully enrolled in"
-msgstr ""
+msgstr "पासवर्ड सफलतापूर्वक रीसेट करें"
 
-#: views/users.py:193
+#: views/users.py:244
 msgid "unsuccessful, please check your details or contact SKILdemy support"
-msgstr ""
-
-#: views/users.py:241
-msgid "successfully requested for solution"
-msgstr ""
-
-#: views/users.py:304
-msgid "You can request for the solution"
-msgstr ""
+msgstr "असफल, कृपया अपने विवरण की जाँच करें या SKILdemy समर्थन से संपर्क करें"
 
 #: views/users.py:320
-msgid "Already enrolled, login and start learning"
-msgstr ""
+msgid "successfully requested for solution"
+msgstr "समाधान हेतु सफलतापूर्वक अनुरोध किया गया"
 
 #: views/users.py:394
+msgid "You can request for the solution"
+msgstr "आप समाधान के लिए अनुरोध कर सकते हैं"
+
+#: views/users.py:416
+msgid "Already enrolled, You can still access this course"
+msgstr "पहले से नामांकित, आप अभी भी इस पाठ्यक्रम तक पहुँच सकते हैं"
+
+#: views/users.py:419
+msgid "Your time expired for this course and you are trying to enroll again"
+msgstr ""
+"इस कोर्स के लिए आपका समय समाप्त हो गया है और आप फिर से नामांकन करने का "
+"प्रयास कर रहे हैं"
+
+#: views/users.py:490
 msgid "Your certificate is ready for download"
-msgstr ""
+msgstr "आपका प्रमाणपत्र डाउनलोड के लिए तैयार है"
 
-#: views/users.py:400
+#: views/users.py:496
 msgid "The certificate will be ready after you complete the course"
-msgstr ""
-
-#~ msgid "proceed for"
-#~ msgstr ""
-
-#~ msgid "certificate will be ready after completion"
-#~ msgstr ""
+msgstr "कोर्स पूरा होने के बाद प्रमाणपत्र तैयार हो जाएगा"
 

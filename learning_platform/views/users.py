@@ -50,8 +50,8 @@ def user_enrolled_courses(course_id):
     for c in current_user.enrolling:
         print(f'{c.name} and {c.id}')
         if c.id == course_id:
-            return True
-    return False
+            return True, c
+    return False, None
 
 
 '''
@@ -331,9 +331,16 @@ def topic_by_course(course_id, topic_id):
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 
-    if not user_enrolled_courses(course_id):
+    stat, c = user_enrolled_courses(course_id)
+    if not stat:
         flash('You have not enrolled in this course', category='warning')
         return redirect(url_for('home.home'))
+
+
+    if completed_course(c):
+        flash('Your access time has elapsed, you can access your certificate', category='warning')
+        return redirect(url_for('users.userprofile'))
+        
 
     course = Course.query.get(course_id).name
     topic = SubTopic.query.get(topic_id).name
@@ -398,14 +405,20 @@ def make_payment(course_id):
     '''
         This is where payment is made
     '''
-    stat = user_enrolled_courses(course_id)
-    if stat:
-        flash(_('Already enrolled, login and start learning'), category='info')
-        return redirect(url_for('home.home'))
-
     if not current_user.is_authenticated:
         next_url = request.url
         return redirect(url_for('users.login', next_url=next_url))
+
+
+    stat, c = user_enrolled_courses(course_id)
+    if stat:
+        if not completed_course(c):
+            flash(_('Already enrolled, You can still access this course'), category='info')
+            return redirect(url_for('home.home'))
+        else:
+            flash(_('Your time expired for this course and you are trying to enroll again'), category='info')
+
+
 
     user = User.query.get(current_user.id)
     email = user.email
@@ -514,9 +527,10 @@ def download_cert(course_id):
 
     student_name = current_user.fullname
     course_name = course.name
+    duration = course.duration
     for c in current_user.enrolling:
         if c == course:
-            completed_on = c.enrolled_at + timedelta(days=120)
+            completed_on = c.enrolled_at + timedelta(minutes=duration)
             completed_on, _ = str(completed_on).split()
             break
 

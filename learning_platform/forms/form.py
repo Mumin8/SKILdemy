@@ -1,7 +1,7 @@
 from wtforms import (
     StringField, PasswordField,
     validators, SubmitField, ValidationError, SelectField,
-    TextAreaField, DecimalField, SubmitField
+    TextAreaField, DecimalField, SubmitField, IntegerField
 )
 from flask_wtf.file import FileAllowed, FileField
 from flask_wtf import FlaskForm
@@ -26,6 +26,8 @@ class CourseForm(FlaskForm):
         "Write a brief description of the course")])
     price = DecimalField(
         'Price', [validators.DataRequired("Enter the price for the course")])
+    duration = IntegerField(
+        'duration', [validators.DataRequired("Enter the duration for this course")])
     submit = SubmitField('Create Course')
 
 

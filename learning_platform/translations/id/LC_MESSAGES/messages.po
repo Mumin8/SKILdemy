@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-05-24 22:01+0000\n"
+"POT-Creation-Date: 2024-08-03 00:13+0000\n"
 "PO-Revision-Date: 2024-05-24 04:47+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: id\n"
@@ -20,203 +20,233 @@ msgstr ""
 
 #: templates/home/home.html:24
 msgid "Dashboard"
-msgstr ""
+msgstr "Dasbor"
 
 #: templates/home/home.html:39
 msgid "Register"
-msgstr ""
+msgstr "Daftar"
 
 #: templates/home/home.html:46 templates/user/login.html:14
 msgid "login"
-msgstr ""
+msgstr "Masuk"
 
 #: templates/home/home.html:71
 msgid "course content"
-msgstr ""
+msgstr "Konten kursus"
 
-#: templates/home/home.html:82
+#: templates/home/home.html:95
 msgid "click on course for more information"
-msgstr ""
+msgstr "klik kursus untuk informasi lebih lanjut"
 
-#: templates/home/home.html:93
+#: templates/home/home.html:106
 msgid "Enrol now"
-msgstr ""
+msgstr "Daftar sekarang"
 
-#: templates/user/certificate.html:6
+#: templates/user/certificate.html:7
 msgid "certificate"
-msgstr ""
-
-#: templates/user/certificate.html:9
-msgid "congratulations"
-msgstr ""
+msgstr "sertifikat"
 
 #: templates/user/certificate.html:12
+msgid "congratulations"
+msgstr "selamat"
+
+#: templates/user/certificate.html:16
 msgid "proceed for certificate"
+msgstr "lanjutkan untuk mendapatkan sertifikat"
+
+#: templates/user/learn_page.html:11 templates/user/profile.html:21
+msgid "Home"
+msgstr "Halaman beranda"
+
+#: templates/user/learn_page.html:16
+msgid "PROGRESS"
 msgstr ""
 
-#: templates/user/learn_page.html:80
+#: templates/user/learn_page.html:38
+msgid "PREVIOUS"
+msgstr "SEBELUMNYA"
+
+#: templates/user/learn_page.html:44
+msgid "NEXT"
+msgstr "BERIKUTNYA"
+
+#: templates/user/learn_page.html:55
+msgid "Back"
+msgstr "Kembali"
+
+#: templates/user/learn_page.html:61
+msgid "SKILdemy guide"
+msgstr "Panduan SKILdemy"
+
+#: templates/user/learn_page.html:66
+msgid "Suggested Videos"
+msgstr "Video yang Disarankan"
+
+#: templates/user/learn_page.html:121
 msgid "Cancel Request"
-msgstr ""
+msgstr "Batalkan Permintaan"
 
-#: templates/user/learn_page.html:87
+#: templates/user/learn_page.html:128
 msgid "keep learning while we prepare the answers for you"
-msgstr ""
+msgstr "Teruslah belajar sementara kami menyiapkan jawaban untuk Anda."
 
-#: templates/user/learn_page.html:97
+#: templates/user/learn_page.html:138
 msgid "Request Solution"
-msgstr ""
+msgstr "Minta solusi"
 
 #: templates/user/locale.html:20
 msgid "Choose a language:"
-msgstr ""
+msgstr "Pilih bahasa:"
 
 #: templates/user/locale.html:22
 msgid "select Language"
-msgstr ""
+msgstr "pilih Bahasa"
 
 #: templates/user/locale.html:23
 msgid "Arabic"
-msgstr ""
+msgstr "Arab"
 
 #: templates/user/locale.html:24
 msgid "Bengali"
-msgstr ""
+msgstr "Bengali"
 
 #: templates/user/locale.html:25
 msgid "Chinese"
-msgstr ""
+msgstr "Cina"
 
 #: templates/user/locale.html:26
 msgid "English"
-msgstr ""
+msgstr "Inggris"
 
 #: templates/user/locale.html:27
 msgid "French"
-msgstr ""
+msgstr "Prancis"
 
 #: templates/user/locale.html:28
 msgid "Hindi"
-msgstr ""
+msgstr "Hindi"
 
 #: templates/user/locale.html:29
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonesia"
 
 #: templates/user/locale.html:30
 msgid "Portuguese"
-msgstr ""
+msgstr "Portugis"
 
 #: templates/user/locale.html:31
 msgid "Russia"
-msgstr ""
+msgstr "Rusia"
 
 #: templates/user/locale.html:32
 msgid "Spanish"
-msgstr ""
+msgstr "Spanyol"
 
 #: templates/user/locale.html:33
 msgid "Turkish"
-msgstr ""
+msgstr "Turki"
 
 #: templates/user/locale.html:34
 msgid "Urdu"
-msgstr ""
+msgstr "Urdu"
 
 #: templates/user/login.html:27
 msgid "Login"
-msgstr ""
+msgstr "Masuk"
 
 #: templates/user/login.html:31
 msgid "Forgot Password"
-msgstr ""
+msgstr "Lupa Kata Sandi"
+
+#: templates/user/profile.html:27
+msgid "logout"
+msgstr "Keluar"
 
 #: templates/user/profile.html:35
 msgid "My courses"
-msgstr ""
+msgstr "Kursus Saya"
 
 #: templates/user/profile.html:46
 msgid "Get certificate"
-msgstr ""
+msgstr "Dapatkan Sertifikat"
 
 #: templates/user/register.html:13
 msgid "Sign up"
-msgstr ""
+msgstr "Daftar"
 
 #: templates/user/reset_password.html:22
 msgid "submit email"
-msgstr ""
+msgstr "kirim email"
 
-#: templates/user/view_cert.html:17
+#: templates/user/view_cert.html:19
 msgid "download"
-msgstr ""
+msgstr "unduh"
 
-#: views/home.py:39
+#: views/home.py:23
 msgid "Welcome to SKILdemy"
-msgstr ""
+msgstr "Selamat datang di SKILdemy"
 
-#: views/users.py:45
+#: views/users.py:48
 msgid "please login first"
-msgstr ""
+msgstr "silakan masuk terlebih dahulu"
 
-#: views/users.py:66
+#: views/users.py:121
 msgid "Thank you for Registering"
-msgstr ""
+msgstr "Terima kasih telah mendaftar"
 
-#: views/users.py:85
+#: views/users.py:140
 msgid "Happy Coding!  😊"
-msgstr ""
+msgstr "Selamat Coding! 😊"
 
-#: views/users.py:87
+#: views/users.py:142
 msgid "Invalid Credentials"
-msgstr ""
+msgstr "Kredensial Tidak Valid"
 
-#: views/users.py:126
+#: views/users.py:181
 msgid "Password Reset Request"
-msgstr ""
+msgstr "permintaan pengaturan ulang kata sandi"
 
-#: views/users.py:135
+#: views/users.py:190
 msgid "Check your email for the password reset link."
-msgstr ""
-
-#: views/users.py:138
-msgid "Email not found"
-msgstr ""
-
-#: views/users.py:156
-msgid "successfully reset password"
-msgstr ""
-
-#: views/users.py:186
-msgid "You have successfully enrolled in"
-msgstr ""
+msgstr "Periksa email Anda untuk tautan pengaturan ulang kata sandi."
 
 #: views/users.py:193
+msgid "Email not found"
+msgstr "Email tidak ditemukan"
+
+#: views/users.py:211
+msgid "successfully reset password"
+msgstr "berhasil mengatur ulang kata sandi"
+
+#: views/users.py:237
+msgid "You have successfully enrolled in"
+msgstr "Anda telah berhasil mendaftar di"
+
+#: views/users.py:244
 msgid "unsuccessful, please check your details or contact SKILdemy support"
-msgstr ""
-
-#: views/users.py:241
-msgid "successfully requested for solution"
-msgstr ""
-
-#: views/users.py:304
-msgid "You can request for the solution"
-msgstr ""
+msgstr "tidak berhasil, silakan periksa detail Anda atau hubungi dukungan SKILdemy"
 
 #: views/users.py:320
-msgid "Already enrolled, login and start learning"
-msgstr ""
+msgid "successfully requested for solution"
+msgstr "berhasil meminta solusi"
 
 #: views/users.py:394
+msgid "You can request for the solution"
+msgstr "Anda dapat meminta solusi"
+
+#: views/users.py:416
+msgid "Already enrolled, You can still access this course"
+msgstr "Anda sudah terdaftar, Anda masih dapat mengakses kursus ini"
+
+#: views/users.py:419
+msgid "Your time expired for this course and you are trying to enroll again"
+msgstr "Waktu Anda telah habis untuk kursus ini dan Anda mencoba mendaftar lagi"
+
+#: views/users.py:490
 msgid "Your certificate is ready for download"
-msgstr ""
+msgstr "Sertifikat Anda siap untuk diunduh"
 
-#: views/users.py:400
+#: views/users.py:496
 msgid "The certificate will be ready after you complete the course"
-msgstr ""
-
-#~ msgid "proceed for"
-#~ msgstr ""
-
-#~ msgid "certificate will be ready after completion"
-#~ msgstr ""
+msgstr "Sertifikat akan siap setelah Anda menyelesaikan kursus"
 

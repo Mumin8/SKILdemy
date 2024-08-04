@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-03 00:13+0000\n"
+"POT-Creation-Date: 2024-08-03 12:24+0000\n"
 "PO-Revision-Date: 2024-05-24 05:02+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: bn\n"
@@ -39,7 +39,7 @@ msgid "click on course for more information"
 msgstr ""
 
 #: templates/home/home.html:106
-msgid "Enrol now"
+msgid "Enroll now"
 msgstr "এখন নথিভুক্ত করুন"
 
 #: templates/user/certificate.html:7

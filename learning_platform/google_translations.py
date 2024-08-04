@@ -48,7 +48,10 @@ def text_translator(text, lang):
 
 def get_duration(audio_path, text, lang):
     with open(audio_path, 'wb') as f:
-        speech = gTTS(text, lang=lang)
+        if lang == "pt":
+            speech = gTTS(text, lang=lang, tld='com.br')
+        else:
+            speech = gTTS(text, lang=lang)
         speech.write_to_fp(f)
     
        
@@ -58,5 +61,8 @@ def process_for_nonLatin(text, audio_path, lang):
     processes the text to another language
     '''
     with open(audio_path, 'wb') as f:
-        tts_ = gTTS(text, lang=lang)
+        if lang == "pt":
+            tts_ = gTTS(text, lang=lang, tld="com.br")
+        else:
+            tts_ = gTTS(text, lang=lang)
         tts_.write_to_fp(f)

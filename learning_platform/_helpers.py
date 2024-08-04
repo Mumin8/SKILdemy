@@ -192,6 +192,15 @@ def s3_client():
     return s3_client
 
 
+def presigned_cert_url(cert_name):
+    client = s3_client()
+    url = client.generate_presigned_url(
+        ClientMethod="get_object",
+        Params={"Bucket": "skild-certs", "Key": cert_name},
+        ExpiresIn=3600)
+    return url
+
+
 def presigned_url(video_name):
     client = s3_client()
     url = client.generate_presigned_url(
@@ -207,11 +216,15 @@ def upload_s3vid_languages(uploaded_file, filename, lang):
     client.upload_fileobj(uploaded_file, os.getenv(
         f"AWS_STORAGE_BUCKET_NAME{lang}"), filename)
 
-# def upload_s3vid_languages(uploaded_file, filename, lang):
+
+# def upload_certificate(file, filename):
 #     client = s3_client()
-#     with open(uploaded_file, 'rb') as file_obj:
-#         client.upload_fileobj(file_obj, os.getenv(
-#             f"AWS_STORAGE_BUCKET_NAME{lang}"), filename)
+#     client.upload_fileobj(file, "skild-certs", filename)
+
+def upload_certificate(file, filename):
+    client = s3_client()
+    with open(file, 'rb') as file_obj:
+        client.upload_fileobj(file_obj, "skild-certs", filename)
 
 
 def get_byID(_id):

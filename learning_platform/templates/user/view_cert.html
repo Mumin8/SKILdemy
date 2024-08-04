@@ -11,11 +11,11 @@
 <body>
     {% block main %}
     <div class="text-center">
-        <img src="{{ url_for('static', filename='student_certificates/' + dest) }}"
+        <img src="{{ dest }}"
          alt=""
          height="540">
          <button>
-            <a href="{{ url_for('users.download_your_cert')}}" class="fs-2 btn btn-info">
+            <a href="{{ url_for('users.download_your_cert', id=id)}}" class="fs-2 btn btn-info">
                 {{_('download')}}
             </a>
         </button>

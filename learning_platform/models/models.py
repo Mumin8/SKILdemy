@@ -85,6 +85,8 @@ class Course(db.Model):
     rate = db.Column(db.Numeric(10, 2), nullable=False, default=1.00)
     enrolled_at = db.Column(db.DateTime(timezone=True), default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), default=func.now())
+    duration = db.Column(db.Integer, nullable=False, default=3)
+    discount = db.Column(db.Integer, nullable=True)
 
     def update(self, update_):
         self.updated_at = update_
@@ -99,9 +101,6 @@ class Course(db.Model):
 
     topics = db.relationship('Topic', secondary=course_topics,
                              lazy='subquery', backref=db.backref('courses', lazy=True))
-
-
-
 
 
 

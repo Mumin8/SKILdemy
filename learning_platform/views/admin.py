@@ -1,14 +1,14 @@
 from bson import ObjectId
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session, jsonify
 from flask_babel import gettext as _
-from flask_login import login_required, current_user, logout_user, login_user
+from flask_login import login_required, current_user
 from learning_platform import bcrypt, db
-from werkzeug.utils import secure_filename
 from learning_platform.forms.form import (
     Registration, CourseForm, TopicForm, SubTopicForm)
 from learning_platform.models.models import (
-    User, Video, Course, SubTopic, Topic, TimeTask)
+    User, Course, SubTopic, Topic, TimeTask)
 from functools import wraps
+from werkzeug.utils import secure_filename
 from learning_platform._helpers import (
     upload_s3vid_languages,
     live_vid_content,
@@ -16,7 +16,7 @@ from learning_platform._helpers import (
     insert_text,
     presigned_url,
     course_topic,
-    _file,
+    file_,
     delete_byID,
     exchange_rate,
     unlink_file,
@@ -103,13 +103,6 @@ def admin_required(f):
     return dec_func
 
 
-@admin_bp.route('/index')
-@admin_required
-def index():
-    approved_videos = Video.query.filter_by(status='approved').all()
-    return render_template('admin/index.html', videos=approved_videos)
-
-
 @admin_bp.route('/reg_admin')
 def reg_admin():
     username = 'Mumin8'
@@ -127,8 +120,9 @@ def reg_admin():
 
 
 @admin_bp.route('/admin')
+@admin_required
 def admin():
-    return redirect(url_for('admin.index'))
+    return render_template('admin/index.html')
 
 
 @admin_bp.route('/create_user', methods=["GET"])
@@ -159,32 +153,10 @@ def admin_add_vid():
         topics=topics)
 
 
-# @admin_bp.route('/level/<string:course_id>/<string:subtopic_id>',
-#                 methods=['GET', 'POST'])
-# def level(course_id, subtopic_id):
-#     if not current_user.is_authenticated:
-#         flash(_('please login first'), category='info')
-#         return redirect(url_for('home.home'))
-
-#     for c in current_user.enrolling:
-#         if c.id == course_id:
-#             subtopic = SubTopic.query.get(subtopic_id)
-#             c.user_level.append(subtopic)
-
-
 @admin_bp.route('/upload/<string:language>/<string:course_id>/<string:topic_id>',
                 methods=['GET', 'POST'])
 def upload(language, course_id, topic_id):
     validate_list()
-
-    # video_ = all_vids()
-    # v_id.append(video_)
-
-    # if len(v_id[0]) > 3:
-    #     flash(
-    #         'the number of videos is up to 4 alread, you will be notified if  a slop is available',
-    #         category='success')
-    #     return redirect(url_for('learn_skills'))
 
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -195,18 +167,12 @@ def upload(language, course_id, topic_id):
             flash('No selected file')
             return redirect(request.url)
         if file and acceptable(file.filename):
-            # filename = secure_filename(file.filename)
-            # name = hash_filename(filename)
+            file = secure_filename(file.filename)
             course = Course.query.get(course_id).name
             topic = SubTopic.query.get(topic_id).name
             name = f'{course}_{topic.strip("?")}.mp4'
-            # _vid = find_missing_vid(v_id[0])
-            # file_details = {"video_id": str(
-            #     _vid), "name": name, "course": course, "topic": topic}
+
             upload_s3vid_languages(file, name, language)
-            # upload_s3vid(file, name)
-            # file.save(os.path.join(app.config['UPLOAD_FOLDER'], name))
-            # insertone(file_details)
 
             flash('successfully added the video', category='success')
         return redirect(url_for('admin.index'))
@@ -506,7 +472,7 @@ def update_published_AI(_id):
         desc = request.form.get('desc')
         name = None
         if request.files['file']:
-            name = _file(request.files, 'UPLOAD_CODE_FOLDER')
+            name = file_(request.files, 'UPLOAD_CODE_FOLDER')
             unlink_file(vid['code'], 'UPLOAD_CODE_FOLDER')
         update_by_id(ObjectId(_id), name, desc)
     return render_template(

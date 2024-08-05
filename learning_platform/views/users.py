@@ -1,6 +1,6 @@
 import os
-import uuid
 from datetime import datetime, timedelta
+import requests
 from flask import (
     Blueprint,
     render_template,
@@ -9,13 +9,13 @@ from flask import (
     request,
     jsonify,
     flash,
-    session,
-    send_from_directory)
+    session)
+from botocore.exceptions import ClientError
 from flask_babel import gettext as _
 from flask_limiter.errors import RateLimitExceeded
 from flask_login import login_required, current_user, logout_user, login_user
 from flask_mail import Message
-from learning_platform import bcrypt, db, app, mail, limiter, r
+from learning_platform import bcrypt, db, app, mail, limiter
 from learning_platform.forms.form import Registration, LoginForm, ResetForm, NewPasswordForm
 from learning_platform.models.models import User, Course, SubTopic, TimeTask
 from learning_platform.google_translations import text_translator
@@ -26,6 +26,9 @@ from learning_platform._helpers import (
     get_ref,
     get_lang,
     presigned_url,
+    presigned_cert_url,
+    upload_certificate,
+    s3_client,
     vid_ids,
     verify_payment,
     completed_course)
@@ -38,6 +41,16 @@ user_bp = Blueprint('users', __name__, static_folder='static',
 ref = []
 
 
+def cert_available(key):
+    s3 = s3_client()
+    try:
+        s3.get_object(Bucket="skild-certs", Key=key) 
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'NoSuchKey':
+            return False
+    return True
+
+
 def pop_ref():
     for i, v in enumerate(ref):
         ref.pop(i)
@@ -48,43 +61,9 @@ def user_enrolled_courses(course_id):
         flash(_('please login first'), category='info')
         return redirect(url_for('home.home'))
     for c in current_user.enrolling:
-        print(f'{c.name} and {c.id}')
         if c.id == course_id:
             return True, c
     return False, None
-
-
-'''
-SESSION_LIMIT = 3
-
-def get_user_sessions(user_id):
-    return r.lrange(f"user_sessions:{user_id}", 0, -1)
-
-def add_user_session(user_id, session_id):
-    r.lpush(f"user_sessions:{user_id}", session_id)
-    r.ltrim(f"user_sessions:{user_id}", 0, SESSION_LIMIT - 1)
-
-def remove_user_session(user_id, session_id):
-    r.lrem(f"user_sessions:{user_id}", 0, session_id)
-
-@app.before_request
-def limit_concurrent_sessions():
-    user_id = session.get('user_id')
-    if user_id:
-        current_session_id = session.get('session_id')
-        if not current_session_id:
-            current_session_id = str(uuid.uuid4())
-            session['session_id'] = current_session_id
-
-        user_sessions = get_user_sessions(user_id)
-
-        if current_session_id not in user_sessions:
-            if len(user_sessions) >= SESSION_LIMIT:
-                session.clear()
-                return "Session limit reached. Please log out from other devices.", 403
-            else:
-                add_user_session(user_id, current_session_id)
-'''
 
 
 @user_bp.errorhandler(RateLimitExceeded)
@@ -231,10 +210,18 @@ def enroll_course(course_id):
         price = course.price
         rate = course.rate
         if result['amount'] > rate * price * 65:
-            course.update_enrolled_at(datetime.now())
-            current_user.enrolling.append(course)
+            
+            mes = _('You have successfully enrolled in', category='success')
+            for c in current_user.enrolling:
+                if c == course:
+                    c.update_enrolled_at(datetime.now())
+                    mes = _('You have successfully updated your course', category='success')
+                    break
+            else:
+                course.update_enrolled_at(datetime.now())
+                current_user.enrolling.append(course)
             db.session.commit()
-            mes = _('You have successfully enrolled in')
+            
             flash(
                 f'{mes} {course.name}',
                 category='info')
@@ -264,9 +251,12 @@ def userprofile():
 @user_bp.route('/next_page/<int:page>/<int:fp>/<int:lp>',
                methods=['GET', 'POST'])
 def paginate(page, fp, lp):
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.login'))
+    
     fk = session.get('c')
     fv = session.get('dict')
-    print(fv[str(page)])
+    
 
     return render_template(
         'user/learn_page.html',
@@ -286,7 +276,15 @@ def learn_skills(course_id):
         next_url = request.url
         return redirect(url_for('users.login', next_url=next_url))
 
+    
+
     user_c = Course.query.get(course_id)
+    for c in current_user.enrolling:
+        if c == user_c:
+            if completed_course(c):
+                flash('Please your time period to access this course has elapsed', category='warning')
+                flash('You can enroll again if you feel you still have more topics to cover', category='info')
+                return redirect(url_for('users.userprofile'))
     if user_c:
         c_and_t = c_and_topics(user_c)
         first_key, first_value = next(iter(c_and_t.items()))
@@ -336,11 +334,11 @@ def topic_by_course(course_id, topic_id):
         flash('You have not enrolled in this course', category='warning')
         return redirect(url_for('home.home'))
 
-
     if completed_course(c):
-        flash('Your access time has elapsed, you can access your certificate', category='warning')
+        flash(
+            'Your access time has elapsed, you can access your certificate',
+            category='warning')
         return redirect(url_for('users.userprofile'))
-        
 
     course = Course.query.get(course_id).name
     topic = SubTopic.query.get(topic_id).name
@@ -409,16 +407,17 @@ def make_payment(course_id):
         next_url = request.url
         return redirect(url_for('users.login', next_url=next_url))
 
-
     stat, c = user_enrolled_courses(course_id)
     if stat:
         if not completed_course(c):
-            flash(_('Already enrolled, You can still access this course'), category='info')
+            flash(
+                _('Already enrolled, You can still access this course'),
+                category='info')
             return redirect(url_for('home.home'))
         else:
-            flash(_('Your time expired for this course and you are trying to enroll again'), category='info')
-
-
+            flash(
+                _('Your time expired for this course and you are trying to enroll again'),
+                category='info')
 
     user = User.query.get(current_user.id)
     email = user.email
@@ -474,33 +473,43 @@ def user_locale():
 @user_bp.route('/cert/<string:course_id>', methods=['GET', 'POST'])
 def cert_of_completion(course_id):
     '''
-    where the certificate will be initiated
+    where the certificate will be previewed
     '''
 
     if not current_user.is_authenticated:
         next_url = request.url
         return redirect(url_for('users.login', next_url=next_url))
 
+    cert_name = f'{current_user.id}{course_id}' + ".jpg"
+
+
     course = Course.query.get(course_id)
 
     for c in current_user.enrolling:
         if c == course:
             if completed_course(c):
+                print('Time passed')
                 flash(
                     _('Your certificate is ready for download'),
                     category='info')
                 return render_template(
                     'user/certificate.html', course_id=c.id, name=c.name)
             else:
-                flash(
-                    _("The certificate will be ready after you complete the course"),
-                    category='info')
-                return redirect(url_for('users.userprofile'))
+                if cert_available(cert_name):
+                    print("certificate exists but time no catch yet")
+                    return render_template(
+                    'user/certificate.html', course_id=c.id, name=c.name)
+                else:
+                    flash(
+                        _("The certificate will be ready after you complete the course"),
+                        category='info')
+                    return redirect(url_for('users.userprofile'))
     return redirect(url_for('users.userprofile'))
 
 
 @user_bp.route('/preview_cert/<string:course_id>', methods=['GET', 'POST'])
 def download_cert(course_id):
+    '''certificate will be downloaded here'''
 
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
@@ -510,54 +519,68 @@ def download_cert(course_id):
     src = 'certificate.jpg'
     dest = current_user.id + '.jpg'
 
-    source_path = os.path.join(root_path, 'static', 'certificate', src)
-    dest_path = os.path.join(root_path, 'static', 'student_certificates', dest)
-    resize = (1056, 816)
-    img = Image.open(source_path)
-    img = img.resize(resize)
-    img = img.convert('RGB')
-    original_size = img.size
+    cert_name = f'{current_user.id}{course.id}' + ".jpg"
+    url = presigned_cert_url(cert_name)
 
-    draw = ImageDraw.Draw(img)
-    font = ImageFont.truetype('arial.ttf', 32)
+    if not cert_available(cert_name):
+        source_path = os.path.join(root_path, 'static', 'certificate', src)
+        dest_path = os.path.join(
+            root_path, 'static', 'student_certificates', dest)
+        resize = (1056, 816)
+        img = Image.open(source_path)
+        img = img.resize(resize)
+        img = img.convert('RGB')
 
-    student_name_pos = (218, 410)
-    course_name_pos = (218, 514)
-    completed_date_pos = (670, 612)
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.truetype('arial.ttf', 32)
 
-    student_name = current_user.fullname
-    course_name = course.name
-    duration = course.duration
-    for c in current_user.enrolling:
-        if c == course:
-            completed_on = c.enrolled_at + timedelta(minutes=duration)
-            completed_on, _ = str(completed_on).split()
-            break
+        student_name_pos = (218, 410)
+        course_name_pos = (218, 514)
+        completed_date_pos = (670, 612)
 
-    draw.text(student_name_pos, student_name, font=font)
-    draw.text(course_name_pos, course_name, font=font)
-    draw.text(completed_date_pos, completed_on, font=font)
+        student_name = current_user.fullname
+        course_name = course.name
+        duration = course.duration
+        for c in current_user.enrolling:
+            if c == course:
+                completed_on = c.enrolled_at + timedelta(minutes=duration)
+                completed_on, _ = str(completed_on).split()
+                break
 
-    img.save(dest_path)
+        draw.text(student_name_pos, student_name, font=font)
+        draw.text(course_name_pos, course_name, font=font)
+        draw.text(completed_date_pos, completed_on, font=font)
 
-    return render_template('user/view_cert.html', dest=dest)
+        img.save(dest_path)
+
+        upload_certificate(dest_path, cert_name)
+        os.remove(dest_path)
+
+        return render_template(
+                'user/view_cert.html', dest=url, id=course_id)
+
+    return render_template('user/view_cert.html', dest=url, id=course_id)
 
 
-@user_bp.route('/dl_cert', methods=['GET', 'POST'])
-def download_your_cert():
+@user_bp.route('/dl_cert/<string:id>', methods=['GET', 'POST'])
+def download_your_cert(id):
     '''
     where the certificate will be downloaded
     '''
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 
-    root_path = app.root_path
-    cert = current_user.id + '.jpg'
-    cert_path = os.path.join(root_path, 'static', 'student_certificates')
-    name = 'certificate.jpg'
-
-    return send_from_directory(
-        cert_path,
-        cert,
-        as_attachment=True,
-        download_name=name)
+    course = Course.query.get(id)
+    cert_name = f'{current_user.id}{course.id}' + ".jpg"
+    url = presigned_cert_url(cert_name)
+    downloads_path = os.path.join(os.path.expanduser('~'), 'Downloads')
+    filename = 'certificate.jpg'
+    local_file_path = os.path.join(downloads_path, filename)
+    r = requests.get(url)
+    if r.status_code == 200:
+        with open(local_file_path, 'wb') as file:
+            file.write(r.content)
+            flash(
+                _('Certificate generated in your downloads path'),
+                category="success")
+    return redirect(url_for('users.userprofile'))

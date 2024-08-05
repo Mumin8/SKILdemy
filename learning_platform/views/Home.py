@@ -3,8 +3,7 @@ from flask_babel import gettext
 from flask_login import current_user
 from learning_platform import db
 from learning_platform.models.models import Course
-from learning_platform.google_translations import get_locale
-from learning_platform._helpers import exchange_rate, time_, get_lang, _auth
+from learning_platform._helpers import exchange_rate, time_, get_lang, auth_
 
 home_bp = Blueprint(
     'home',
@@ -32,7 +31,7 @@ def home():
             c.rate = rate
         db.session.commit()
 
-    auth = _auth()
+    auth = auth_()
 
     # for getting locale flag
     lang = get_lang()
@@ -51,7 +50,7 @@ def home_(course_id):
         the page visited when a course is clicked
     '''
 
-    auth = _auth()
+    auth = auth_()
     lang = get_lang()
     lang = lang + '.jpg'
 

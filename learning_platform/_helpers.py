@@ -100,7 +100,7 @@ def split_WC(text, max_length=38):
     return substrings
 
 
-def _file(files, _dir):
+def file_(files, _dir):
     '''
     _file:
         this will save file
@@ -393,7 +393,7 @@ def get_lang():
     return lang
 
 
-def _auth():
+def auth_():
     auth = False
     if current_user.is_authenticated:
         auth = True

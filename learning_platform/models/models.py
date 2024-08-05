@@ -31,7 +31,11 @@ course_topics = db.Table('course_topics',
 class User(db.Model, UserMixin):
     __tablename__ = "user"
 
-    id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
+    id = db.Column(
+        db.String(36),
+        primary_key=True,
+        default=lambda: str(
+            uuid.uuid4()))
     fullname = db.Column(db.String(100), nullable=False)
     username = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
@@ -78,7 +82,11 @@ class User(db.Model, UserMixin):
 class Course(db.Model):
     __tablename__ = "course"
 
-    id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
+    id = db.Column(
+        db.String(36),
+        primary_key=True,
+        default=lambda: str(
+            uuid.uuid4()))
     name = db.Column(db.String(80), nullable=False)
     description = db.Column(db.String(250), nullable=False)
     price = db.Column(db.Numeric(10, 2), nullable=False)
@@ -93,32 +101,42 @@ class Course(db.Model):
 
     def get_updated(self):
         return self.updated_at
-    
 
     def update_enrolled_at(self, enrolled):
         self.enrolled_at = enrolled
         db.session.commit()
 
-    topics = db.relationship('Topic', secondary=course_topics,
-                             lazy='subquery', backref=db.backref('courses', lazy=True))
-
+    topics = db.relationship(
+        'Topic',
+        secondary=course_topics,
+        lazy='subquery',
+        backref=db.backref(
+            'courses',
+            lazy=True))
 
 
 class Topic(db.Model):
     __tablename__ = "topic"
 
-    id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
+    id = db.Column(
+        db.String(36),
+        primary_key=True,
+        default=lambda: str(
+            uuid.uuid4()))
     name = db.Column(db.String(255), nullable=False)
     desc = db.Column(db.String(500), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     sub_topics = db.relationship('SubTopic', backref='topic', lazy='dynamic')
-    
 
 
 class SubTopic(db.Model):
     __tablename__ = "subtopic"
 
-    id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
+    id = db.Column(
+        db.String(36),
+        primary_key=True,
+        default=lambda: str(
+            uuid.uuid4()))
     name = db.Column(db.String(80), nullable=False)
     desc = db.Column(db.String(250), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
@@ -127,29 +145,14 @@ class SubTopic(db.Model):
 
 class TimeTask(db.Model):
     __tablename__ = "timetask"
-    id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
+    id = db.Column(
+        db.String(36),
+        primary_key=True,
+        default=lambda: str(
+            uuid.uuid4()))
     usertask = db.Column(db.String(80), nullable=True)
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
-    
-
-
-
-class Video(db.Model):
-    '''
-    this is the model to allow videos to be 
-    added and approved
-    '''
-    __tablename__ = "video"
-    id = db.Column(db.String(36), primary_key=True, default= lambda: str(uuid.uuid4()))
-    video_id = db.Column(db.String(255))
-    video_path = db.Column(db.String(255))
-    course = db.Column(db.String(20))
-    topic = db.Column(db.String(20))
-    status = db.Column(db.String(20), default='pending')
-
-    def __repr__(self):
-        return f"<Video {self.topic}>"
 
 
 with app.app_context():

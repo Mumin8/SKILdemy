@@ -1,5 +1,13 @@
 from bson import ObjectId
-from flask import Blueprint, render_template, redirect, url_for, request, flash, session, jsonify
+from flask import (
+    Blueprint,
+    render_template,
+    redirect,
+    url_for,
+    request,
+    flash,
+    session,
+    jsonify)
 from flask_babel import gettext as _
 from flask_login import login_required, current_user
 from learning_platform import bcrypt, db
@@ -8,14 +16,15 @@ from learning_platform.forms.form import (
 from learning_platform.models.models import (
     User, Course, SubTopic, Topic, TimeTask)
 from functools import wraps
-from werkzeug.utils import secure_filename
 from learning_platform._helpers import (
     upload_s3vid_languages,
     live_vid_content,
+    encryption,
     acceptable,
     insert_text,
     presigned_url,
     course_topic,
+    c_and_topics,
     file_,
     delete_byID,
     exchange_rate,
@@ -167,15 +176,16 @@ def upload(language, course_id, topic_id):
             flash('No selected file')
             return redirect(request.url)
         if file and acceptable(file.filename):
-            file = secure_filename(file.filename)
-            course = Course.query.get(course_id).name
-            topic = SubTopic.query.get(topic_id).name
-            name = f'{course}_{topic.strip("?")}.mp4'
+            course = Course.query.get(course_id)
+            topic = SubTopic.query.get(topic_id)
+            _name = f'{course.course_creator}{topic.topic_id}{topic.name}'
+            
+            name = encryption(_name) + '.mp4'
 
             upload_s3vid_languages(file, name, language)
 
             flash('successfully added the video', category='success')
-        return redirect(url_for('admin.index'))
+        return redirect(url_for('admin.admin'))
 
 
 @admin_bp.route('/reg_course', methods=['GET', 'POST'])
@@ -189,10 +199,12 @@ def register_course():
         name = form.name.data
         desc = form.description.data
         price = form.price.data
-        duration = form.duration.data
+        duration = form.duration.data   
+        creator = current_user.username
         rate = exchange_rate()
         new_course = Course(
             name=name,
+            course_creator=creator,
             description=desc,
             price=price,
             duration=duration,
@@ -203,6 +215,38 @@ def register_course():
     return render_template(
         'content_management/Register_course.html',
         form=form)
+
+
+@admin_bp.route('/t/')
+@admin_bp.route('/t/<string:c_id>')
+def free_topics(c_id):
+    if c_id != ' ':
+        print(f'Just a single course: {c_id}')
+        course = Course.query.get(c_id)
+        c_and_t = c_and_topics(course)
+        _, fv = next(iter(c_and_t.items()))
+        return render_template('content_management/course_free_topic.html', fv=fv)
+    
+    courses = Course.query.all()
+    return render_template('content_management/courses.html', courses=courses)
+
+
+@admin_bp.route('/cfass/<string:stop_id>/<string:c_id>')
+def course_free_asso(stop_id, c_id):
+    course= Course.query.get(c_id)
+    trial = SubTopic.query.get(stop_id)
+
+    c_and_t = c_and_topics(course)
+    _, fv = next(iter(c_and_t.items()))
+        
+    if trial not in course.trial_topics:
+        course.trial_topics.append(trial)
+        flash('success', category='success')
+        db.session.commit()
+        return render_template('content_management/course_free_topic.html', fv=fv)
+
+    flash('already associated', category='warning')
+    return render_template('content_management/course_free_topic.html', fv=fv)
 
 
 @admin_bp.route('/cs_avail', methods=['GET', 'POST'])
@@ -404,12 +448,8 @@ def aud_vid(lang):
     aud_vid:
         this is where the audio video clip thing starts
     '''
-
     v = get_text_desc()
     acc_v = recieve_displayed_text(v, lang)
-
-    # else:
-    #     acc_v = recieve_displayed_text_others(str(current_user.id), v, lang)
 
     return acc_v
 

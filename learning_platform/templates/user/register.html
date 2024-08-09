@@ -20,13 +20,16 @@
   <form action="/register" method="post">
     {{ form.csrf_token }}
     <div class="bg-dark-subtle text-primary fs-4"> 
-      {{ render_field(form.fullname, class="form-control") }}
+      {{ render_field(form.fullname, class="form-control", placeholder=l) }}
       {{ render_field(form.username, class="form-control") }}
-      {{ render_field(form.email, class="form-control") }}
-      {{ render_field(form.password, class="form-control") }}
-      {{ render_field(form.confirm, class="form-control") }}
+      {{ render_field(form.email, class="form-control", 
+                      placeholder="*****1?*_@example.com" ) }}
+      {{ render_field(form.password, class="form-control", 
+                      placeholder="*****") }}
+      {{ render_field(form.confirm, class="form-control", 
+                      placeholder="*****") }}
     </div>
-    <p class="text-center"><input type=submit value=Register class="btn btn-lg btn btn-primary"></p>
+    <input type="submit" value="{{ _('Register') }}" class="btn btn-lg btn-primary">
   </form>
 </div>
   <div class="col-2"></div>
@@ -34,5 +37,6 @@
 </div>
   {% endblock %}
   
+
 </body>
 </html>

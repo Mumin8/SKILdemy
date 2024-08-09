@@ -3,6 +3,8 @@ from wtforms import (
     validators, SubmitField, ValidationError, SelectField,
     TextAreaField, DecimalField, SubmitField, IntegerField
 )
+
+from flask_babel import gettext as _
 from flask_wtf.file import FileAllowed, FileField
 from flask_wtf import FlaskForm
 from ..models.models import User
@@ -54,23 +56,21 @@ class NewPasswordForm(FlaskForm):
 
 
 class Registration(FlaskForm):
-    fullname = StringField('Full name', [validators.Length(min=4, max=25)])
-    username = StringField('User name', [validators.Length(min=4, max=25)])
-    email = StringField(
-        'Email', [validators.Length(min=6, max=35), validators.Email()])
+    fullname = StringField('Full name', [validators.Length(min=4, max=25)]) 
+    username = StringField('User name', [validators.Length(min=4, max=25)]) 
+    email = StringField('Email', [validators.Length(min=6, max=35), validators.Email()])
     password = PasswordField('Password', [
         validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords must match')
-    ])
+        validators.EqualTo('confirm', message=_('Passwords must match'))])
     confirm = PasswordField('Repeat Password')
     profile = FileField('Profile ', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'],
                                                             "Image only please")])
-    submit = SubmitField('Register')
+    submit = SubmitField(_('Register'))
 
     def validate_username(self, username):
         if User.query.filter_by(username=username.data).first():
-            raise ValidationError("This username is already taken")
+            raise ValidationError(_("This username is already taken"))
 
     def validate_email(self, email):
         if User.query.filter_by(email=email.data).first():
-            raise ValidationError("This email is already taken")
+            raise ValidationError(_("This email is already taken"))

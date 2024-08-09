@@ -88,6 +88,7 @@ class Course(db.Model):
         default=lambda: str(
             uuid.uuid4()))
     name = db.Column(db.String(80), nullable=False)
+    course_creator = db.Column(db.String(100), nullable=True)
     description = db.Column(db.String(250), nullable=False)
     price = db.Column(db.Numeric(10, 2), nullable=False)
     rate = db.Column(db.Numeric(10, 2), nullable=False, default=1.00)
@@ -95,6 +96,8 @@ class Course(db.Model):
     updated_at = db.Column(db.DateTime(timezone=True), default=func.now())
     duration = db.Column(db.Integer, nullable=False, default=3)
     discount = db.Column(db.Integer, nullable=True)
+
+
 
     def update(self, update_):
         self.updated_at = update_
@@ -113,6 +116,7 @@ class Course(db.Model):
         backref=db.backref(
             'courses',
             lazy=True))
+    trial_topics = db.relationship('SubTopic', backref='course', lazy='dynamic')
 
 
 class Topic(db.Model):
@@ -141,6 +145,7 @@ class SubTopic(db.Model):
     desc = db.Column(db.String(250), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     topic_id = db.Column(db.String(36), db.ForeignKey('topic.id'))
+    course_id = db.Column(db.String(36), db.ForeignKey('course.id', name='fk_trialtopics_course_id'))
 
 
 class TimeTask(db.Model):

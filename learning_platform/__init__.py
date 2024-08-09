@@ -10,7 +10,7 @@ from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_pymongo import PyMongo
 from flask_wtf.csrf import CSRFProtect
-import os, sys, redis
+import os, sys
 from learning_platform.google_translations import get_locale
 
 
@@ -43,7 +43,7 @@ app.config["MONGO_URI"] = 'mongodb+srv://alhassanmumin8:Mumin2121@cluster0.tmjnu
 mongo = PyMongo(app)
 
 
-r = redis.StrictRedis(host='localhost', port=6379, db=0)
+# r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 
 # for encryption of password

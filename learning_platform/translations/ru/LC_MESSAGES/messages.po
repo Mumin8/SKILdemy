@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-03 12:24+0000\n"
+"POT-Creation-Date: 2024-08-07 00:57+0000\n"
 "PO-Revision-Date: 2024-05-24 04:46+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -19,13 +19,49 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
+#: forms/form.py:58
+msgid "Full name"
+msgstr "полное имя"
+
+#: forms/form.py:59
+msgid "This name will appear on your certificate when you enroll in a course"
+msgstr "Это имя появится в вашем сертификате, когда вы запишетесь на курс."
+
+#: forms/form.py:60
+msgid "username"
+msgstr ""
+
+#: forms/form.py:62
+msgid "Email"
+msgstr "Электронная почта"
+
+#: forms/form.py:63
+msgid "Password"
+msgstr "пароль"
+
+#: forms/form.py:65
+msgid "Passwords must match"
+msgstr "Пароли должны совпадать"
+
+#: forms/form.py:66
+msgid "Repeat Password"
+msgstr "Повторить пароль"
+
+#: forms/form.py:69 templates/home/home.html:39 templates/user/register.html:32
+msgid "Register"
+msgstr "Регистрация"
+
+#: forms/form.py:73
+msgid "This username is already taken"
+msgstr "Это имя пользователя уже занято"
+
+#: forms/form.py:77
+msgid "This email is already taken"
+msgstr "Этот адрес электронной почты уже занят"
+
 #: templates/home/home.html:24
 msgid "Dashboard"
 msgstr "Приборная панель"
-
-#: templates/home/home.html:39
-msgid "Register"
-msgstr "Регистрация"
 
 #: templates/home/home.html:46 templates/user/login.html:14
 msgid "login"
@@ -42,6 +78,31 @@ msgstr "нажмите на курс для получения дополнит�
 #: templates/home/home.html:106
 msgid "Enroll now"
 msgstr "Записаться сейчас"
+
+#: templates/payment/payment.html:17
+#, fuzzy
+msgid "You are about to make a payment to enroll in"
+msgstr "Вы собираетесь совершить платеж, чтобы записаться в"
+
+#: templates/payment/payment.html:29
+msgid "click here to proceed to payment page"
+msgstr "нажмите здесь, чтобы перейти на страницу оплаты"
+
+#: templates/payment/success.html:16
+msgid "Thank you for choosing SKILdemy"
+msgstr "Спасибо, что выбрали SKILdemy"
+
+#: templates/payment/success.html:17
+msgid "You can now access the course content"
+msgstr "Теперь вы можете получить доступ к содержанию курса"
+
+#: templates/payment/unsuccessful.html:16
+msgid "payment is unsuccessful"
+msgstr "оплата не прошла"
+
+#: templates/payment/unsuccessful.html:17
+msgid "Verify your details or contact paystack"
+msgstr "Проверьте свои данные или свяжитесь с paystack"
 
 #: templates/user/certificate.html:7
 msgid "certificate"
@@ -183,73 +244,91 @@ msgstr "Отправить электронное письмо"
 msgid "download"
 msgstr "скачать"
 
-#: views/home.py:23
+#: views/home.py:22
 msgid "Welcome to SKILdemy"
 msgstr "Добро пожаловать в SKILdemy"
 
-#: views/users.py:48
+#: views/users.py:61
 msgid "please login first"
 msgstr "пожалуйста, сначала войдите в систему"
 
-#: views/users.py:121
+#: views/users.py:101
 msgid "Thank you for Registering"
 msgstr "Спасибо за регистрацию"
 
-#: views/users.py:140
+#: views/users.py:120
 msgid "Happy Coding!  😊"
 msgstr "Удачного кодирования! 😊"
 
-#: views/users.py:142
+#: views/users.py:122
 msgid "Invalid Credentials"
 msgstr "Неверные учетные данные"
 
-#: views/users.py:181
+#: views/users.py:161
 msgid "Password Reset Request"
 msgstr "Запрос на сброс пароля"
 
-#: views/users.py:190
+#: views/users.py:170
 msgid "Check your email for the password reset link."
 msgstr "Проверьте свою электронную почту, чтобы получить ссылку для сброса пароля."
 
-#: views/users.py:193
+#: views/users.py:173
 msgid "Email not found"
 msgstr "Электронная почта не найдена"
 
-#: views/users.py:211
+#: views/users.py:191
 msgid "successfully reset password"
 msgstr "успешно сбросить пароль"
 
-#: views/users.py:237
+#: views/users.py:215
 msgid "You have successfully enrolled in"
 msgstr "Вы успешно поступили в"
 
-#: views/users.py:244
+#: views/users.py:219
+msgid "You have successfully updated your course"
+msgstr "Вы успешно обновили свой курс"
+
+#: views/users.py:234
 msgid "unsuccessful, please check your details or contact SKILdemy support"
 msgstr ""
 "не удалось, пожалуйста, проверьте свои данные или свяжитесь со службой "
 "поддержки SKILdemy"
 
-#: views/users.py:320
+#: views/users.py:286
+msgid "Please your time period to access this course has elapsed"
+msgstr "Пожалуйста, срок вашего доступа к этому курсу истек."
+
+#: views/users.py:289
+msgid "You can enroll again if you feel you still have more topics to cover"
+msgstr ""
+"Вы можете записаться еще раз, если почувствуете, что у вас еще есть темы "
+"для изучения"
+
+#: views/users.py:322
 msgid "successfully requested for solution"
 msgstr "успешно запросил решение"
 
-#: views/users.py:394
+#: views/users.py:396
 msgid "You can request for the solution"
 msgstr "Вы можете запросить решение"
 
-#: views/users.py:416
+#: views/users.py:418
 msgid "Already enrolled, You can still access this course"
 msgstr "Вы уже зарегистрированы, вы все еще можете получить доступ к этому курсу"
 
-#: views/users.py:419
+#: views/users.py:423
 msgid "Your time expired for this course and you are trying to enroll again"
 msgstr "Ваше время на этот курс истекло, и вы пытаетесь записаться на него снова"
 
-#: views/users.py:490
+#: views/users.py:496
 msgid "Your certificate is ready for download"
 msgstr "Ваш сертификат готов к загрузке"
 
-#: views/users.py:496
+#: views/users.py:507
 msgid "The certificate will be ready after you complete the course"
 msgstr "Сертификат будет готов после того, как вы пройдете курс."
+
+#: views/users.py:587
+msgid "Certificate has been generated in your downloads folder"
+msgstr "Сертификат был сгенерирован в вашей папке загрузок"
 

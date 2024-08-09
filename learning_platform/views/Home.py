@@ -3,7 +3,7 @@ from flask_babel import gettext
 from flask_login import current_user
 from learning_platform import db
 from learning_platform.models.models import Course
-from learning_platform._helpers import exchange_rate, time_, get_lang, auth_
+from learning_platform._helpers import exchange_rate, time_, get_lang, auth_,free_trial, encryption
 
 home_bp = Blueprint(
     'home',
@@ -18,7 +18,9 @@ def home():
     home:
         the page visited when the site is visited
     '''
-
+   
+    print(f'{encryption("tr")[:16]}')
+    
     welc = gettext('Welcome to SKILdemy')
 
     courses = Course.query.all()
@@ -55,12 +57,17 @@ def home_(course_id):
     lang = lang + '.jpg'
 
     course = Course.query.get(course_id)
-
+    
+    
     if course is not None:
+        trial = course.trial_topics
+
+        free = free_trial(trial)
 
         topics = course.topics
         return render_template(
             'home/home.html',
+            tr=free,
             topics=topics,
             course=course,
             lang=lang,

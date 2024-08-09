@@ -18,16 +18,26 @@
        <div class="row">
         <div class="collapse" id="navbarToggleExternalContent">
             <div class="bg-dark p-2">
-                <div class="" id="register"><a class="btn btn-info" href="{{ url_for('users.register') }}">Register</a></div>
+                <div class="" id="register">
+                    <a class="btn btn-info" href="{{ url_for('users.register') }}">
+                        Register
+                    </a>
+                </div>
             </div>
             <div class="bg-dark p-2">
-                <div class="" id="sign-in"><a class="btn btn-info" href="{{ url_for('users.login') }}">Login</a></div>
+                <div class="" id="sign-in">
+                    <a class="btn btn-info" href="{{ url_for('users.login') }}">
+                        Login
+                    </a>
+                </div>
               </div>
 
           </div>
           <nav class="navbar navbar-dark bg-dark">
             <div class="container-fluid">
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" 
+              aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
             </div>

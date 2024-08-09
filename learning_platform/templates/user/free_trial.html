@@ -8,15 +8,11 @@
 </head>
 <body>
   {% block main %}
-  <nav><a class="btn btn-primary" href="{{url_for('users.userprofile')}}">{{_('Home')}}</a></nav>
+  <nav><a class="btn btn-primary" href="{{url_for('home.home')}}">{{_('Home')}}</a></nav>
         <div class="container-fluid">
-            <div class="row" style="background-color: black; justify-content: center;">
+            <div class="row">
                 {% if fk %}
-                <p class="text-info text-center fs-2 btn btn-light">
-                    {{_('PROGRESS')}}: <span class="text-success" style="font-weight: bolder; height: 120px; width: 120px;
-                     border-radius: 60px; background-color: black; padding: 3px;">
-                    {{ (((page | int +1) / (lp|int + 1))*100) | int }}</span>
-                </p>
+                
                         
                 <div class="col" style="display: flex; flex-direction: column;">
                   <div>
@@ -29,30 +25,12 @@
                       </a>
                     </p>
                    
-                  </div>
-                    
-
-                    <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                      {% if page | int > fp   %}
-                   <p> <a href="{{ url_for('users.paginate', page= (page | int - 1), fp=fp, lp=lp) }}">
-                    {{_('PREVIOUS')}}
-                  </a></p>
-                   {% endif %}
-
-                   {% if lp > page | int %}
-                   <p><a href="{{ url_for('users.paginate', page=(page | int + 1), fp=fp, lp=lp) }}">
-                    {{_('NEXT')}}
-                  </a></p>
-                   {% endif %}
-                    </div>
-                    
+                  </div>  
                                 
                 </div>
-
-
                 {% elif mat %}
                 <div class="col fs-3" style="background-color: rgb(214, 255, 159);">
-                    <a class="btn btn-primary" href="{{ url_for('users.learn_skills', course_id=course_id) }}">{{_('Back')}}</a>
+                    <a class="btn btn-primary" href="{{ url_for('home.home', course_id=course_id) }}">{{_('Back')}}</a>
                     <div class="row">
                        <nav id="ai-yt">
                         <div class="col text-success">
@@ -105,15 +83,15 @@
                     </div>
                 </div>
                 {% elif path and not_time %}
-                <div style="max-width: max-content; background-color: red; align-self: center;">
-                  <video controls style="min-width: fit-content; background-color: black;" class="text-center">
+                <div class="col-md-4">
+                  <video width="640" controls>
                     <source src="{{ path }}" type="video/mp4">
                   </video>
                 </div>
 
                 {% elif path and pending %}
-                <div style="max-width: fit-content;" class="text-center">
-                  <video controls style="min-width: fit-content;">
+                <div class="col-md-4">
+                  <video controls class="col-md-12">
                     <source src="" type="video/mp4">
                   </video>
                   <div class="text-end ">

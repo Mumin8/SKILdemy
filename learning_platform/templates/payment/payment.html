@@ -14,10 +14,7 @@
 <body>
     {% block main %}
     <p class="text-light  fs-3">
-        You are about to make a payment of 
-        <span class="btn btn-success">
-            {{ _price }}
-        </span> USD to enrol in 
+        {{_('You are about to make a payment to enroll in')}} 
         <span class="btn btn-primary">
             {{c_name}}
         </span>
@@ -28,9 +25,9 @@
         
         <div class="form-submit">
           <button class="bg-dark" type="submit" onclick="payWithPaystack()">
-            <span class="btn btn-outline-success fs-3">
-                proceed payment
-            </span>
+            <a class=" fs-3">
+                {{_('click here to proceed to payment page')}}
+            </a>
         </button>
         </div>
      

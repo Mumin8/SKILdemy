@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-03 12:24+0000\n"
+"POT-Creation-Date: 2024-08-07 00:57+0000\n"
 "PO-Revision-Date: 2024-05-24 04:47+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: hi\n"
@@ -18,13 +18,49 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
+#: forms/form.py:58
+msgid "Full name"
+msgstr "पूरा नाम"
+
+#: forms/form.py:59
+msgid "This name will appear on your certificate when you enroll in a course"
+msgstr "जब आप किसी कोर्स में दाखिला लेंगे तो यह नाम आपके प्रमाणपत्र पर दिखाई देगा"
+
+#: forms/form.py:60
+msgid "username"
+msgstr ""
+
+#: forms/form.py:62
+msgid "Email"
+msgstr "ईमेल"
+
+#: forms/form.py:63
+msgid "Password"
+msgstr "पासवर्ड"
+
+#: forms/form.py:65
+msgid "Passwords must match"
+msgstr "पासवर्ड अवश्य मेल खाना चाहिए"
+
+#: forms/form.py:66
+msgid "Repeat Password"
+msgstr "पासवर्ड रीसेट"
+
+#: forms/form.py:69 templates/home/home.html:39 templates/user/register.html:32
+msgid "Register"
+msgstr "रजिस्टर करें"
+
+#: forms/form.py:73
+msgid "This username is already taken"
+msgstr "यह उपयोगकर्ता नाम पहले ही ले लिया है"
+
+#: forms/form.py:77
+msgid "This email is already taken"
+msgstr "यह ई - मेल पहले ही लिया जा चुका हैं"
+
 #: templates/home/home.html:24
 msgid "Dashboard"
 msgstr "डैशबोर्ड"
-
-#: templates/home/home.html:39
-msgid "Register"
-msgstr "रजिस्टर करें"
 
 #: templates/home/home.html:46 templates/user/login.html:14
 msgid "login"
@@ -41,6 +77,31 @@ msgstr "अधिक जानकारी के लिए पाठ्यक�
 #: templates/home/home.html:106
 msgid "Enroll now"
 msgstr "अभी नामांकन करें"
+
+#: templates/payment/payment.html:17
+#, fuzzy
+msgid "You are about to make a payment to enroll in"
+msgstr "आप नामांकन के लिए भुगतान करने वाले हैं"
+
+#: templates/payment/payment.html:29
+msgid "click here to proceed to payment page"
+msgstr "भुगतान पृष्ठ पर आगे बढ़ने के लिए यहां क्लिक करें"
+
+#: templates/payment/success.html:16
+msgid "Thank you for choosing SKILdemy"
+msgstr "SKILdemy को चुनने के लिए धन्यवाद"
+
+#: templates/payment/success.html:17
+msgid "You can now access the course content"
+msgstr "अब आप पाठ्यक्रम सामग्री तक पहुँच सकते हैं"
+
+#: templates/payment/unsuccessful.html:16
+msgid "payment is unsuccessful"
+msgstr "भुगतान असफल रहा"
+
+#: templates/payment/unsuccessful.html:17
+msgid "Verify your details or contact paystack"
+msgstr "अपना विवरण सत्यापित करें या पेस्टैक से संपर्क करें"
 
 #: templates/user/certificate.html:7
 msgid "certificate"
@@ -182,74 +243,91 @@ msgstr "ईमेल सबमिट करें"
 msgid "download"
 msgstr "डाउनलोड करें"
 
-#: views/home.py:23
+#: views/home.py:22
 msgid "Welcome to SKILdemy"
 msgstr "SKILdemy में आपका स्वागत है"
 
-#: views/users.py:48
+#: views/users.py:61
 msgid "please login first"
 msgstr "कृपया पहले लॉगिन करें"
 
-#: views/users.py:121
+#: views/users.py:101
 msgid "Thank you for Registering"
 msgstr "पंजीकरण करने के लिए धन्यवाद"
 
-#: views/users.py:140
-#, fuzzy
+#: views/users.py:120
 msgid "Happy Coding!  😊"
 msgstr "कोडिंग का आनंद लें! 😊"
 
-#: views/users.py:142
+#: views/users.py:122
 msgid "Invalid Credentials"
 msgstr "अमान्य प्रमाण-पत्र"
 
-#: views/users.py:181
+#: views/users.py:161
 msgid "Password Reset Request"
 msgstr "पासवर्ड रीसेट अनुरोध"
 
-#: views/users.py:190
+#: views/users.py:170
 msgid "Check your email for the password reset link."
 msgstr "पासवर्ड रीसेट लिंक के लिए अपना ईमेल जांचें।"
 
-#: views/users.py:193
+#: views/users.py:173
 msgid "Email not found"
 msgstr "ईमेल नहीं मिला"
 
-#: views/users.py:211
+#: views/users.py:191
 msgid "successfully reset password"
-msgstr ""
+msgstr "पासवर्ड सफलतापूर्वक रीसेट करें"
 
-#: views/users.py:237
+#: views/users.py:215
 msgid "You have successfully enrolled in"
 msgstr "पासवर्ड सफलतापूर्वक रीसेट करें"
 
-#: views/users.py:244
+#: views/users.py:219
+msgid "You have successfully updated your course"
+msgstr "आपने अपना पाठ्यक्रम सफलतापूर्वक अपडेट कर लिया है"
+
+#: views/users.py:234
 msgid "unsuccessful, please check your details or contact SKILdemy support"
 msgstr "असफल, कृपया अपने विवरण की जाँच करें या SKILdemy समर्थन से संपर्क करें"
 
-#: views/users.py:320
+#: views/users.py:286
+msgid "Please your time period to access this course has elapsed"
+msgstr "Please your time period to access this course has elapsed"
+
+#: views/users.py:289
+msgid "You can enroll again if you feel you still have more topics to cover"
+msgstr ""
+"यदि आपको लगता है कि आपको अभी और विषय कवर करने हैं तो आप पुनः नामांकन करा "
+"सकते हैं"
+
+#: views/users.py:322
 msgid "successfully requested for solution"
 msgstr "समाधान हेतु सफलतापूर्वक अनुरोध किया गया"
 
-#: views/users.py:394
+#: views/users.py:396
 msgid "You can request for the solution"
 msgstr "आप समाधान के लिए अनुरोध कर सकते हैं"
 
-#: views/users.py:416
+#: views/users.py:418
 msgid "Already enrolled, You can still access this course"
 msgstr "पहले से नामांकित, आप अभी भी इस पाठ्यक्रम तक पहुँच सकते हैं"
 
-#: views/users.py:419
+#: views/users.py:423
 msgid "Your time expired for this course and you are trying to enroll again"
 msgstr ""
 "इस कोर्स के लिए आपका समय समाप्त हो गया है और आप फिर से नामांकन करने का "
 "प्रयास कर रहे हैं"
 
-#: views/users.py:490
+#: views/users.py:496
 msgid "Your certificate is ready for download"
 msgstr "आपका प्रमाणपत्र डाउनलोड के लिए तैयार है"
 
-#: views/users.py:496
+#: views/users.py:507
 msgid "The certificate will be ready after you complete the course"
 msgstr "कोर्स पूरा होने के बाद प्रमाणपत्र तैयार हो जाएगा"
+
+#: views/users.py:587
+msgid "Certificate has been generated in your downloads folder"
+msgstr "आपके डाउनलोड फ़ोल्डर में प्रमाणपत्र तैयार कर दिया गया है"
 

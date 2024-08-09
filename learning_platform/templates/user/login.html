@@ -22,7 +22,7 @@
   {{ form.csrf_token }}
   <div class="bg-dark-subtle p-4 mt-3 text-primary fs-3"> 
     {{ render_field(form.email, class="form-control fs-4", placeholder="email@example.com") }}
-    {{ render_field(form.password, class="form-control fs-4", placeholder="password...") }}
+    {{ render_field(form.password, class="form-control fs-4", placeholder="******") }}
   </div>
   <p class="text-center m-3"><input type=submit value="{{_('Login')}}" class="btn btn-primary btn-lg"></p>
   

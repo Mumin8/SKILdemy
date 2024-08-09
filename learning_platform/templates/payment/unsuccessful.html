@@ -13,9 +13,8 @@
 <body>
 
     {% block main %}
-    <p class="text-success">payment is unsuccessful</p>
-    <p class="text-success">{ You can contact us for refund if you think there was a technical challenge }</p>
-
+    <p class="text-success">{{_('payment is unsuccessful')}}</p>
+    <p class="text-success">{{_('Verify your details or contact paystack')}}</p>
 
     {% endblock %}
     

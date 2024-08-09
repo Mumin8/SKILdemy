@@ -1,5 +1,6 @@
 import os
 import re
+import hmac, hashlib
 import boto3
 import secrets
 import shutil
@@ -9,7 +10,7 @@ from bson.objectid import ObjectId
 from werkzeug.local import LocalProxy
 from flask import g, session, flash, redirect, url_for, request
 from flask_login import current_user
-from learning_platform import mongo, app
+from learning_platform import mongo, app, bcrypt
 from datetime import datetime, timedelta
 from moviepy.editor import (
     AudioFileClip,
@@ -29,9 +30,20 @@ my_audio_video = 'output_folder/'
 cache = {}
 
 
+
+
 def get_dict():
     return cache
 
+def encryption(stri):
+    key='secret'
+    return hmac.new(key.encode(), stri.encode(), hashlib.sha256).hexdigest()
+
+def free_trial(c):
+    l = []
+    for t in c:
+        l.append(t.name)
+    return l
 
 def get_ref():
     return secrets.token_urlsafe(50)
@@ -194,10 +206,11 @@ def s3_client():
 
 def presigned_cert_url(cert_name):
     client = s3_client()
+    cert = f'{encryption("cert")[:16]}'
     url = client.generate_presigned_url(
         ClientMethod="get_object",
-        Params={"Bucket": "skild-certs", "Key": cert_name},
-        ExpiresIn=3600)
+        Params={"Bucket": cert, "Key": cert_name},
+        ExpiresIn=1800)
     return url
 
 
@@ -205,30 +218,25 @@ def presigned_url(video_name):
     client = s3_client()
     url = client.generate_presigned_url(
         ClientMethod="get_object",
-        Params={"Bucket": os.getenv(
-            f"AWS_STORAGE_BUCKET_NAME{get_lang()}"), "Key": video_name},
+        Params={"Bucket": encryption(get_lang())[:16], "Key": video_name},
         ExpiresIn=3600)
     return url
 
 
 def upload_s3vid_languages(uploaded_file, filename, lang):
     client = s3_client()
-    client.upload_fileobj(uploaded_file, os.getenv(
-        f"AWS_STORAGE_BUCKET_NAME{lang}"), filename)
+    client.upload_fileobj(uploaded_file, encryption(lang)[:16], filename)
 
-
-# def upload_certificate(file, filename):
-#     client = s3_client()
-#     client.upload_fileobj(file, "skild-certs", filename)
 
 def upload_certificate(file, filename):
     client = s3_client()
+    cert = f'{encryption("cert")[:16]}'
     with open(file, 'rb') as file_obj:
-        client.upload_fileobj(file_obj, "skild-certs", filename)
+        client.upload_fileobj(file_obj, cert, filename)
 
 
 def get_byID(_id):
-
+    '''Gets the data by id'''
     video_ = db.ai_video_text.find_one({'_id': _id})
     return video_
 
@@ -872,3 +880,5 @@ def completed_course(course):
     if elapsed_time >= timedelta(minutes=course.duration):
         return True
     return False
+
+user_courses

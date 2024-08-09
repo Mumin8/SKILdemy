@@ -22,6 +22,7 @@ from learning_platform.google_translations import text_translator
 from learning_platform._helpers import (
     c_and_topics,
     cached,
+    free_trial,
     validate_time_task,
     get_ref,
     get_lang,
@@ -29,7 +30,7 @@ from learning_platform._helpers import (
     presigned_cert_url,
     upload_certificate,
     s3_client,
-    vid_ids,
+    encryption,
     verify_payment,
     completed_course)
 from PIL import Image, ImageDraw, ImageFont
@@ -43,8 +44,9 @@ ref = []
 
 def cert_available(key):
     s3 = s3_client()
+    cert = f'{encryption("cert")[:16]}'
     try:
-        s3.get_object(Bucket="skild-certs", Key=key) 
+        s3.get_object(Bucket=cert, Key=key)
     except ClientError as e:
         if e.response['Error']['Code'] == 'NoSuchKey':
             return False
@@ -78,6 +80,16 @@ def register_auth():
 
 @user_bp.route('/register', methods=['GET', 'POST'])
 def register():
+    l = {'en': 'This name will appear on your certificate when you enroll in a course',
+'ar': 'سيظهر هذا الاسم على شهادتك عند تسجيلك في دورة تدريبية',
+'bn': 'আপনি যখন একটি কোর্সে ভর্তি হন তখন এই নামটি আপনার শংসাপত্রে উপস্থিত হবে',
+'es': 'Este nombre aparecerá en su certificado cuando se matricule en un curso',
+'fr': 'Ce nom apparaîtra sur votre certificat lorsque vous vous inscrirez à un cours',
+'hi': 'जब आप किसी कोर्स में दाखिला लेंगे तो यह नाम आपके प्रमाणपत्र पर दिखाई देगा',
+'id': 'Nama ini akan muncul di sertifikat Anda ketika Anda mendaftar di sebuah kursus',
+'pt': 'Esse nome aparecerá em seu certificado quando você se inscrever em um curso',
+'ru': 'Это имя будет указано в вашем сертификате, когда вы запишетесь на курс',
+'ur': 'جب آپ کسی کورس میں داخلہ لیں گے تو یہ نام آپ کے سرٹیفکیٹ پر ظاہر ہوگا۔' }
     form = Registration(request.form)
     if form.validate_on_submit():
         fullname = form.fullname.data
@@ -99,7 +111,7 @@ def register():
             else:
                 flash(_("Thank you for Registering"), category='success')
         return redirect(url_for('users.register_auth'))
-    return render_template('user/register.html', form=form)
+    return render_template('user/register.html', form=form, l=l[get_lang()])
 
 
 @user_bp.route("/login", methods=['GET', 'POST'])
@@ -210,18 +222,20 @@ def enroll_course(course_id):
         price = course.price
         rate = course.rate
         if result['amount'] > rate * price * 65:
-            
+
             mes = _('You have successfully enrolled in', category='success')
             for c in current_user.enrolling:
                 if c == course:
                     c.update_enrolled_at(datetime.now())
-                    mes = _('You have successfully updated your course', category='success')
+                    mes = _(
+                        'You have successfully updated your course',
+                        category='success')
                     break
             else:
                 course.update_enrolled_at(datetime.now())
                 current_user.enrolling.append(course)
             db.session.commit()
-            
+
             flash(
                 f'{mes} {course.name}',
                 category='info')
@@ -253,10 +267,9 @@ def userprofile():
 def paginate(page, fp, lp):
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
-    
+
     fk = session.get('c')
     fv = session.get('dict')
-    
 
     return render_template(
         'user/learn_page.html',
@@ -276,14 +289,16 @@ def learn_skills(course_id):
         next_url = request.url
         return redirect(url_for('users.login', next_url=next_url))
 
-    
-
     user_c = Course.query.get(course_id)
     for c in current_user.enrolling:
         if c == user_c:
             if completed_course(c):
-                flash('Please your time period to access this course has elapsed', category='warning')
-                flash('You can enroll again if you feel you still have more topics to cover', category='info')
+                flash(
+                    _('Please your time period to access this course has elapsed'),
+                    category='warning')
+                flash(
+                    _('You can enroll again if you feel you still have more topics to cover'),
+                    category='info')
                 return redirect(url_for('users.userprofile'))
     if user_c:
         c_and_t = c_and_topics(user_c)
@@ -316,12 +331,34 @@ def request_task_solution(topic_id):
     user.time_task.append(usertask)
     db.session.commit()
     flash(_('successfully requested for solution'))
-    return 'added to time tasks'
+    return redirect(url_for('users.userprofile'))
+
+
+
+@user_bp.route('/trial/<string:course_id>/<string:topic_id>',
+               methods=['GET', 'POST'])
+def free_test(course_id, topic_id):
+    '''
+    gets and displays the reading content for the user
+    '''
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.login'))
+    
+    course = Course.query.get(course_id)
+    topic = SubTopic.query.get(topic_id).name
+    trial = free_trial(course.trial_topics)
+    if topic in trial:
+        mat, iframes = cached(course.name, topic)
+        return render_template(
+        'user/free_trial.html',
+        mat=mat,
+        path=iframes,
+        course_id=course_id,
+        topic_id=topic_id)
 
 
 @user_bp.route('/mat/<string:course_id>/<string:topic_id>',
                methods=['GET', 'POST'])
-@limiter.limit('10 per second')
 def topic_by_course(course_id, topic_id):
     '''
     gets and displays the reading content for the user
@@ -360,14 +397,16 @@ def gptplus_vid(course_id, topic_id):
     gptplus_vid:
         this will get the video here straight away
     '''
-    course = Course.query.get(course_id).name
-    topic = SubTopic.query.get(topic_id).name
-    file = f'{course}_{topic.strip("?")}.mp4'
-
     if not current_user.is_authenticated:
         return redirect(url_for('users.logn'))
+    
+    course = Course.query.get(course_id)
+    topic = SubTopic.query.get(topic_id)
+    _file = f'{course.course_creator}{topic.topic_id}{topic.name}'
 
-    status, state = validate_time_task(current_user.id, topic_id, topic)
+    file = encryption(_file) + '.mp4'
+
+    status, state = validate_time_task(current_user.id, topic_id, topic.name)
     if status and state == "Not timely":
         url = presigned_url(file)
         not_time = state
@@ -446,18 +485,6 @@ def make_payment(course_id):
         ref=ref[0])
 
 
-@user_bp.route('/yt_vid/<string:topic_id>', methods=['GET', 'POST'])
-def youtube_vids(topic_id):
-    '''
-    this will get the video related to the topic in youtube
-    '''
-    subtopic = SubTopic.query.filter_by(id=topic_id).first()
-    subtopic_videos = subtopic.youtube_videos
-    vids = vid_ids(subtopic_videos)
-
-    return render_template('user/watch_youtube_video.html', paths=vids)
-
-
 @user_bp.route('/locale', methods=['GET', 'POST'])
 def user_locale():
     '''
@@ -482,13 +509,11 @@ def cert_of_completion(course_id):
 
     cert_name = f'{current_user.id}{course_id}' + ".jpg"
 
-
     course = Course.query.get(course_id)
 
     for c in current_user.enrolling:
         if c == course:
             if completed_course(c):
-                print('Time passed')
                 flash(
                     _('Your certificate is ready for download'),
                     category='info')
@@ -496,9 +521,8 @@ def cert_of_completion(course_id):
                     'user/certificate.html', course_id=c.id, name=c.name)
             else:
                 if cert_available(cert_name):
-                    print("certificate exists but time no catch yet")
                     return render_template(
-                    'user/certificate.html', course_id=c.id, name=c.name)
+                        'user/certificate.html', course_id=c.id, name=c.name)
                 else:
                     flash(
                         _("The certificate will be ready after you complete the course"),
@@ -521,7 +545,6 @@ def download_cert(course_id):
 
     cert_name = f'{current_user.id}{course.id}' + ".jpg"
     url = presigned_cert_url(cert_name)
-
     if not cert_available(cert_name):
         source_path = os.path.join(root_path, 'static', 'certificate', src)
         dest_path = os.path.join(
@@ -557,7 +580,7 @@ def download_cert(course_id):
         os.remove(dest_path)
 
         return render_template(
-                'user/view_cert.html', dest=url, id=course_id)
+            'user/view_cert.html', dest=url, id=course_id)
 
     return render_template('user/view_cert.html', dest=url, id=course_id)
 
@@ -581,6 +604,6 @@ def download_your_cert(id):
         with open(local_file_path, 'wb') as file:
             file.write(r.content)
             flash(
-                _('Certificate generated in your downloads path'),
+                _('Certificate has been generated in your downloads folder'),
                 category="success")
     return redirect(url_for('users.userprofile'))

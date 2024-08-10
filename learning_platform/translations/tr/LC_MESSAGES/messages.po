@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-07 00:57+0000\n"
+"POT-Creation-Date: 2024-08-09 23:59+0000\n"
 "PO-Revision-Date: 2024-05-24 04:46+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: tr\n"
@@ -18,43 +18,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
-#: forms/form.py:58
-msgid "Full name"
-msgstr "Ad Soyad"
-
-#: forms/form.py:59
-msgid "This name will appear on your certificate when you enroll in a course"
-msgstr "Bu ad, bir kursa kaydolduğunuzda sertifikanızda görünecektir"
-
-#: forms/form.py:60
-msgid "username"
-msgstr ""
-
-#: forms/form.py:62
-msgid "Email"
-msgstr "E-posta"
-
-#: forms/form.py:63
-msgid "Password"
-msgstr "Şifre"
-
-#: forms/form.py:65
+#: forms/form.py:64
 msgid "Passwords must match"
 msgstr "Şifreler aynı olmalıdır"
 
-#: forms/form.py:66
-msgid "Repeat Password"
-msgstr "Şifreyi Tekrarla"
-
-#: forms/form.py:69 templates/home/home.html:39 templates/user/register.html:32
+#: forms/form.py:68 templates/home/home.html:39 templates/user/register.html:32
 msgid "Register"
 msgstr "Kayıt Ol"
 
-#: forms/form.py:73
+#: forms/form.py:72
 msgid "This username is already taken"
 msgstr "Bu kullanıcı adı zaten alınmış"
 
-#: forms/form.py:77
+#: forms/form.py:76
 msgid "This email is already taken"
 msgstr "Bu e-posta zaten alınmış"
 
@@ -70,11 +46,15 @@ msgstr "giriş"
 msgid "course content"
 msgstr "kurs içeriği"
 
-#: templates/home/home.html:95
+#: templates/home/home.html:82
+msgid "Try this for free"
+msgstr ""
+
+#: templates/home/home.html:104
 msgid "click on course for more information"
 msgstr "daha fazla bilgi için kursa tıklayın"
 
-#: templates/home/home.html:106
+#: templates/home/home.html:115
 msgid "Enroll now"
 msgstr "Şimdi kaydolun"
 
@@ -115,9 +95,34 @@ msgstr "Tebrikler"
 msgid "proceed for certificate"
 msgstr "sertifika için ilerleyin"
 
-#: templates/user/learn_page.html:11 templates/user/profile.html:21
+#: templates/user/free_trial.html:11 templates/user/learn_page.html:11
+#: templates/user/profile.html:21
 msgid "Home"
 msgstr "Ana Sayfa"
+
+#: templates/user/free_trial.html:33 templates/user/learn_page.html:55
+msgid "Back"
+msgstr "Geri"
+
+#: templates/user/free_trial.html:39 templates/user/learn_page.html:61
+msgid "SKILdemy guide"
+msgstr "SKILdemy kılavuzu"
+
+#: templates/user/free_trial.html:44 templates/user/learn_page.html:66
+msgid "Suggested Videos"
+msgstr "Önerilen Videolar"
+
+#: templates/user/free_trial.html:99 templates/user/learn_page.html:121
+msgid "Cancel Request"
+msgstr "Talebi İptal Et"
+
+#: templates/user/free_trial.html:106 templates/user/learn_page.html:128
+msgid "keep learning while we prepare the answers for you"
+msgstr "Cevapları sizin için hazırlarken öğrenmeye devam edin"
+
+#: templates/user/free_trial.html:116 templates/user/learn_page.html:138
+msgid "Request Solution"
+msgstr "Çözüm talebinde bulunabilirsiniz"
 
 #: templates/user/learn_page.html:16
 msgid "PROGRESS"
@@ -130,30 +135,6 @@ msgstr "ÖNCEKİ"
 #: templates/user/learn_page.html:44
 msgid "NEXT"
 msgstr "SONRAKİ"
-
-#: templates/user/learn_page.html:55
-msgid "Back"
-msgstr "Geri"
-
-#: templates/user/learn_page.html:61
-msgid "SKILdemy guide"
-msgstr "SKILdemy kılavuzu"
-
-#: templates/user/learn_page.html:66
-msgid "Suggested Videos"
-msgstr "Önerilen Videolar"
-
-#: templates/user/learn_page.html:121
-msgid "Cancel Request"
-msgstr "Talebi İptal Et"
-
-#: templates/user/learn_page.html:128
-msgid "keep learning while we prepare the answers for you"
-msgstr "Cevapları sizin için hazırlarken öğrenmeye devam edin"
-
-#: templates/user/learn_page.html:138
-msgid "Request Solution"
-msgstr "Çözüm talebinde bulunabilirsiniz"
 
 #: templates/user/locale.html:20
 msgid "Choose a language:"
@@ -243,91 +224,91 @@ msgstr "e-postayı gönder"
 msgid "download"
 msgstr "indir"
 
-#: views/home.py:22
+#: views/home.py:24
 msgid "Welcome to SKILdemy"
 msgstr "SKILdemy'ye hoş geldiniz"
 
-#: views/users.py:61
+#: views/users.py:63
 msgid "please login first"
 msgstr "lütfen önce giriş yapın"
 
-#: views/users.py:101
+#: views/users.py:112
 msgid "Thank you for Registering"
 msgstr "Kayıt olduğunuz için teşekkürler"
 
-#: views/users.py:120
+#: views/users.py:131
 msgid "Happy Coding!  😊"
 msgstr "Mutlu Kodlamalar!  😊"
 
-#: views/users.py:122
+#: views/users.py:133
 msgid "Invalid Credentials"
 msgstr "Geçersiz Kimlik Bilgileri"
 
-#: views/users.py:161
+#: views/users.py:172
 msgid "Password Reset Request"
 msgstr "Şifre Sıfırlama İsteği"
 
-#: views/users.py:170
+#: views/users.py:181
 msgid "Check your email for the password reset link."
 msgstr "Şifre sıfırlama bağlantısı için e-postanızı kontrol edin."
 
-#: views/users.py:173
+#: views/users.py:184
 msgid "Email not found"
 msgstr "E-posta bulunamadı"
 
-#: views/users.py:191
+#: views/users.py:202
 msgid "successfully reset password"
 msgstr "başarıyla şifre sıfırlama"
 
-#: views/users.py:215
+#: views/users.py:226
 msgid "You have successfully enrolled in"
 msgstr "Başarıyla kayıt oldunuz"
 
-#: views/users.py:219
+#: views/users.py:230
 msgid "You have successfully updated your course"
 msgstr "Kursunuzu başarıyla güncellediniz"
 
-#: views/users.py:234
+#: views/users.py:245
 msgid "unsuccessful, please check your details or contact SKILdemy support"
 msgstr ""
 "başarısız, lütfen bilgilerinizi kontrol edin veya SKILdemy destek ile "
 "iletişime geçin"
 
-#: views/users.py:286
+#: views/users.py:297
 msgid "Please your time period to access this course has elapsed"
 msgstr "Lütfen bu kursa erişim süreniz doldu"
 
-#: views/users.py:289
+#: views/users.py:300
 msgid "You can enroll again if you feel you still have more topics to cover"
 msgstr ""
 "Hala ele almanız gereken daha fazla konu olduğunu düşünüyorsanız tekrar "
 "kayıt olabilirsiniz"
 
-#: views/users.py:322
+#: views/users.py:333
 msgid "successfully requested for solution"
 msgstr "Başarıyla çözüm talebinde bulundunuz"
 
-#: views/users.py:396
+#: views/users.py:432
 msgid "You can request for the solution"
 msgstr "Çözüm talebinde bulunabilirsiniz"
 
-#: views/users.py:418
+#: views/users.py:454
 msgid "Already enrolled, You can still access this course"
 msgstr "Zaten kayıtlısınız, giriş yapın ve öğrenmeye başlayın"
 
-#: views/users.py:423
+#: views/users.py:459
 msgid "Your time expired for this course and you are trying to enroll again"
 msgstr "Bu kurs için süreniz doldu ve tekrar kaydolmaya çalışıyorsunu"
 
-#: views/users.py:496
+#: views/users.py:519
 msgid "Your certificate is ready for download"
 msgstr "Sertifikanız indirmeye hazır"
 
-#: views/users.py:507
+#: views/users.py:529
 msgid "The certificate will be ready after you complete the course"
 msgstr "Sertifika kursu tamamladıktan sonra hazır olacak"
 
-#: views/users.py:587
+#: views/users.py:608
 msgid "Certificate has been generated in your downloads folder"
 msgstr "İndirilenler klasörünüzde sertifika oluşturuldu"
 

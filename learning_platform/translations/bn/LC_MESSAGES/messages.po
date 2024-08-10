@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-07 00:57+0000\n"
+"POT-Creation-Date: 2024-08-09 23:59+0000\n"
 "PO-Revision-Date: 2024-05-24 05:02+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: bn\n"
@@ -18,43 +18,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
-#: forms/form.py:58
-msgid "Full name"
-msgstr "পুরো নাম"
-
-#: forms/form.py:59
-msgid "This name will appear on your certificate when you enroll in a course"
-msgstr "আপনি যখন একটি কোর্সে ভর্তি হন তখন এই নামটি আপনার শংসাপত্রে উপস্থিত হবে"
-
-#: forms/form.py:60
-msgid "username"
-msgstr ""
-
-#: forms/form.py:62
-msgid "Email"
-msgstr "ইমেইল"
-
-#: forms/form.py:63
-msgid "Password"
-msgstr "পাসওয়ার্ড"
-
-#: forms/form.py:65
+#: forms/form.py:64
 msgid "Passwords must match"
 msgstr "পাসওয়ার্ড অবশ্যই মিলবে"
 
-#: forms/form.py:66
-msgid "Repeat Password"
-msgstr "পুনরাবৃত্তি পাসওয়ার্ড"
-
-#: forms/form.py:69 templates/home/home.html:39 templates/user/register.html:32
+#: forms/form.py:68 templates/home/home.html:39 templates/user/register.html:32
 msgid "Register"
 msgstr "নিবন্ধন"
 
-#: forms/form.py:73
+#: forms/form.py:72
 msgid "This username is already taken"
 msgstr "এই ব্যবহারকারীর নাম ইতিমধ্যে নেওয়া হয়েছে"
 
-#: forms/form.py:77
+#: forms/form.py:76
 msgid "This email is already taken"
 msgstr "এই ইমেল ইতিমধ্যে নেওয়া হয়েছে"
 
@@ -70,11 +46,15 @@ msgstr "প্রবেশ করুন"
 msgid "course content"
 msgstr "কোর্স কন্টেন্ট"
 
-#: templates/home/home.html:95
+#: templates/home/home.html:82
+msgid "Try this for free"
+msgstr ""
+
+#: templates/home/home.html:104
 msgid "click on course for more information"
 msgstr "আরও তথ্যের জন্য কোর্সে ক্লিক করুন"
 
-#: templates/home/home.html:106
+#: templates/home/home.html:115
 msgid "Enroll now"
 msgstr "এখন নথিভুক্ত করুন"
 
@@ -115,9 +95,34 @@ msgstr "অভিনন্দন"
 msgid "proceed for certificate"
 msgstr "শংসাপত্রের জন্য এগিয়ে যান"
 
-#: templates/user/learn_page.html:11 templates/user/profile.html:21
+#: templates/user/free_trial.html:11 templates/user/learn_page.html:11
+#: templates/user/profile.html:21
 msgid "Home"
 msgstr "মূল পাতা"
+
+#: templates/user/free_trial.html:33 templates/user/learn_page.html:55
+msgid "Back"
+msgstr "পিছনে"
+
+#: templates/user/free_trial.html:39 templates/user/learn_page.html:61
+msgid "SKILdemy guide"
+msgstr "SKILdemy গাইড"
+
+#: templates/user/free_trial.html:44 templates/user/learn_page.html:66
+msgid "Suggested Videos"
+msgstr "প্রস্তাবিত ভিডিও"
+
+#: templates/user/free_trial.html:99 templates/user/learn_page.html:121
+msgid "Cancel Request"
+msgstr "অনুরোধ বাতিল করুন"
+
+#: templates/user/free_trial.html:106 templates/user/learn_page.html:128
+msgid "keep learning while we prepare the answers for you"
+msgstr "আমরা আপনার জন্য উত্তর প্রস্তুত করার সময় শিখতে থাকুন"
+
+#: templates/user/free_trial.html:116 templates/user/learn_page.html:138
+msgid "Request Solution"
+msgstr "সমাধানের অনুরোধ"
 
 #: templates/user/learn_page.html:16
 msgid "PROGRESS"
@@ -130,30 +135,6 @@ msgstr "পূর্ববর্তী"
 #: templates/user/learn_page.html:44
 msgid "NEXT"
 msgstr "পরবর্তী"
-
-#: templates/user/learn_page.html:55
-msgid "Back"
-msgstr "পিছনে"
-
-#: templates/user/learn_page.html:61
-msgid "SKILdemy guide"
-msgstr "SKILdemy গাইড"
-
-#: templates/user/learn_page.html:66
-msgid "Suggested Videos"
-msgstr "প্রস্তাবিত ভিডিও"
-
-#: templates/user/learn_page.html:121
-msgid "Cancel Request"
-msgstr "অনুরোধ বাতিল করুন"
-
-#: templates/user/learn_page.html:128
-msgid "keep learning while we prepare the answers for you"
-msgstr "আমরা আপনার জন্য উত্তর প্রস্তুত করার সময় শিখতে থাকুন"
-
-#: templates/user/learn_page.html:138
-msgid "Request Solution"
-msgstr "সমাধানের অনুরোধ"
 
 #: templates/user/locale.html:20
 msgid "Choose a language:"
@@ -243,93 +224,93 @@ msgstr "ইমেইল পাঠান"
 msgid "download"
 msgstr "ডাউনলোড"
 
-#: views/home.py:22
+#: views/home.py:24
 msgid "Welcome to SKILdemy"
 msgstr "SKILdemy এ স্বাগতম"
 
-#: views/users.py:61
+#: views/users.py:63
 msgid "please login first"
 msgstr "দয়া করে প্রথমে লগ ইন করুন"
 
-#: views/users.py:101
+#: views/users.py:112
 msgid "Thank you for Registering"
 msgstr "নিবন্ধন করার জন্য আপনাকে ধন্যবাদ"
 
-#: views/users.py:120
+#: views/users.py:131
 msgid "Happy Coding!  😊"
 msgstr "শুভ কোডিং! 😊"
 
-#: views/users.py:122
+#: views/users.py:133
 msgid "Invalid Credentials"
 msgstr "অবৈধ পরিচয়পত্র"
 
-#: views/users.py:161
+#: views/users.py:172
 msgid "Password Reset Request"
 msgstr "পাসওয়ার্ড রিসেট অনুরোধ"
 
-#: views/users.py:170
+#: views/users.py:181
 msgid "Check your email for the password reset link."
 msgstr "পাসওয়ার্ড রিসেট লিঙ্কের জন্য আপনার ইমেল চেক করুন."
 
-#: views/users.py:173
+#: views/users.py:184
 msgid "Email not found"
 msgstr "ইমেইল পাওয়া যায়নি"
 
-#: views/users.py:191
+#: views/users.py:202
 msgid "successfully reset password"
 msgstr "পাসওয়ার্ড সফলভাবে রিসেট করা হয়েছে"
 
-#: views/users.py:215
+#: views/users.py:226
 msgid "You have successfully enrolled in"
 msgstr "আপনি সফলভাবে ভর্তি হয়েছেন"
 
-#: views/users.py:219
+#: views/users.py:230
 msgid "You have successfully updated your course"
 msgstr "আপনি সফলভাবে আপনার কোর্স পুনর্নবীকরণ করেছেন"
 
-#: views/users.py:234
+#: views/users.py:245
 msgid "unsuccessful, please check your details or contact SKILdemy support"
 msgstr ""
 "অসফল, অনুগ্রহ করে আপনার বিশদ বিবরণ পরীক্ষা করুন বা SKILdemy সহায়তার সাথে"
 " যোগাযোগ করুন"
 
-#: views/users.py:286
+#: views/users.py:297
 msgid "Please your time period to access this course has elapsed"
 msgstr "এই কোর্সটি অ্যাক্সেস করার জন্য আপনার সময়কাল অতিবাহিত হয়েছে"
 
-#: views/users.py:289
+#: views/users.py:300
 msgid "You can enroll again if you feel you still have more topics to cover"
 msgstr ""
 "আপনি আবার নথিভুক্ত করতে পারেন যদি আপনি মনে করেন আপনার এখনও কভার করার জন্য"
 " আরও বিষয় আছে"
 
-#: views/users.py:322
+#: views/users.py:333
 msgid "successfully requested for solution"
 msgstr "সমাধানের জন্য সফলভাবে অনুরোধ করা হয়েছে"
 
-#: views/users.py:396
+#: views/users.py:432
 msgid "You can request for the solution"
 msgstr "আপনি সমাধানের জন্য অনুরোধ করতে পারেন"
 
-#: views/users.py:418
+#: views/users.py:454
 msgid "Already enrolled, You can still access this course"
 msgstr "ইতিমধ্যে নথিভুক্ত, আপনি এখনও এই কোর্স অ্যাক্সেস করতে পারেন"
 
-#: views/users.py:423
+#: views/users.py:459
 msgid "Your time expired for this course and you are trying to enroll again"
 msgstr ""
 "এই কোর্সের জন্য আপনার সময় শেষ হয়ে গেছে এবং আপনি আবার নথিভুক্ত করার "
 "চেষ্টা করছেন"
 
-#: views/users.py:496
+#: views/users.py:519
 msgid "Your certificate is ready for download"
 msgstr "আপনার শংসাপত্র ডাউনলোডের জন্য প্রস্তুত"
 
-#: views/users.py:507
+#: views/users.py:529
 msgid "The certificate will be ready after you complete the course"
 msgstr "আপনি কোর্স শেষ করার পরে সার্টিফিকেট প্রস্তুত হবে"
 
-#: views/users.py:587
+#: views/users.py:608
 msgid "Certificate has been generated in your downloads folder"
 msgstr "আপনার ডাউনলোড ফোল্ডারে সার্টিফিকেট তৈরি করা হয়েছে"
 

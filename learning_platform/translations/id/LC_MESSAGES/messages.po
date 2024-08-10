@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-07 00:57+0000\n"
+"POT-Creation-Date: 2024-08-09 23:59+0000\n"
 "PO-Revision-Date: 2024-05-24 04:47+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: id\n"
@@ -18,43 +18,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
-#: forms/form.py:58
-msgid "Full name"
-msgstr "nama lengkap"
-
-#: forms/form.py:59
-msgid "This name will appear on your certificate when you enroll in a course"
-msgstr "Nama ini akan muncul di sertifikat Anda saat Anda mendaftar di kursus"
-
-#: forms/form.py:60
-msgid "username"
-msgstr ""
-
-#: forms/form.py:62
-msgid "Email"
-msgstr "Email"
-
-#: forms/form.py:63
-msgid "Password"
-msgstr "Kata sandi"
-
-#: forms/form.py:65
+#: forms/form.py:64
 msgid "Passwords must match"
 msgstr "Kata sandi harus cocok"
 
-#: forms/form.py:66
-msgid "Repeat Password"
-msgstr "Ulangi Kata Sandi"
-
-#: forms/form.py:69 templates/home/home.html:39 templates/user/register.html:32
+#: forms/form.py:68 templates/home/home.html:39 templates/user/register.html:32
 msgid "Register"
 msgstr "Daftar"
 
-#: forms/form.py:73
+#: forms/form.py:72
 msgid "This username is already taken"
 msgstr "Nama pengguna ini sudah digunakan"
 
-#: forms/form.py:77
+#: forms/form.py:76
 msgid "This email is already taken"
 msgstr "Email ini sudah diambil"
 
@@ -70,11 +46,15 @@ msgstr "Masuk"
 msgid "course content"
 msgstr "Konten kursus"
 
-#: templates/home/home.html:95
+#: templates/home/home.html:82
+msgid "Try this for free"
+msgstr ""
+
+#: templates/home/home.html:104
 msgid "click on course for more information"
 msgstr "klik kursus untuk informasi lebih lanjut"
 
-#: templates/home/home.html:106
+#: templates/home/home.html:115
 msgid "Enroll now"
 msgstr "Daftar sekarang"
 
@@ -115,9 +95,34 @@ msgstr "selamat"
 msgid "proceed for certificate"
 msgstr "lanjutkan untuk mendapatkan sertifikat"
 
-#: templates/user/learn_page.html:11 templates/user/profile.html:21
+#: templates/user/free_trial.html:11 templates/user/learn_page.html:11
+#: templates/user/profile.html:21
 msgid "Home"
 msgstr "Halaman beranda"
+
+#: templates/user/free_trial.html:33 templates/user/learn_page.html:55
+msgid "Back"
+msgstr "Kembali"
+
+#: templates/user/free_trial.html:39 templates/user/learn_page.html:61
+msgid "SKILdemy guide"
+msgstr "Panduan SKILdemy"
+
+#: templates/user/free_trial.html:44 templates/user/learn_page.html:66
+msgid "Suggested Videos"
+msgstr "Video yang Disarankan"
+
+#: templates/user/free_trial.html:99 templates/user/learn_page.html:121
+msgid "Cancel Request"
+msgstr "Batalkan Permintaan"
+
+#: templates/user/free_trial.html:106 templates/user/learn_page.html:128
+msgid "keep learning while we prepare the answers for you"
+msgstr "Teruslah belajar sementara kami menyiapkan jawaban untuk Anda."
+
+#: templates/user/free_trial.html:116 templates/user/learn_page.html:138
+msgid "Request Solution"
+msgstr "Minta solusi"
 
 #: templates/user/learn_page.html:16
 msgid "PROGRESS"
@@ -130,30 +135,6 @@ msgstr "SEBELUMNYA"
 #: templates/user/learn_page.html:44
 msgid "NEXT"
 msgstr "BERIKUTNYA"
-
-#: templates/user/learn_page.html:55
-msgid "Back"
-msgstr "Kembali"
-
-#: templates/user/learn_page.html:61
-msgid "SKILdemy guide"
-msgstr "Panduan SKILdemy"
-
-#: templates/user/learn_page.html:66
-msgid "Suggested Videos"
-msgstr "Video yang Disarankan"
-
-#: templates/user/learn_page.html:121
-msgid "Cancel Request"
-msgstr "Batalkan Permintaan"
-
-#: templates/user/learn_page.html:128
-msgid "keep learning while we prepare the answers for you"
-msgstr "Teruslah belajar sementara kami menyiapkan jawaban untuk Anda."
-
-#: templates/user/learn_page.html:138
-msgid "Request Solution"
-msgstr "Minta solusi"
 
 #: templates/user/locale.html:20
 msgid "Choose a language:"
@@ -243,89 +224,89 @@ msgstr "kirim email"
 msgid "download"
 msgstr "unduh"
 
-#: views/home.py:22
+#: views/home.py:24
 msgid "Welcome to SKILdemy"
 msgstr "Selamat datang di SKILdemy"
 
-#: views/users.py:61
+#: views/users.py:63
 msgid "please login first"
 msgstr "silakan masuk terlebih dahulu"
 
-#: views/users.py:101
+#: views/users.py:112
 msgid "Thank you for Registering"
 msgstr "Terima kasih telah mendaftar"
 
-#: views/users.py:120
+#: views/users.py:131
 msgid "Happy Coding!  😊"
 msgstr "Selamat Coding! 😊"
 
-#: views/users.py:122
+#: views/users.py:133
 msgid "Invalid Credentials"
 msgstr "Kredensial Tidak Valid"
 
-#: views/users.py:161
+#: views/users.py:172
 msgid "Password Reset Request"
 msgstr "permintaan pengaturan ulang kata sandi"
 
-#: views/users.py:170
+#: views/users.py:181
 msgid "Check your email for the password reset link."
 msgstr "Periksa email Anda untuk tautan pengaturan ulang kata sandi."
 
-#: views/users.py:173
+#: views/users.py:184
 msgid "Email not found"
 msgstr "Email tidak ditemukan"
 
-#: views/users.py:191
+#: views/users.py:202
 msgid "successfully reset password"
 msgstr "berhasil mengatur ulang kata sandi"
 
-#: views/users.py:215
+#: views/users.py:226
 msgid "You have successfully enrolled in"
 msgstr "Anda telah berhasil mendaftar di"
 
-#: views/users.py:219
+#: views/users.py:230
 msgid "You have successfully updated your course"
 msgstr "Anda telah berhasil memperbarui kursus Anda"
 
-#: views/users.py:234
+#: views/users.py:245
 msgid "unsuccessful, please check your details or contact SKILdemy support"
 msgstr "tidak berhasil, silakan periksa detail Anda atau hubungi dukungan SKILdemy"
 
-#: views/users.py:286
+#: views/users.py:297
 msgid "Please your time period to access this course has elapsed"
 msgstr "Harap waktu Anda untuk mengakses kursus ini telah habis"
 
-#: views/users.py:289
+#: views/users.py:300
 msgid "You can enroll again if you feel you still have more topics to cover"
 msgstr ""
 "Anda dapat mendaftar lagi jika Anda merasa masih memiliki lebih banyak "
 "topik untuk dibahas"
 
-#: views/users.py:322
+#: views/users.py:333
 msgid "successfully requested for solution"
 msgstr "berhasil meminta solusi"
 
-#: views/users.py:396
+#: views/users.py:432
 msgid "You can request for the solution"
 msgstr "Anda dapat meminta solusi"
 
-#: views/users.py:418
+#: views/users.py:454
 msgid "Already enrolled, You can still access this course"
 msgstr "Anda sudah terdaftar, Anda masih dapat mengakses kursus ini"
 
-#: views/users.py:423
+#: views/users.py:459
 msgid "Your time expired for this course and you are trying to enroll again"
 msgstr "Waktu Anda telah habis untuk kursus ini dan Anda mencoba mendaftar lagi"
 
-#: views/users.py:496
+#: views/users.py:519
 msgid "Your certificate is ready for download"
 msgstr "Sertifikat Anda siap untuk diunduh"
 
-#: views/users.py:507
+#: views/users.py:529
 msgid "The certificate will be ready after you complete the course"
 msgstr "Sertifikat akan siap setelah Anda menyelesaikan kursus"
 
-#: views/users.py:587
+#: views/users.py:608
 msgid "Certificate has been generated in your downloads folder"
 msgstr "Sertifikat telah dibuat di folder unduhan Anda"
 

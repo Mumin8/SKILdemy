@@ -409,6 +409,7 @@ def gptplus_vid(course_id, topic_id):
     status, state = validate_time_task(current_user.id, topic_id, topic.name)
     if status and state == "Not timely":
         url = presigned_url(file)
+        
         not_time = state
         return render_template(
             'user/learn_page.html',

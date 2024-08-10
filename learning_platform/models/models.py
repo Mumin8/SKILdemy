@@ -145,7 +145,7 @@ class SubTopic(db.Model):
     desc = db.Column(db.String(250), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     topic_id = db.Column(db.String(36), db.ForeignKey('topic.id'))
-    course_id = db.Column(db.String(36), db.ForeignKey('course.id', name='fk_trialtopics_course_id'))
+    course_id = db.Column(db.String(36), db.ForeignKey('course.id'))
 
 
 class TimeTask(db.Model):

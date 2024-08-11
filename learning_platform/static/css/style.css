@@ -148,6 +148,7 @@ footer{
 }
 
 /* the certificate design */
+
 @media (max-width: 768px) {
     .size img{
     width: 768px;
@@ -169,6 +170,7 @@ footer{
     }
 }
 
+
 @media (max-width: 390px) {
     .size img{
     width: 390px;
@@ -182,7 +184,6 @@ footer{
     height: auto;
     }
 }
-
 
 @media (max-width: 334px) {
     .size img{

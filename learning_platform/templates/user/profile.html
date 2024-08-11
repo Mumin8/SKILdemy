@@ -35,14 +35,17 @@
               {{_('My courses')}}
             </p>
             {% for c in user_courses %}
-            <div class="profile-info m-3 ">
+            <div class="profile-info m-3 "> 
               <div class="btn btn-info">
-                <a href="{{ url_for('users.learn_skills', course_id=c.id) }}">
-                   {{ c.name }} 
+                <a href="{{ url_for('users.learn_skills', course_id=c[0].id) }}">
+                   {{ c[0].name }} 
                 </a>
+                <span class=" text-danger m-3">
+                  {% if c[1] != ' ' %} {{ c[1]}}: <span>{{_('days left')}}</span>  {% endif %}
+                </span>
               </div>
               <div style="background-color: bisque;">
-                <a href="{{ url_for('users.cert_of_completion', course_id=c.id) }}">
+                <a href="{{ url_for('users.cert_of_completion', course_id=c[0].id) }}">
                    {{_('Get certificate')}} <span style="font-size: 26px;">🎓</span>
                 </a>
               </div>

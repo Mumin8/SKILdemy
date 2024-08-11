@@ -62,7 +62,8 @@ def user_enrolled_courses(course_id):
     if not current_user.is_authenticated:
         flash(_('please login first'), category='info')
         return redirect(url_for('home.home'))
-    for c in current_user.enrolling:
+    user_courses = current_user.enrolling
+    for c in user_courses:
         if c.id == course_id:
             return True, c
     return False, None
@@ -254,10 +255,19 @@ def userprofile():
         this will initiate the user profile setting
     '''
     if current_user.is_authenticated:
-        user = User.query.filter_by(id=current_user.id).first()
+        _lis = []
+        user_courses=current_user.enrolling
+        for c in user_courses:
+            st, v = completed_course(c)
+            print(type(v))
+            if v >= 0:
+                _lis.append([c, v])
+            else:
+                _lis.append([c, ' '])
+        print(_lis)
         return render_template(
             'user/profile.html',
-            user_courses=user.enrolling)
+            user_courses=_lis) 
     next_url = request.url
     return redirect(url_for('home.home', next_url=next_url))
 
@@ -292,7 +302,8 @@ def learn_skills(course_id):
     user_c = Course.query.get(course_id)
     for c in current_user.enrolling:
         if c == user_c:
-            if completed_course(c):
+            compl_c, n_ = completed_course(c)
+            if compl_c:
                 flash(
                     _('Please your time period to access this course has elapsed'),
                     category='warning')
@@ -371,7 +382,8 @@ def topic_by_course(course_id, topic_id):
         flash('You have not enrolled in this course', category='warning')
         return redirect(url_for('home.home'))
 
-    if completed_course(c):
+    compl_c, n_ = completed_course(c)
+    if compl_c:
         flash(
             'Your access time has elapsed, you can access your certificate',
             category='warning')
@@ -449,7 +461,8 @@ def make_payment(course_id):
 
     stat, c = user_enrolled_courses(course_id)
     if stat:
-        if not completed_course(c):
+        compl_c, n_ = completed_course(c)
+        if not compl_c:
             flash(
                 _('Already enrolled, You can still access this course'),
                 category='info')
@@ -514,7 +527,8 @@ def cert_of_completion(course_id):
 
     for c in current_user.enrolling:
         if c == course:
-            if completed_course(c):
+            compl_c, n_ = completed_course(c)
+            if compl_c:
                 flash(
                     _('Your certificate is ready for download'),
                     category='info')

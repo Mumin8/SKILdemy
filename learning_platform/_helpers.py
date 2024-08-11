@@ -11,7 +11,7 @@ from werkzeug.local import LocalProxy
 from flask import g, session, flash, redirect, url_for, request
 from flask_login import current_user
 from learning_platform import mongo, app, bcrypt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from moviepy.editor import (
     AudioFileClip,
     concatenate_videoclips,
@@ -876,9 +876,19 @@ def completed_course(course):
     '''
     check if the user is ready to retrieve certificate
     '''
-    elapsed_time = datetime.now() - course.enrolled_at
-    if elapsed_time >= timedelta(minutes=course.duration):
-        return True
-    return False
+    ct = datetime.now()
+    td = timedelta(days=course.duration)
+    e = course.enrolled_at
+
+    sd = date(e.year, e.month, e.day)
+    cd = date(ct.year,ct.month, ct.day)
+
+    elapsed_time = ct - e
+    et = sd - cd
+
+    if elapsed_time >= td:
+        # d = elapsed_time-date(ctym.year, ctym.month, ctym.day)
+        return True,  et.days + td.days  
+    return False,   et.days + td.days
 
 user_courses

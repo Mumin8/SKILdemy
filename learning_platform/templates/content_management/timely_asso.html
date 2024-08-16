@@ -4,18 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% extends "base.html" %}
-    <title>{% block title %}Courses{% endblock %}</title>
+    <title>{% block title %}Course{% endblock %}</title>
 </head>
 <body>
     {% block main %}
-    
-    {% for c in courses %}
-    <a class="text-info ml-2" href="{{url_for('admin.free_topics', c_id=c.id)}}">
-        {{c.name}}
+    {% for val in fv %}
+    <a style="text-decoration: none; font-size: xx-large;" class="fs-3 btn btn-info m-2"
+    href="{{ url_for('admin.course_timely_asso', stop_id=val[2], c_id=val[1]) }}">
+      {{ val[0] }}
     </a> 
     <br>
     {% endfor %}
     {% endblock %}
-    
 </body>
 </html>

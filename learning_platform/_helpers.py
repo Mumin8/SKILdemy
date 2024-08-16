@@ -663,11 +663,13 @@ def copy_ai_video(vid_path, dest_path):
 
 
 def validate_time_task(user_id, task_id, task_name):
+    # task_name is only unique to timely tasks
     timely_task = TimeTask.query.filter_by(usertask=task_name).first()
 
     if timely_task is None:
         return True, "Not timely"
     else:
+        # task_id is only unique to timely tasks
         task = TimeTask.query.filter_by(user_id=user_id, id=task_id).first()
 
         if task:
@@ -705,9 +707,7 @@ def task_pending(user_id):
         elapsed_time = datetime.now() - tt.updated_at
         waiting_period = timedelta(days=1)
         if elapsed_time <= waiting_period:
-            print(f'pending {tt} and {tt.usertask}')
             return False, tt.usertask
-
     return True, None
 
 

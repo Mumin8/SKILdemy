@@ -45,7 +45,6 @@ from learning_platform._helpers import (
     tream)
 
 
-
 admin_bp = Blueprint(
     'admin', __name__, static_folder='static', template_folder='templates')
 
@@ -180,7 +179,7 @@ def upload(language, course_id, topic_id):
             course = Course.query.get(course_id)
             topic = SubTopic.query.get(topic_id)
             _name = f'{course.course_creator}{topic.topic_id}{topic.name}'
-            
+
             name = encryption(_name) + '.mp4'
 
             upload_s3vid_languages(file, name, language)
@@ -200,7 +199,7 @@ def register_course():
         name = form.name.data
         desc = form.description.data
         price = form.price.data
-        duration = form.duration.data   
+        duration = form.duration.data
         creator = current_user.username
         rate = exchange_rate()
         new_course = Course(
@@ -222,7 +221,7 @@ def register_course():
 
 @admin_bp.route('/tim/')
 @admin_bp.route('/tim/<string:c_id>')
-def timely_topics(c_id): 
+def timely_topics(c_id):
     '''course to work with to be selected here
     '''
     if c_id != ' ':
@@ -231,19 +230,22 @@ def timely_topics(c_id):
         _, fv = next(iter(c_and_t.items()))
         return render_template('content_management/timely_asso.html', fv=fv)
     courses = Course.query.all()
-    return render_template('content_management/timely_course.html', courses=courses)
+    return render_template(
+        'content_management/timely_course.html',
+        courses=courses)
 
 
 @admin_bp.route('/ctim/<string:stop_id>/<string:c_id>')
 def course_timely_asso(stop_id, c_id):
     '''tasks will be added here
     '''
-    course= Course.query.get(c_id)
+    course = Course.query.get(c_id)
     c_and_t = c_and_topics(course)
     _, fv = next(iter(c_and_t.items()))
     topic = SubTopic.query.get(stop_id)
 
-    n = encryption(f'{course.course_creator}{topic.topic_id}{course.id}{topic.id}')
+    n = encryption(
+        f'{course.course_creator}{topic.topic_id}{course.id}{topic.id}')
 
     for sub_topic in course.time_task.sub_topic:
         if sub_topic.name_a == n:
@@ -254,8 +256,8 @@ def course_timely_asso(stop_id, c_id):
         course.time_task.sub_topic.append(topic)
         db.session.commit()
         flash('successfully added to delayed tasks', category='success')
-    return render_template('content_management/timely_asso.html', fv=fv)   
-   
+    return render_template('content_management/timely_asso.html', fv=fv)
+
 
 @admin_bp.route('/t/')
 @admin_bp.route('/t/<string:c_id>')
@@ -264,25 +266,27 @@ def free_topics(c_id):
         course = Course.query.get(c_id)
         c_and_t = c_and_topics(course)
         _, fv = next(iter(c_and_t.items()))
-        return render_template('content_management/course_free_topic.html', fv=fv)
-    
+        return render_template(
+            'content_management/course_free_topic.html', fv=fv)
+
     courses = Course.query.all()
     return render_template('content_management/courses.html', courses=courses)
 
 
 @admin_bp.route('/cfass/<string:stop_id>/<string:c_id>')
 def course_free_asso(stop_id, c_id):
-    course= Course.query.get(c_id)
+    course = Course.query.get(c_id)
     trial = SubTopic.query.get(stop_id)
 
     c_and_t = c_and_topics(course)
     _, fv = next(iter(c_and_t.items()))
-        
+
     if trial not in course.trial_topics:
         course.trial_topics.append(trial)
         flash('success', category='success')
         db.session.commit()
-        return render_template('content_management/course_free_topic.html', fv=fv)
+        return render_template(
+            'content_management/course_free_topic.html', fv=fv)
 
     flash('already associated', category='warning')
     return render_template('content_management/course_free_topic.html', fv=fv)
@@ -557,29 +561,6 @@ def update_published_AI(_id):
     return render_template(
         'content_management/update_ai_content.html',
         vid=vid)
-
-
-@admin_bp.route('/add_tt', methods=['GET', 'POST'])
-def add_tt():
-    '''
-    add_tt:
-        this will add tasks that will be delayed to the database
-    '''
-
-    if request.method == "POST":
-        task_id = request.form.get('topic_id')
-        usertask = SubTopic.query.get(task_id).name
-        if usertask:
-            new_task = TimeTask(usertask=usertask, id=task_id)
-            db.session.add(new_task)
-            db.session.commit()
-            flash('added to delayed tasks', category='success')
-            return redirect(url_for('admin.add_tt'))
-
-    avail_tasks = SubTopic.query.all()
-    return render_template(
-        'content_management/timely_task.html',
-        avail_tasks=avail_tasks)
 
 
 @admin_bp.route('/del_course/<string:c_id>', methods=['GET'])

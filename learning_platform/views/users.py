@@ -78,14 +78,12 @@ def completed_topics(c):
         all += 1
         print(u.name)
         for t in user.time_task:
-            if u.name_a ==  t.usertask:
+            if u.name_a == t.usertask:
                 print('that one is in')
                 some += 1
                 break
 
     print(f'percentage complete {int((some / all)*100)}')
-
-
 
 
 @user_bp.errorhandler(RateLimitExceeded)
@@ -100,8 +98,8 @@ def register_auth():
 
 @user_bp.route('/register', methods=['GET', 'POST'])
 def register():
-    l='This name will appear on your certificate when you enroll in a course'
-    lang = get_lang() 
+    l = 'This name will appear on your certificate when you enroll in a course'
+    lang = get_lang()
     if lang != "en":
         l = text_translator(l, lang)
 
@@ -250,7 +248,8 @@ def enroll_course(course_id):
                 course.update_enrolled_at(datetime.now())
                 current_user.enrolling.append(course)
                 for subt in course.time_task.sub_topic:
-                    det_id = encryption(f'{course.course_creator}{subt.topic_id}{subt.id}')
+                    det_id = encryption(
+                        f'{course.course_creator}{subt.topic_id}{subt.id}')
                     new_task = TimeTask(usertask=subt.name_a, id=det_id)
                     db.session.add(new_task)
             db.session.commit()
@@ -274,7 +273,7 @@ def userprofile():
     '''
     if current_user.is_authenticated:
         _lis = []
-        user_courses=current_user.enrolling
+        user_courses = current_user.enrolling
         for c in user_courses:
             st, v = completed_course(c)
             print(type(v))
@@ -286,7 +285,7 @@ def userprofile():
         print(_lis)
         return render_template(
             'user/profile.html',
-            user_courses=_lis) 
+            user_courses=_lis)
     next_url = request.url
     return redirect(url_for('home.home', next_url=next_url))
 
@@ -355,7 +354,6 @@ def learn_skills(course_id):
 def request_task_solution(topic_id):
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
-    
 
     status, _ = task_pending(current_user.id)
     print('this is not working as expected')
@@ -370,7 +368,6 @@ def request_task_solution(topic_id):
     return redirect(url_for('users.userprofile'))
 
 
-
 @user_bp.route('/trial/<string:course_id>/<string:topic_id>',
                methods=['GET', 'POST'])
 def free_test(course_id, topic_id):
@@ -379,18 +376,18 @@ def free_test(course_id, topic_id):
     '''
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
-    
+
     course = Course.query.get(course_id)
     topic = SubTopic.query.get(topic_id).name
     trial = free_trial(course.trial_topics)
     if topic in trial:
         mat, iframes = cached(course.name, topic)
         return render_template(
-        'user/free_trial.html',
-        mat=mat,
-        path=iframes,
-        course_id=course_id,
-        topic_id=topic_id)
+            'user/free_trial.html',
+            mat=mat,
+            path=iframes,
+            course_id=course_id,
+            topic_id=topic_id)
 
 
 @user_bp.route('/mat/<string:course_id>/<string:topic_id>',
@@ -436,13 +433,12 @@ def gptplus_vid(course_id, topic_id):
     '''
     if not current_user.is_authenticated:
         return redirect(url_for('users.logn'))
-    
+
     course = Course.query.get(course_id)
     topic = SubTopic.query.get(topic_id)
     _file = f'{course.course_creator}{topic.topic_id}{topic.name}'
 
     file = encryption(_file) + '.mp4'
-
 
     status, state = validate_time_task(current_user.id, topic_id, topic.name_a)
     if status and state == "Not timely":

@@ -1,6 +1,7 @@
 import os
 import re
-import hmac, hashlib
+import hmac
+import hashlib
 import boto3
 import secrets
 import shutil
@@ -30,20 +31,21 @@ my_audio_video = 'output_folder/'
 cache = {}
 
 
-
-
 def get_dict():
     return cache
 
+
 def encryption(stri):
-    key='secret'
+    key = 'secret'
     return hmac.new(key.encode(), stri.encode(), hashlib.sha256).hexdigest()
+
 
 def free_trial(c):
     l = []
     for t in c:
         l.append(t.name)
     return l
+
 
 def get_ref():
     return secrets.token_urlsafe(50)
@@ -881,14 +883,11 @@ def completed_course(course):
     e = course.enrolled_at
 
     sd = date(e.year, e.month, e.day)
-    cd = date(ct.year,ct.month, ct.day)
+    cd = date(ct.year, ct.month, ct.day)
 
     elapsed_time = ct - e
     et = sd - cd
 
     if elapsed_time >= td:
-        # d = elapsed_time-date(ctym.year, ctym.month, ctym.day)
-        return True,  et.days + td.days  
-    return False,   et.days + td.days
-
-user_courses
+        return True, et.days + td.days
+    return False, et.days + td.days

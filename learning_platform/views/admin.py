@@ -210,7 +210,9 @@ def register_course():
             price=price,
             duration=duration,
             rate=rate)
+        timely = TimeTask(course=new_course)
         db.session.add(new_course)
+        db.session.add(timely)
         db.session.commit()
         return jsonify({'message': 'Course created successfully'}), 201
     return render_template(
@@ -218,11 +220,47 @@ def register_course():
         form=form)
 
 
+@admin_bp.route('/tim/')
+@admin_bp.route('/tim/<string:c_id>')
+def timely_topics(c_id): 
+    '''course to work with to be selected here
+    '''
+    if c_id != ' ':
+        course = Course.query.get(c_id)
+        c_and_t = c_and_topics(course)
+        _, fv = next(iter(c_and_t.items()))
+        return render_template('content_management/timely_asso.html', fv=fv)
+    courses = Course.query.all()
+    return render_template('content_management/timely_course.html', courses=courses)
+
+
+@admin_bp.route('/ctim/<string:stop_id>/<string:c_id>')
+def course_timely_asso(stop_id, c_id):
+    '''tasks will be added here
+    '''
+    course= Course.query.get(c_id)
+    c_and_t = c_and_topics(course)
+    _, fv = next(iter(c_and_t.items()))
+    topic = SubTopic.query.get(stop_id)
+
+    n = encryption(f'{course.course_creator}{topic.topic_id}{course.id}{topic.id}')
+
+    for sub_topic in course.time_task.sub_topic:
+        if sub_topic.name_a == n:
+            flash('already associated', category='warning')
+            break
+    else:
+        topic.update_name_a(n)
+        course.time_task.sub_topic.append(topic)
+        db.session.commit()
+        flash('successfully added to delayed tasks', category='success')
+    return render_template('content_management/timely_asso.html', fv=fv)   
+   
+
 @admin_bp.route('/t/')
 @admin_bp.route('/t/<string:c_id>')
 def free_topics(c_id):
     if c_id != ' ':
-        print(f'Just a single course: {c_id}')
         course = Course.query.get(c_id)
         c_and_t = c_and_topics(course)
         _, fv = next(iter(c_and_t.items()))

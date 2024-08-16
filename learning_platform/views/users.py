@@ -22,6 +22,7 @@ from learning_platform.google_translations import text_translator
 from learning_platform._helpers import (
     c_and_topics,
     cached,
+    task_pending,
     free_trial,
     validate_time_task,
     get_ref,
@@ -69,6 +70,24 @@ def user_enrolled_courses(course_id):
     return False, None
 
 
+def completed_topics(c):
+    user = current_user
+    all = 0
+    some = 0
+    for u in c.time_task.sub_topic:
+        all += 1
+        print(u.name)
+        for t in user.time_task:
+            if u.name_a ==  t.usertask:
+                print('that one is in')
+                some += 1
+                break
+
+    print(f'percentage complete {int((some / all)*100)}')
+
+
+
+
 @user_bp.errorhandler(RateLimitExceeded)
 def rateLimit_handler(e):
     return jsonify(error='something went wrong. try again')
@@ -81,16 +100,11 @@ def register_auth():
 
 @user_bp.route('/register', methods=['GET', 'POST'])
 def register():
-    l = {'en': 'This name will appear on your certificate when you enroll in a course',
-'ar': 'سيظهر هذا الاسم على شهادتك عند تسجيلك في دورة تدريبية',
-'bn': 'আপনি যখন একটি কোর্সে ভর্তি হন তখন এই নামটি আপনার শংসাপত্রে উপস্থিত হবে',
-'es': 'Este nombre aparecerá en su certificado cuando se matricule en un curso',
-'fr': 'Ce nom apparaîtra sur votre certificat lorsque vous vous inscrirez à un cours',
-'hi': 'जब आप किसी कोर्स में दाखिला लेंगे तो यह नाम आपके प्रमाणपत्र पर दिखाई देगा',
-'id': 'Nama ini akan muncul di sertifikat Anda ketika Anda mendaftar di sebuah kursus',
-'pt': 'Esse nome aparecerá em seu certificado quando você se inscrever em um curso',
-'ru': 'Это имя будет указано в вашем сертификате, когда вы запишетесь на курс',
-'ur': 'جب آپ کسی کورس میں داخلہ لیں گے تو یہ نام آپ کے سرٹیفکیٹ پر ظاہر ہوگا۔' }
+    l='This name will appear on your certificate when you enroll in a course'
+    lang = get_lang() 
+    if lang != "en":
+        l = text_translator(l, lang)
+
     form = Registration(request.form)
     if form.validate_on_submit():
         fullname = form.fullname.data
@@ -112,7 +126,7 @@ def register():
             else:
                 flash(_("Thank you for Registering"), category='success')
         return redirect(url_for('users.register_auth'))
-    return render_template('user/register.html', form=form, l=l[get_lang()])
+    return render_template('user/register.html', form=form, l=l)
 
 
 @user_bp.route("/login", methods=['GET', 'POST'])
@@ -235,6 +249,10 @@ def enroll_course(course_id):
             else:
                 course.update_enrolled_at(datetime.now())
                 current_user.enrolling.append(course)
+                for subt in course.time_task.sub_topic:
+                    det_id = encryption(f'{course.course_creator}{subt.topic_id}{subt.id}')
+                    new_task = TimeTask(usertask=subt.name_a, id=det_id)
+                    db.session.add(new_task)
             db.session.commit()
 
             flash(
@@ -261,7 +279,8 @@ def userprofile():
             st, v = completed_course(c)
             print(type(v))
             if v >= 0:
-                _lis.append([c, v])
+                ms = text_translator(str(v) + ' days left', get_lang())
+                _lis.append([c, ms])
             else:
                 _lis.append([c, ' '])
         print(_lis)
@@ -296,8 +315,7 @@ def learn_skills(course_id):
     the course and topics will be displayed for the
     '''
     if not current_user.is_authenticated:
-        next_url = request.url
-        return redirect(url_for('users.login', next_url=next_url))
+        return redirect(url_for('users.login'))
 
     user_c = Course.query.get(course_id)
     for c in current_user.enrolling:
@@ -337,11 +355,18 @@ def learn_skills(course_id):
 def request_task_solution(topic_id):
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
-    usertask = TimeTask.query.get(topic_id)
-    user = User.query.get(current_user.id)
-    user.time_task.append(usertask)
-    db.session.commit()
-    flash(_('successfully requested for solution'))
+    
+
+    status, _ = task_pending(current_user.id)
+    print('this is not working as expected')
+    if status:
+        usertask = TimeTask.query.get(topic_id)
+        user = User.query.get(current_user.id)
+        user.time_task.append(usertask)
+        db.session.commit()
+        flash(_('successfully requested for solution'), category='success')
+    else:
+        flash(_('Never'), category='warning')
     return redirect(url_for('users.userprofile'))
 
 
@@ -418,10 +443,10 @@ def gptplus_vid(course_id, topic_id):
 
     file = encryption(_file) + '.mp4'
 
-    status, state = validate_time_task(current_user.id, topic_id, topic.name)
+
+    status, state = validate_time_task(current_user.id, topic_id, topic.name_a)
     if status and state == "Not timely":
         url = presigned_url(file)
-        
         not_time = state
         return render_template(
             'user/learn_page.html',
@@ -524,6 +549,8 @@ def cert_of_completion(course_id):
     cert_name = f'{current_user.id}{course_id}' + ".jpg"
 
     course = Course.query.get(course_id)
+
+    completed_topics(course)
 
     for c in current_user.enrolling:
         if c == course:

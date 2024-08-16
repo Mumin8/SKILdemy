@@ -6,15 +6,11 @@
     {% extends "base.html" %}
     
     <title>
-        {% block title %}
-        SKILdemy
-        {% endblock %}
+        {% block title %}SKILdemy{% endblock %}
     </title>
 </head>
 <body>
     {% block main %}
-    
-
     <div class="container-fluid">
        <div class="row nav">
         <nav>
@@ -27,7 +23,7 @@
 
             <div>
                 <a class="" href="{{ url_for('users.user_locale')}}"> 
-                    <img src="{{ url_for('static', filename='flags/' + lang)}}" alt="">    
+                    <img src="{{ url_for('static', filename='flags/' + lang)}}" alt="">   
                 </a>
             </div>
 
@@ -66,6 +62,8 @@
               </nav>
 
               <div class="fs-2 text-center text-info"> {{ course.name }}</div>
+
+              <p class="desc">{{desc}}</p>
             <p>
                 <ul>   
                         <h3 class="text-info">{{_('course content')}}</h3>
@@ -81,8 +79,8 @@
                                         href="{{ url_for('users.free_test', course_id=course.id, topic_id=subt.id) }}">
                                         <span class="btn btn-outline-success"> {{subt.name}} </span> <span> {{_('Try this for free')}}</span>
                                         </a>   
-                                    </p>
-                                    {% else %}
+				    </p>
+				    {% else %}
                                     <p style="font-size: larger;" class="text-secondary">
                                         {{subt.name}}
                                     </p>
@@ -121,14 +119,11 @@
             <div class="pb-4 btn btn-outline-success fs-2">{{ course.name }}</div>
             <div>
                 <p class="text-center text-success fs-5 text-secondary">
-                    complete and get a certificate within 
-                    <span class="fs-3" style="color: rgb(63, 64, 88);">
-                        {{course.duration}}
-                    </span> days</p>
+                    </p>
             </div>
             <div style=" color: red; margin-bottom: 24px;" class="text-center">
                 <span style="min-width: auto; background-color: rgb(12, 14, 4); font-size: medium;">
-                    -58% discount
+                    
                 </span>
                 </div>
             <div class="fs-3 text-center text-dark"> $ <span class="fs-3 text-success">{{ course.price }}

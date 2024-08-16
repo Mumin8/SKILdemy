@@ -53,23 +53,24 @@
                 {% elif mat %}
                 <div class="col fs-3" style="background-color: rgb(214, 255, 159);">
                     <a class="btn btn-primary" href="{{ url_for('users.learn_skills', course_id=course_id) }}">{{_('Back')}}</a>
-                    <div class="row">
-                       <nav id="ai-yt">
-                        <div class="col text-success">
-                          <a class="btn btn-primary" 
-                          href="{{ url_for('users.gptplus_vid', course_id=course_id, topic_id=topic_id) }}">
-                          {{_('SKILdemy guide')}}
-                        </a>
-                        </div>
-                        <div class="btn-group">
-                          <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{_('Suggested Videos')}}
-                          </button>
+                    <div class="row text-center">
+                      
+                       <nav id="sk">
+                        <div class="col text-success text-center sk" style="margin-bottom: 1rem;">
+                          <a href="{{ url_for('users.gptplus_vid', course_id=course_id, topic_id=topic_id) }}">
+                            <p id="p">{{ _('SKILdemy guide') }}</p>
+                              <img src="{{ url_for('static', filename='thumbnail/thumbnail.png') }}" alt="thumbnail"> 
+                          </a>
+                      </div>
+                        <div class="col text-center sk" style="margin: 1rem;">
+                          <div class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <p id="p">{{_('Suggested Videos')}}</p>
+                            <img src="{{ url_for('static', filename='thumbnail/youtube.png') }}" alt="thumbnail">
+                          </div>
                           <ul class="dropdown-menu" style="background-color: rgb(58, 37, 37);">
                           
                             {% for idx in path %}
-			                      <p class="fs-3 text-info text-center"
-                             style="background-color: rgb(43, 43, 61);">SKILdemy</p>
+			                      <p class="fs-3 text-info text-center" style="background-color: rgb(43, 43, 61);">SKILdemy</p>
                             <li>
                               
                                 <iframe width="560" height="315" 
@@ -88,7 +89,7 @@
                         
                         
                        </nav>  
-                    <div>
+                    <div class="txtdsp">
                 {% for line in mat.split('\n') %}
 
                 {% if line.startswith('http') %}
@@ -105,8 +106,8 @@
                     </div>
                 </div>
                 {% elif path and not_time %}
-                <div style="max-width: max-content; background-color: red; align-self: center;">
-                  <video controls style="min-width: fit-content; background-color: black;" class="text-center">
+                <div style=" background-color: red;" class="text-center vidp">
+                  <video controls >
                     <source src="{{ path }}" type="video/mp4">
                   </video>
                 </div>
@@ -133,8 +134,8 @@
                     <source src="" type="video/mp4">
                   </video>
                   <div class="text-end ">
-                    <a class="btn btn-success text-info fs-3" href="{{ url_for('users.request_task_solution', topic_id=topic_id) }}">
-                      
+                    <a class="btn btn-success text-info fs-3" 
+                    href="{{ url_for('users.request_task_solution', topic_id=topic_id) }}">
                       {{_('Request Solution')}}
                     </a>
                   </div>

@@ -44,6 +44,7 @@ def text_translator(text, lang):
     translates the text to a language specified as lang
     '''
     text = translator.translate(text=text, src='en', dest=lang).text
+    print(text)
     return text
 
 def get_duration(audio_path, text, lang):

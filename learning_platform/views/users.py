@@ -76,14 +76,11 @@ def completed_topics(c):
     some = 0
     for u in c.time_task.sub_topic:
         all += 1
-        print(u.name)
         for t in user.time_task:
             if u.name_a == t.usertask:
-                print('that one is in')
                 some += 1
                 break
-
-    print(f'percentage complete {int((some / all)*100)}')
+    return int((some / all)*100)
 
 
 @user_bp.errorhandler(RateLimitExceeded)
@@ -276,13 +273,14 @@ def userprofile():
         user_courses = current_user.enrolling
         for c in user_courses:
             st, v = completed_course(c)
-            print(type(v))
+            pct = completed_topics(c)
+           
             if v >= 0:
                 ms = text_translator(str(v) + ' days left', get_lang())
-                _lis.append([c, ms])
+                _lis.append([c, ms, pct])
             else:
-                _lis.append([c, ' '])
-        print(_lis)
+                _lis.append([c, ' ', pct])
+        
         return render_template(
             'user/profile.html',
             user_courses=_lis)
@@ -325,7 +323,7 @@ def learn_skills(course_id):
                     _('Please your time period to access this course has elapsed'),
                     category='warning')
                 flash(
-                    _('You can enroll again if you feel you still have more topics to cover'),
+                    _('Your can always enroll again'),
                     category='info')
                 return redirect(url_for('users.userprofile'))
     if user_c:
@@ -355,8 +353,7 @@ def request_task_solution(topic_id):
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 
-    status, _ = task_pending(current_user.id)
-    print('this is not working as expected')
+    status, trash = task_pending(current_user.id)
     if status:
         usertask = TimeTask.query.get(topic_id)
         user = User.query.get(current_user.id)
@@ -364,7 +361,7 @@ def request_task_solution(topic_id):
         db.session.commit()
         flash(_('successfully requested for solution'), category='success')
     else:
-        flash(_('Never'), category='warning')
+        flash(_('There is already one task pending for solution'), category='warning')
     return redirect(url_for('users.userprofile'))
 
 
@@ -401,14 +398,12 @@ def topic_by_course(course_id, topic_id):
 
     stat, c = user_enrolled_courses(course_id)
     if not stat:
-        flash('You have not enrolled in this course', category='warning')
+        flash(_('You have not enrolled in this course'), category='warning')
         return redirect(url_for('home.home'))
 
     compl_c, n_ = completed_course(c)
     if compl_c:
-        flash(
-            'Your access time has elapsed, you can access your certificate',
-            category='warning')
+        flash(_('Your access time has elapsed, you can access your certificate'), category='warning')
         return redirect(url_for('users.userprofile'))
 
     course = Course.query.get(course_id).name
@@ -546,17 +541,25 @@ def cert_of_completion(course_id):
 
     course = Course.query.get(course_id)
 
-    completed_topics(course)
+    print ('this thng')
 
     for c in current_user.enrolling:
         if c == course:
             compl_c, n_ = completed_course(c)
             if compl_c:
-                flash(
-                    _('Your certificate is ready for download'),
-                    category='info')
-                return render_template(
-                    'user/certificate.html', course_id=c.id, name=c.name)
+                pct = completed_topics(c)
+                if pct >= 70:
+                    flash(
+                        _('Your certificate is ready for download'),
+                        category='info')
+                    return render_template(
+                        'user/certificate.html', course_id=c.id, name=c.name)
+                else:
+                    flash(
+                        _("Your mark is below 70%. You can enroll again to improve your marks"),
+                        category='danger')
+                    return redirect(url_for('users.userprofile'))
+
             else:
                 if cert_available(cert_name):
                     return render_template(

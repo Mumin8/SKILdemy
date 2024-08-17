@@ -468,9 +468,7 @@ def gptplus_vid(course_id, topic_id):
 
 @user_bp.route('/payment/<string:course_id>', methods=['GET'])
 def make_payment(course_id):
-    '''
-        This is where payment is made
-    '''
+    '''This is where payment is made'''
     if not current_user.is_authenticated:
         next_url = request.url
         return redirect(url_for('users.login', next_url=next_url))
@@ -529,9 +527,7 @@ def user_locale():
 
 @user_bp.route('/cert/<string:course_id>', methods=['GET', 'POST'])
 def cert_of_completion(course_id):
-    '''
-    where the certificate will be previewed
-    '''
+    '''where the certificate will be previewed'''
 
     if not current_user.is_authenticated:
         next_url = request.url
@@ -628,9 +624,7 @@ def download_cert(course_id):
 
 @user_bp.route('/dl_cert/<string:id>', methods=['GET', 'POST'])
 def download_your_cert(id):
-    '''
-    where the certificate will be downloaded
-    '''
+    '''where the certificate will be downloaded'''
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 

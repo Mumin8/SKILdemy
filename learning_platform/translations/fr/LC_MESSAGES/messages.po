@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-09 23:59+0000\n"
+"POT-Creation-Date: 2024-08-17 08:11+0000\n"
 "PO-Revision-Date: 2024-05-22 10:27+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -18,11 +18,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
+#: _helpers.py:618
+msgid "Please login to access this page"
+msgstr "Veuillez vous connecter pour accéder à cette page"
+
+#: _helpers.py:646
+msgid "Hours left to receive solution"
+msgstr "Il reste des heures pour recevoir la solution"
+
+#: _helpers.py:650
+msgid "please request for the solution"
+msgstr "s'il vous plaît demander la solution"
+
 #: forms/form.py:64
 msgid "Passwords must match"
 msgstr "Les mots de passe doivent correspondre"
 
-#: forms/form.py:68 templates/home/home.html:39 templates/user/register.html:32
+#: forms/form.py:68 templates/home/home.html:35 templates/user/register.html:32
 msgid "Register"
 msgstr "S’inscrire"
 
@@ -34,40 +46,39 @@ msgstr "Ce nom d'utilisateur est déjà pris"
 msgid "This email is already taken"
 msgstr "Cet e-mail est déjà pris"
 
-#: templates/home/home.html:24
+#: templates/home/home.html:20
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
-#: templates/home/home.html:46 templates/user/login.html:14
+#: templates/home/home.html:42 templates/user/login.html:14
 msgid "login"
 msgstr "connexion"
 
-#: templates/home/home.html:71
+#: templates/home/home.html:69
 msgid "course content"
 msgstr "Contenu du cours"
 
-#: templates/home/home.html:82
+#: templates/home/home.html:80
 msgid "Try this for free"
-msgstr ""
+msgstr "Essayez ceci gratuitement"
 
-#: templates/home/home.html:104
+#: templates/home/home.html:102
 msgid "click on course for more information"
 msgstr "Cliquez sur le cours pour plus d’informations"
 
-#: templates/home/home.html:115
+#: templates/home/home.html:113
 msgid "Enroll now"
 msgstr "Inscrivez-vous maintenant"
 
 #: templates/payment/payment.html:17
 msgid "You are about to make a payment to enroll in"
-msgstr ""
+msgstr "Vous êtes sur le point d'effectuer un paiement pour vous inscrire"
 
 #: templates/payment/payment.html:29
 msgid "click here to proceed to payment page"
-msgstr ""
+msgstr "cliquez ici pour accéder à la page de paiement"
 
 #: templates/payment/success.html:16
-#, fuzzy
 msgid "Thank you for choosing SKILdemy"
 msgstr "Merci d'avoir choisi SKILdemy"
 
@@ -108,19 +119,19 @@ msgstr "Retour"
 msgid "SKILdemy guide"
 msgstr "Guide SKILdemy"
 
-#: templates/user/free_trial.html:44 templates/user/learn_page.html:66
+#: templates/user/free_trial.html:44 templates/user/learn_page.html:67
 msgid "Suggested Videos"
 msgstr "Vidéos suggérées"
 
-#: templates/user/free_trial.html:99 templates/user/learn_page.html:121
+#: templates/user/free_trial.html:99 templates/user/learn_page.html:122
 msgid "Cancel Request"
 msgstr "Annuler la demande"
 
-#: templates/user/free_trial.html:106 templates/user/learn_page.html:128
+#: templates/user/free_trial.html:106 templates/user/learn_page.html:129
 msgid "keep learning while we prepare the answers for you"
 msgstr "continuez à apprendre pendant que nous préparons les réponses pour vous"
 
-#: templates/user/free_trial.html:116 templates/user/learn_page.html:138
+#: templates/user/free_trial.html:116 templates/user/learn_page.html:139
 msgid "Request Solution"
 msgstr "Vous pouvez demander la solution"
 
@@ -153,42 +164,38 @@ msgid "Bengali"
 msgstr "Bengali"
 
 #: templates/user/locale.html:25
-msgid "Chinese"
-msgstr "Chinois"
-
-#: templates/user/locale.html:26
 msgid "English"
 msgstr "Anglais"
 
-#: templates/user/locale.html:27
+#: templates/user/locale.html:26
 msgid "French"
 msgstr "Français"
 
-#: templates/user/locale.html:28
+#: templates/user/locale.html:27
 msgid "Hindi"
 msgstr "Hindi"
 
-#: templates/user/locale.html:29
+#: templates/user/locale.html:28
 msgid "Indonesian"
 msgstr "Indonésien"
 
-#: templates/user/locale.html:30
+#: templates/user/locale.html:29
 msgid "Portuguese"
 msgstr "Portugais"
 
-#: templates/user/locale.html:31
+#: templates/user/locale.html:30
 msgid "Russia"
 msgstr "Russe"
 
-#: templates/user/locale.html:32
+#: templates/user/locale.html:31
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: templates/user/locale.html:33
+#: templates/user/locale.html:32
 msgid "Turkish"
 msgstr "Turc"
 
-#: templates/user/locale.html:34
+#: templates/user/locale.html:33
 msgid "Urdu"
 msgstr "Urdu"
 
@@ -204,13 +211,21 @@ msgstr "Mot de passe oublié"
 msgid "logout"
 msgstr "déconnexion"
 
-#: templates/user/profile.html:35
+#: templates/user/profile.html:34
+msgid "You will need at least 70% to pass this course for a certificate"
+msgstr "Vous aurez besoin d'au moins 70% pour réussir ce cours et obtenir un certificat"
+
+#: templates/user/profile.html:36
 msgid "My courses"
 msgstr "Mes cours"
 
-#: templates/user/profile.html:46
+#: templates/user/profile.html:51
 msgid "Get certificate"
 msgstr "Obtenir un certificat"
+
+#: templates/user/profile.html:54
+msgid "current score:"
+msgstr "score actuel:"
 
 #: templates/user/register.html:13
 msgid "Sign up"
@@ -224,91 +239,105 @@ msgstr "soumettre l'email"
 msgid "download"
 msgstr "télécharger"
 
-#: views/home.py:24
+#: views/home.py:25
 msgid "Welcome to SKILdemy"
 msgstr "Bienvenue sur SKILdemy"
 
-#: views/users.py:63
+#: views/users.py:64
 msgid "please login first"
 msgstr "Veuillez vous connecter d’abord"
 
-#: views/users.py:112
+#: views/users.py:122
 msgid "Thank you for Registering"
 msgstr "Merci de vous être inscrit(e)"
 
-#: views/users.py:131
+#: views/users.py:141
 msgid "Happy Coding!  😊"
 msgstr "Bon codage ! 😊"
 
-#: views/users.py:133
+#: views/users.py:143
 msgid "Invalid Credentials"
 msgstr "Identifiants invalides"
 
-#: views/users.py:172
+#: views/users.py:182
 msgid "Password Reset Request"
 msgstr "Demande de réinitialisation du mot de passe"
 
-#: views/users.py:181
+#: views/users.py:191
 msgid "Check your email for the password reset link."
 msgstr "Vérifiez votre e-mail pour le lien de réinitialisation du mot de passe"
 
-#: views/users.py:184
+#: views/users.py:194
 msgid "Email not found"
 msgstr "Email non trouvé"
 
-#: views/users.py:202
+#: views/users.py:212
 msgid "successfully reset password"
 msgstr "Réinitialisation du mot de passe réussie"
 
-#: views/users.py:226
+#: views/users.py:236
 msgid "You have successfully enrolled in"
 msgstr "Vous vous êtes inscrit(e) avec succès à"
 
-#: views/users.py:230
+#: views/users.py:240
 msgid "You have successfully updated your course"
 msgstr "Vous avez mis à jour votre cours avec succès"
 
-#: views/users.py:245
+#: views/users.py:260
 msgid "unsuccessful, please check your details or contact SKILdemy support"
 msgstr "Échec, veuillez vérifier vos détails ou contacter le support Paystack"
 
-#: views/users.py:297
+#: views/users.py:323
 msgid "Please your time period to access this course has elapsed"
 msgstr "Veuillez noter que votre période d'accès à ce cours est écoulée."
 
-#: views/users.py:300
-msgid "You can enroll again if you feel you still have more topics to cover"
-msgstr ""
-"Vous pouvez vous inscrire à nouveau si vous pensez avoir encore plus de "
-"sujets à couvrir"
+#: views/users.py:326
+msgid "Your can always enroll again"
+msgstr "Vous pouvez toujours vous inscrire à nouveau"
 
-#: views/users.py:333
+#: views/users.py:362
 msgid "successfully requested for solution"
 msgstr "Vous pouvez demander la solution"
 
-#: views/users.py:432
+#: views/users.py:364
+msgid "There is already one task pending for solution"
+msgstr "Il y a déjà une tâche en attente de résolution"
+
+#: views/users.py:401
+msgid "You have not enrolled in this course"
+msgstr "Vous n'êtes pas inscrit à ce cours"
+
+#: views/users.py:406
+msgid "Your access time has elapsed, you can access your certificate"
+msgstr "Votre temps d'accès est écoulé, vous pouvez accéder à votre certificat"
+
+#: views/users.py:460
 msgid "You can request for the solution"
 msgstr "Vous pouvez demander la solution"
 
-#: views/users.py:454
+#: views/users.py:483
 msgid "Already enrolled, You can still access this course"
 msgstr "Déjà inscrit, vous pouvez encore accéder à ce cours"
 
-#: views/users.py:459
+#: views/users.py:488
 msgid "Your time expired for this course and you are trying to enroll again"
 msgstr ""
 "Votre temps a expiré pour ce cours et vous essayez de vous inscrire à "
 "nouveau"
 
-#: views/users.py:519
+#: views/users.py:553
 msgid "Your certificate is ready for download"
 msgstr "Votre certificat est prêt pour le téléchargement"
 
-#: views/users.py:529
+#: views/users.py:559
+msgid "Your mark is below 70%. You can enroll again to improve your marks"
+msgstr "Votre note est inférieure à 70%. Vous pouvez vous réinscrire pour améliorer vos notes"
+
+#: views/users.py:569
 msgid "The certificate will be ready after you complete the course"
 msgstr "Le certificat sera prêt une fois le cours terminé"
 
-#: views/users.py:608
+#: views/users.py:648
 msgid "Certificate has been generated in your downloads folder"
 msgstr "Le certificat a été généré dans votre dossier de téléchargements"
 

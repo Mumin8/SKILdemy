@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-09 23:59+0000\n"
+"POT-Creation-Date: 2024-08-17 08:11+0000\n"
 "PO-Revision-Date: 2024-05-24 04:46+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -19,11 +19,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
+#: _helpers.py:618
+msgid "Please login to access this page"
+msgstr "Пожалуйста, войдите для доступа к этой странице"
+
+#: _helpers.py:646
+msgid "Hours left to receive solution"
+msgstr "There are a few hours left until the decision is received"
+
+#: _helpers.py:650
+msgid "please request for the solution"
+msgstr "пожалуйста, запросите решение"
+
 #: forms/form.py:64
 msgid "Passwords must match"
 msgstr "Пароли должны совпадать"
 
-#: forms/form.py:68 templates/home/home.html:39 templates/user/register.html:32
+#: forms/form.py:68 templates/home/home.html:35 templates/user/register.html:32
 msgid "Register"
 msgstr "Регистрация"
 
@@ -35,34 +47,33 @@ msgstr "Это имя пользователя уже занято"
 msgid "This email is already taken"
 msgstr "Этот адрес электронной почты уже занят"
 
-#: templates/home/home.html:24
+#: templates/home/home.html:20
 msgid "Dashboard"
 msgstr "Приборная панель"
 
-#: templates/home/home.html:46 templates/user/login.html:14
+#: templates/home/home.html:42 templates/user/login.html:14
 msgid "login"
 msgstr "войти"
 
-#: templates/home/home.html:71
+#: templates/home/home.html:69
 msgid "course content"
 msgstr "содержание курса"
 
-#: templates/home/home.html:82
+#: templates/home/home.html:80
 msgid "Try this for free"
-msgstr ""
+msgstr "Попробуйте это бесплатно"
 
-#: templates/home/home.html:104
+#: templates/home/home.html:102
 msgid "click on course for more information"
 msgstr "нажмите на курс для получения дополнительной информации"
 
-#: templates/home/home.html:115
+#: templates/home/home.html:113
 msgid "Enroll now"
 msgstr "Записаться сейчас"
 
 #: templates/payment/payment.html:17
-#, fuzzy
 msgid "You are about to make a payment to enroll in"
-msgstr "Вы собираетесь совершить платеж, чтобы записаться в"
+msgstr "You are about to make a payment to enroll in"
 
 #: templates/payment/payment.html:29
 msgid "click here to proceed to payment page"
@@ -109,19 +120,19 @@ msgstr "Назад"
 msgid "SKILdemy guide"
 msgstr "Руководство SKILdemy"
 
-#: templates/user/free_trial.html:44 templates/user/learn_page.html:66
+#: templates/user/free_trial.html:44 templates/user/learn_page.html:67
 msgid "Suggested Videos"
 msgstr "Предлагаемые видео"
 
-#: templates/user/free_trial.html:99 templates/user/learn_page.html:121
+#: templates/user/free_trial.html:99 templates/user/learn_page.html:122
 msgid "Cancel Request"
 msgstr "Отменить запрос"
 
-#: templates/user/free_trial.html:106 templates/user/learn_page.html:128
+#: templates/user/free_trial.html:106 templates/user/learn_page.html:129
 msgid "keep learning while we prepare the answers for you"
 msgstr "Продолжайте учиться, пока мы готовим для вас ответы"
 
-#: templates/user/free_trial.html:116 templates/user/learn_page.html:138
+#: templates/user/free_trial.html:116 templates/user/learn_page.html:139
 msgid "Request Solution"
 msgstr "Запросить решение"
 
@@ -154,42 +165,38 @@ msgid "Bengali"
 msgstr "Бенгальский"
 
 #: templates/user/locale.html:25
-msgid "Chinese"
-msgstr "Китайский"
-
-#: templates/user/locale.html:26
 msgid "English"
 msgstr "Английский"
 
-#: templates/user/locale.html:27
+#: templates/user/locale.html:26
 msgid "French"
 msgstr "Французский"
 
-#: templates/user/locale.html:28
+#: templates/user/locale.html:27
 msgid "Hindi"
 msgstr "Хинди"
 
-#: templates/user/locale.html:29
+#: templates/user/locale.html:28
 msgid "Indonesian"
 msgstr "Индонезийский"
 
-#: templates/user/locale.html:30
+#: templates/user/locale.html:29
 msgid "Portuguese"
 msgstr "Португальский"
 
-#: templates/user/locale.html:31
+#: templates/user/locale.html:30
 msgid "Russia"
 msgstr "Русский"
 
-#: templates/user/locale.html:32
+#: templates/user/locale.html:31
 msgid "Spanish"
 msgstr "Испанский"
 
-#: templates/user/locale.html:33
+#: templates/user/locale.html:32
 msgid "Turkish"
 msgstr "Турецкий"
 
-#: templates/user/locale.html:34
+#: templates/user/locale.html:33
 msgid "Urdu"
 msgstr "Урду"
 
@@ -205,13 +212,21 @@ msgstr "Забыли пароль"
 msgid "logout"
 msgstr "Выйти"
 
-#: templates/user/profile.html:35
+#: templates/user/profile.html:34
+msgid "You will need at least 70% to pass this course for a certificate"
+msgstr "Для прохождения этого курса и получения сертификата вам потребуется не менее 70%"
+
+#: templates/user/profile.html:36
 msgid "My courses"
 msgstr "Мои курсы"
 
-#: templates/user/profile.html:46
+#: templates/user/profile.html:51
 msgid "Get certificate"
 msgstr "Получить сертификат"
+
+#: templates/user/profile.html:54
+msgid "current score:"
+msgstr "Текущий счет:"
 
 #: templates/user/register.html:13
 msgid "Sign up"
@@ -225,91 +240,105 @@ msgstr "Отправить электронное письмо"
 msgid "download"
 msgstr "скачать"
 
-#: views/home.py:24
+#: views/home.py:25
 msgid "Welcome to SKILdemy"
 msgstr "Добро пожаловать в SKILdemy"
 
-#: views/users.py:63
+#: views/users.py:64
 msgid "please login first"
 msgstr "пожалуйста, сначала войдите в систему"
 
-#: views/users.py:112
+#: views/users.py:122
 msgid "Thank you for Registering"
 msgstr "Спасибо за регистрацию"
 
-#: views/users.py:131
+#: views/users.py:141
 msgid "Happy Coding!  😊"
 msgstr "Удачного кодирования! 😊"
 
-#: views/users.py:133
+#: views/users.py:143
 msgid "Invalid Credentials"
 msgstr "Неверные учетные данные"
 
-#: views/users.py:172
+#: views/users.py:182
 msgid "Password Reset Request"
 msgstr "Запрос на сброс пароля"
 
-#: views/users.py:181
+#: views/users.py:191
 msgid "Check your email for the password reset link."
 msgstr "Проверьте свою электронную почту, чтобы получить ссылку для сброса пароля."
 
-#: views/users.py:184
+#: views/users.py:194
 msgid "Email not found"
 msgstr "Электронная почта не найдена"
 
-#: views/users.py:202
+#: views/users.py:212
 msgid "successfully reset password"
 msgstr "успешно сбросить пароль"
 
-#: views/users.py:226
+#: views/users.py:236
 msgid "You have successfully enrolled in"
 msgstr "Вы успешно поступили в"
 
-#: views/users.py:230
+#: views/users.py:240
 msgid "You have successfully updated your course"
 msgstr "Вы успешно обновили свой курс"
 
-#: views/users.py:245
+#: views/users.py:260
 msgid "unsuccessful, please check your details or contact SKILdemy support"
 msgstr ""
 "не удалось, пожалуйста, проверьте свои данные или свяжитесь со службой "
 "поддержки SKILdemy"
 
-#: views/users.py:297
+#: views/users.py:323
 msgid "Please your time period to access this course has elapsed"
 msgstr "Пожалуйста, срок вашего доступа к этому курсу истек."
 
-#: views/users.py:300
-msgid "You can enroll again if you feel you still have more topics to cover"
-msgstr ""
-"Вы можете записаться еще раз, если почувствуете, что у вас еще есть темы "
-"для изучения"
+#: views/users.py:326
+msgid "Your can always enroll again"
+msgstr "Вы всегда можете зарегистрироваться снова."
 
-#: views/users.py:333
+#: views/users.py:362
 msgid "successfully requested for solution"
 msgstr "успешно запросил решение"
 
-#: views/users.py:432
+#: views/users.py:364
+msgid "There is already one task pending for solution"
+msgstr "Уже есть одна задача, ожидающая решения"
+
+#: views/users.py:401
+msgid "You have not enrolled in this course"
+msgstr "Вы не записались на этот курс"
+
+#: views/users.py:406
+msgid "Your access time has elapsed, you can access your certificate"
+msgstr "Время вашего доступа истекло, вы можете получить доступ к своему сертификату"
+
+#: views/users.py:460
 msgid "You can request for the solution"
 msgstr "Вы можете запросить решение"
 
-#: views/users.py:454
+#: views/users.py:483
 msgid "Already enrolled, You can still access this course"
 msgstr "Вы уже зарегистрированы, вы все еще можете получить доступ к этому курсу"
 
-#: views/users.py:459
+#: views/users.py:488
 msgid "Your time expired for this course and you are trying to enroll again"
 msgstr "Ваше время на этот курс истекло, и вы пытаетесь записаться на него снова"
 
-#: views/users.py:519
+#: views/users.py:553
 msgid "Your certificate is ready for download"
 msgstr "Ваш сертификат готов к загрузке"
 
-#: views/users.py:529
+#: views/users.py:559
+msgid "Your mark is below 70%. You can enroll again to improve your marks"
+msgstr "Ваша оценка ниже 70%. Вы можете зарегистрироваться снова, чтобы улучшить свои оценки."
+
+#: views/users.py:569
 msgid "The certificate will be ready after you complete the course"
 msgstr "Сертификат будет готов после того, как вы пройдете курс."
 
-#: views/users.py:608
+#: views/users.py:648
 msgid "Certificate has been generated in your downloads folder"
 msgstr "Сертификат был сгенерирован в вашей папке загрузок"
 

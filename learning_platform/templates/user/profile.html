@@ -31,16 +31,18 @@
     </nav>
     <div class="row">
         <div class="col bg-secondary" >
+          <p>{{_('You will need at least 70 to pass this course for a certificate')}}</p>
             <p class="text-light fs-2">
               {{_('My courses')}}
             </p>
             {% for c in user_courses %}
-            <div class="profile-info m-3 "> 
-              <div class="btn btn-info">
+            <div class="profile-info m-2 "> 
+              <div class="btn btn-info" style="text-align: left;">
                 <a href="{{ url_for('users.learn_skills', course_id=c[0].id) }}">
                    {{ c[0].name }} 
                 </a>
-                <span class=" text-danger m-3">
+                
+                <span class=" text-danger">
                   {% if c[1] != ' ' %} {{ c[1]}}  {% endif %}
                 </span>
               </div>
@@ -48,6 +50,9 @@
                 <a href="{{ url_for('users.cert_of_completion', course_id=c[0].id) }}">
                    {{_('Get certificate')}} <span style="font-size: 26px;">🎓</span>
                 </a>
+                <span class=" text-success">
+                  <p>{{_('current score:')}} <span> {{ c[-1]}}</span></p>
+                </span>
               </div>
               
             </div>

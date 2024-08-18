@@ -18,7 +18,6 @@ from learning_platform.models.models import (
 from functools import wraps
 from learning_platform._helpers import (
     upload_s3vid_languages,
-    live_vid_content,
     encryption,
     acceptable,
     insert_text,
@@ -435,9 +434,13 @@ def add_c_s_st():
     subtopic = SubTopic.query.all()
     if request.method == "POST":
         session['course'] = request.form.get("course")
-        session['subject'] = request.form.get("subject")
-        session['subtopic'] = request.form.get("subtopic")
-        insert_text()
+        # session['subject'] = request.form.get("subject")
+        # instead of passing the subtopic name, i should pass the subtopic itself
+        subtopic_id = request.form.get("subtopic")
+        print(subtopic_id)
+        print('--------------------------------------------------')
+        # this insert function will take subtopic so that i can retrieve the topic associated with it
+        insert_text(subtopic_id)
         flash('successfully added content for ai video', category='success')
     return render_template(
         'content_management/course_subtopic.html',
@@ -452,47 +455,47 @@ def add_reading_text():
         this will add the skeleton of the reading text
     '''
     courses = Course.query.all()
-    topics = SubTopic.query.all()
+    subtopics = SubTopic.query.all()
 
     if request.method == "POST":
         c_name = Course.query.get(request.form.get('course_id')).name
-        t_name = SubTopic.query.get(request.form.get('topic_id')).name
-        text_data(c_name, t_name)
+        subtopic = SubTopic.query.get(request.form.get('topic_id'))
+        text_data(c_name, subtopic)
         flash('added content ')
         return render_template(
             'content_management/reading_text.html',
             courses=courses,
-            topics=topics)
+            topics=subtopics)
 
     return render_template('content_management/reading_text.html',
                            courses=courses,
                            #  subjects=subjects,
-                           topics=topics)
+                           topics=subtopics)
 
 
-@admin_bp.route('/gpvid', methods=['GET'])
-def get_published_Video():
-    '''
-    get_published_video:
-        this will get all the published videos for visual display
-    '''
-    vid_content = live_vid_content()
-    url = presigned_url('3957dc2fc92e347daa1d388e5b9b71eb.mp4')
-    print(f'the url {vid_content}')
-    return render_template(
-        'content_management/preview_shared_videos.html',
-        url=url)
+# @admin_bp.route('/gpvid', methods=['GET'])
+# def get_published_Video():
+#     '''
+#     get_published_video:
+#         this will get all the published videos for visual display
+#     '''
+#     vid_content = live_vid_content()
+#     url = presigned_url('3957dc2fc92e347daa1d388e5b9b71eb.mp4')
+#     print(f'the url {vid_content}')
+#     return render_template(
+#         'content_management/preview_shared_videos.html',
+#         url=url)
 
 
 @admin_bp.route('/gtv', methods=['GET', 'POST'])
 @login_required
-def aud_vid(lang):
+def aud_vid(lang, subtopic):
     '''
     aud_vid:
         this is where the audio video clip thing starts
     '''
-    v = get_text_desc()
-    acc_v = recieve_displayed_text(v, lang)
+    v = get_text_desc(subtopic)
+    acc_v = recieve_displayed_text(v, lang, subtopic.name)
 
     return acc_v
 
@@ -505,12 +508,14 @@ def gptplus(language, course_id, topic_id):
     gptplus:
         this is where the ai video is processed
     '''
+
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 
+    # Another thing to work on
     session['course'] = Course.query.get(course_id).name
-    session['topic'] = SubTopic.query.get(topic_id).name
-    aud_vid(language)
+    subtopic = SubTopic.query.get(topic_id)
+    aud_vid(language, subtopic)
 
     flash('video generated successfully', category='success')
 

@@ -375,7 +375,7 @@ def free_test(course_id, topic_id):
         return redirect(url_for('users.login'))
 
     course = Course.query.get(course_id)
-    topic = SubTopic.query.get(topic_id).name
+    topic = SubTopic.query.get(topic_id)
     trial = free_trial(course.trial_topics)
     if topic in trial:
         mat, iframes = cached(course.name, topic)
@@ -407,7 +407,7 @@ def topic_by_course(course_id, topic_id):
         return redirect(url_for('users.userprofile'))
 
     course = Course.query.get(course_id).name
-    topic = SubTopic.query.get(topic_id).name
+    topic = SubTopic.query.get(topic_id)
     if course:
         mat, iframes = cached(course, topic)
     return render_template(
@@ -536,8 +536,6 @@ def cert_of_completion(course_id):
     cert_name = f'{current_user.id}{course_id}' + ".jpg"
 
     course = Course.query.get(course_id)
-
-    print ('this thng')
 
     for c in current_user.enrolling:
         if c == course:

@@ -9,6 +9,7 @@ import requests
 import pyttsx3
 from bson.objectid import ObjectId
 from werkzeug.local import LocalProxy
+from flask_babel import gettext as _
 from flask import g, session, flash, redirect, url_for, request
 from flask_login import current_user
 from learning_platform import mongo, app, bcrypt
@@ -24,7 +25,7 @@ from moviepy.video.tools.subtitles import SubtitlesClip
 from werkzeug.utils import secure_filename
 from learning_platform.google_translations import (
     text_translator, process_for_nonLatin, get_locale, get_duration)
-from learning_platform.models.models import Course, TimeTask, User
+from learning_platform.models.models import Course, TimeTask, User, Topic, SubTopic
 
 my_audio_video = 'output_folder/'
 
@@ -148,18 +149,6 @@ def unlink_file(name, _dir):
         return 'no file found'
 
 
-def find_missing_vid(vid_list):
-    set_values = {1, 2, 3, 4}
-    my_list = []
-    for v_item in vid_list:
-        # print(v_item)
-        my_list.append(v_item)
-        my_list.append(int(v_item['video_id']))
-    for s_v in set_values:
-        if s_v not in my_list:
-            return s_v
-
-
 def hash_filename(filename):
     file_ext = '.' + filename.rsplit('.', 1)[1].lower()
     random_name = secrets.token_hex(16)
@@ -170,30 +159,6 @@ def _json(l):
     for i, o in enumerate(l):
         l[i]['_id'] = str(o['_id'])
     return l
-
-
-def all_vids():
-    '''
-    This will get all videos from mongodb
-    Return:
-            the vidoes object in a list
-    '''
-    course = session.get('course')
-    topic = session.get('topic')
-
-    video_ = db.student_shared_videos.find(
-        {
-            "$and": [
-                {"course": course},
-                {"topic": topic}
-            ]
-        }
-    )
-    return list(video_)
-
-
-def insertone(_dict):
-    db.student_shared_videos.insert_one(_dict)
 
 
 def s3_client():
@@ -373,18 +338,19 @@ def cached(course, topic):
     return _text, iframes
 
 
-def read_content(course, topic):
+def read_content(course, subtopic):
     '''
     text_data:
         the approved videos will be handled by this
     '''
-
+    topic_name = Topic.query.get(subtopic.topic_id).name
     my_list = []
     content_ = db.text_display.find(
         {
             "$and": [
                 {"course": course},
-                {"topic": topic}
+                {"topic": topic_name},
+                {"subtopic": subtopic.name}
             ]
         }
     )
@@ -410,7 +376,7 @@ def auth_():
     return auth
 
 
-def insert_text(code='f.PNG', desc=None, en=None,
+def insert_text(topic_id, code='f.PNG', desc=None, en=None,
                 ru=None, es=None, hi=None, ar=None, fr=None,
                 ur=None, bn=None, pt=None, zh=None, tr=None,
                 id=None):
@@ -419,14 +385,15 @@ def insert_text(code='f.PNG', desc=None, en=None,
         this will insert text to a collection
     '''
     course = session.get('course')
-    subject = session.get('subject')
-    topic = session.get('subtopic')
+    subtopic = SubTopic.query.get(topic_id)
+    topic_name = Topic.query.get(subtopic.topic_id).name
+
     text_details = {
         "code": code,
         "desc": desc,
         "course": course,
-        "language": subject,
-        "topic": topic,
+        "topic": topic_name,
+        "subtopic": subtopic.name,
         "en": en,
         "ar": ar,
         "bn": bn,
@@ -444,20 +411,26 @@ def insert_text(code='f.PNG', desc=None, en=None,
     db.ai_video_text.insert_one(text_details)
 
 
-def get_text_desc():
+def get_text_desc(subtopic):
     '''
     get_text_desc:
         this will query the mongodb collection for a match
     '''
 
+    # i will add the topic itself here so that i query params will be three
     _course = session.get('course')
-    _topic = session.get('topic')
+    
+    topic_name = Topic.query.get(subtopic.topic_id).name
+    print(subtopic)
+    print(topic_name)
+    print('-----------------------------------------------------------------')
 
     video_ = db.ai_video_text.find(
         {
             "$and": [
                 {"course": _course},
-                {"topic": _topic}
+                {"topic": topic_name},
+                {"subtopic": subtopic.name}
             ]
 
         }
@@ -465,12 +438,12 @@ def get_text_desc():
     return list(video_)
 
 
-def live_vid_content():
-    all_videos = []
-    col_content = db.student_shared_videos.find()
-    all_videos.append(list(col_content))
-    _list = _json(all_videos[0])
-    return _list
+# def live_vid_content():
+#     all_videos = []
+#     col_content = db.student_shared_videos.find()
+#     all_videos.append(list(col_content))
+#     _list = _json(all_videos[0])
+#     return _list
 
 
 def create_audio_clip(text, output_path):
@@ -522,7 +495,7 @@ def create_video_clip(img, output_path, duration, folder, subs, lang):
     os.remove(path_aud)
 
 
-def join_clips(res_clips, lang):
+def join_clips(res_clips, subtopic):
     '''
     join_clips:
         this will join all the clips together
@@ -530,7 +503,7 @@ def join_clips(res_clips, lang):
         the final output path
     '''
     root_path = app.root_path
-    comp_file = f'{session.get("course")}_{session.get("topic").strip("?")}.mp4'
+    comp_file = f'{session.get("course")}_{subtopic.strip("?")}.mp4'
     output_p = os.path.join(root_path, 'static', 'myvideo', comp_file)
 
     clips_list = []
@@ -541,8 +514,6 @@ def join_clips(res_clips, lang):
     final_c = concatenate_videoclips(clips_list, method="compose")
 
     final_c.write_videofile(output_p)
-
-    # upload_s3vid_languages(output_p, comp_file, lang)
 
     return output_p
 
@@ -568,7 +539,7 @@ def tts(text, output_path):
     engine.runAndWait()
 
 
-def recieve_displayed_text(vid_list, lang):
+def recieve_displayed_text(vid_list, lang, subt):
     '''
     recieve_displayed_text:
         It will read the text from Mongodb
@@ -586,7 +557,7 @@ def recieve_displayed_text(vid_list, lang):
         audio_path = os.path.join(my_audio_video, audio_file)
         video_path = os.path.join(my_audio_video, video_file)
 
-        latin_alphabet = {'en'}
+        # latin_alphabet = {'en'}
 
         text = _d[lang]
         if lang == "en":
@@ -616,7 +587,7 @@ def recieve_displayed_text(vid_list, lang):
         res_clips.append(output_p)
         cl.write_videofile(output_p)
 
-    final_output_path = join_clips(res_clips, lang)
+    final_output_path = join_clips(res_clips, subt)
 
     return final_output_path
 
@@ -652,7 +623,7 @@ def user_courses(id=None):
 
         return course_list
     except AttributeError:
-        flash('Please login to access this page', category='success')
+        flash(_('Please login to access this page'), category='success')
         return redirect(url_for('users.admin_login'))
 
 
@@ -665,13 +636,11 @@ def copy_ai_video(vid_path, dest_path):
 
 
 def validate_time_task(user_id, task_id, task_name):
-    # task_name is only unique to timely tasks
     timely_task = TimeTask.query.filter_by(usertask=task_name).first()
 
     if timely_task is None:
         return True, "Not timely"
     else:
-        # task_id is only unique to timely tasks
         task = TimeTask.query.filter_by(user_id=user_id, id=task_id).first()
 
         if task:
@@ -679,19 +648,14 @@ def validate_time_task(user_id, task_id, task_name):
             if status:
                 return status, "Not timely"
             else:
-                # the time for the solution is not yet up so solution will not
-                # be ready
+                
                 elapsed_time = datetime.now() - task.updated_at
-                hours, minutes, seconds = f'{timedelta(days=1) - elapsed_time}'.split(
-                    ':')
-                flash(
-                    f'''{_task} is already pending
-                        solution will be available in {hours} hr, {minutes} MIN
-                        But you can decline the previous pending task if you want this rather
-                        ''', category='info')
+                hours, minutes, seconds = f'{timedelta(days=1) - elapsed_time}'.split(':')
+                m = _('Hours left to receive solution')
+                flash(f'{m}  {hours}', category='info')
                 return status, "pending"
         else:
-            flash('please request for the solution')
+            flash(_('please request for the solution'), category='info')
             return False, "request"
 
 
@@ -743,7 +707,7 @@ def delete_byID(_id):
     db.ai_video_text.delete_one({'_id': ObjectId(_id)})
 
 
-def text_data(course, topic, desc=None, en=None,
+def text_data(course, subtopic, desc=None, en=None,
               ru=None, es=None, hi=None, ar=None, fr=None,
               ur=None, bn=None, pt=None, zh=None, tr=None,
               id=None):
@@ -751,9 +715,11 @@ def text_data(course, topic, desc=None, en=None,
     text_data:
         structure of the reading text
     '''
+    topic = Topic.query.get(subtopic.topic_id)
     file_details = {
         "course": course,
-        "topic": topic,
+        "topic": topic.name,
+        "subtopic": subtopic.name,
         "desc": desc,
         "en": en,
         "ar": ar,
@@ -866,8 +832,6 @@ def time_():
 
     if courses:
         course = next(iter(courses))
-        print(f'previous rate: {course.rate}')
-
         elapsed_time = datetime.now() - course.get_updated()
         if elapsed_time >= timedelta(hours=1):
             return True, datetime.now()

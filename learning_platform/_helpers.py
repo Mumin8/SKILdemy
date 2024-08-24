@@ -70,10 +70,7 @@ def acceptable(filename):
 
 
 def allowed_file(filename):
-    '''
-    allowed_file:
-        this will validate the allowed files
-    '''
+    '''this will validate the allowed files'''
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -87,6 +84,21 @@ def _voices(language):
 
     return _lang[language], rate
 
+
+def course_delayTasks(ctt, subtopic_id, topic_id):
+    for task in ctt:
+        if task.id == subtopic_id and task.topic_id == topic_id:
+            return True
+    else:
+        return False
+
+
+def timely_t(task):
+    for t in current_user.time_task:
+        if task.id == t.id and task.topic_id == t.usertask:
+            return True
+    return False
+    
 
 def durations_(l, r):
     start = 0
@@ -116,10 +128,7 @@ def split_WC(text, max_length=38):
 
 
 def file_(files, _dir):
-    '''
-    _file:
-        this will save file
-    '''
+    '''this will save file'''
     if 'file' not in files:
         flash('No file part')
         return redirect(request.url)
@@ -136,12 +145,7 @@ def file_(files, _dir):
 
 
 def unlink_file(name, _dir):
-    '''
-    unlink_file:
-        this will delete the unneeded files from the directory
-    args:
-        name: this is the name of the file
-        _dir: this is the directory in which the file is
+    '''this will delete the unneeded files from the directory
     '''
     try:
         os.unlink(os.path.join(app.config[_dir], name))
@@ -240,14 +244,7 @@ def update_trans_by_id(_id, desc):
 
 
 def course_topic(course):
-    """
-    validate_topic:
-        this ensures there is no topic with the same name
-    arg:
-        course_list: the list of all the courses
-    return:
-        True if no such topic exists and False otherwise
-    """
+    """this ensures there is no topic with the same name"""
 
     c_dict = {}
 
@@ -339,9 +336,7 @@ def cached(course, topic):
 
 
 def read_content(course, subtopic):
-    '''
-    text_data:
-        the approved videos will be handled by this
+    '''the approved videos will be handled by this
     '''
     topic_name = Topic.query.get(subtopic.topic_id).name
     my_list = []
@@ -380,9 +375,7 @@ def insert_text(topic_id, code='f.PNG', desc=None, en=None,
                 ru=None, es=None, hi=None, ar=None, fr=None,
                 ur=None, bn=None, pt=None, zh=None, tr=None,
                 id=None):
-    '''
-    insert_text:
-        this will insert text to a collection
+    '''this will insert text to a collection
     '''
     course = session.get('course')
     subtopic = SubTopic.query.get(topic_id)
@@ -412,19 +405,11 @@ def insert_text(topic_id, code='f.PNG', desc=None, en=None,
 
 
 def get_text_desc(subtopic):
+    '''this will query the mongodb collection for a match
     '''
-    get_text_desc:
-        this will query the mongodb collection for a match
-    '''
-
-    # i will add the topic itself here so that i query params will be three
     _course = session.get('course')
     
     topic_name = Topic.query.get(subtopic.topic_id).name
-    print(subtopic)
-    print(topic_name)
-    print('-----------------------------------------------------------------')
-
     video_ = db.ai_video_text.find(
         {
             "$and": [
@@ -438,37 +423,19 @@ def get_text_desc(subtopic):
     return list(video_)
 
 
-# def live_vid_content():
-#     all_videos = []
-#     col_content = db.student_shared_videos.find()
-#     all_videos.append(list(col_content))
-#     _list = _json(all_videos[0])
-#     return _list
-
-
 def create_audio_clip(text, output_path):
-    '''
-    create_audio_clip:
-        this will read the text
-    args:
-        text:   the string of text to read
-        output_path: the path to the synthesized audio
+    '''this will read the text
     '''
     tts(text, output_path)
 
 
 def create_video_clip(img, output_path, duration, folder, subs, lang):
+    '''this will create the video clip
     '''
-    create_video_clip:
-        this will create the video clip
-    '''
-
     if not current_user.is_authenticated:
         return redirect(url_for('users.admin_login'))
 
-    # video_duration = durationar
     audio_clip_path = str(current_user.id) + "_"'temp_audio.mp3'
-
     path_aud = os.path.join(folder, audio_clip_path)
 
     if lang == "en":
@@ -477,15 +444,14 @@ def create_video_clip(img, output_path, duration, folder, subs, lang):
         process_for_nonLatin(img, path_aud, lang)
 
     video_clip = ImageClip(img, duration=duration)
-
     video_clip = video_clip.set_audio(AudioFileClip(path_aud))
+
 
     def generator(txt):
         return TextClip(txt, font='Arial', fontsize=30, color='aqua',
                         method='caption', size=(640, None), align='South')
 
     subtitles = SubtitlesClip(subs, generator)
-
     video_clip = CompositeVideoClip(
         [video_clip, subtitles.set_position(('center', 'bottom'))])
 
@@ -496,32 +462,24 @@ def create_video_clip(img, output_path, duration, folder, subs, lang):
 
 
 def join_clips(res_clips, subtopic):
-    '''
-    join_clips:
-        this will join all the clips together
-    return:
-        the final output path
+    '''this will join all the clips together
     '''
     root_path = app.root_path
     comp_file = f'{session.get("course")}_{subtopic.strip("?")}.mp4'
     output_p = os.path.join(root_path, 'static', 'myvideo', comp_file)
 
     clips_list = []
-
     for _clip in res_clips:
         clips_list.append(VideoFileClip(_clip))
 
     final_c = concatenate_videoclips(clips_list, method="compose")
-
     final_c.write_videofile(output_p)
 
     return output_p
 
 
 def tts(text, output_path):
-    '''
-    tts:
-        this will instance text to speech and set the properties
+    '''this will instance text to speech and set the properties
     '''
     lang = session.get('lang')
 
@@ -540,13 +498,8 @@ def tts(text, output_path):
 
 
 def recieve_displayed_text(vid_list, lang, subt):
+    '''It will read the text from Mongodb
     '''
-    recieve_displayed_text:
-        It will read the text from Mongodb
-    arg:
-        vid_list: the list of videos
-    '''
-
     res_clips = []
     root_path = app.root_path
 
@@ -556,8 +509,6 @@ def recieve_displayed_text(vid_list, lang, subt):
 
         audio_path = os.path.join(my_audio_video, audio_file)
         video_path = os.path.join(my_audio_video, video_file)
-
-        # latin_alphabet = {'en'}
 
         text = _d[lang]
         if lang == "en":
@@ -635,28 +586,27 @@ def copy_ai_video(vid_path, dest_path):
     return name
 
 
-def validate_time_task(user_id, task_id, task_name):
-    timely_task = TimeTask.query.filter_by(usertask=task_name).first()
-
-    if timely_task is None:
+def validate_time_task(ctasks, task):
+    status = course_delayTasks(ctasks, task.id, task.topic_id)
+    if not status:
         return True, "Not timely"
     else:
-        task = TimeTask.query.filter_by(user_id=user_id, id=task_id).first()
-
-        if task:
-            status, _task = task_pending(user_id)
-            if status:
-                return status, "Not timely"
-            else:
-                
+        status = timely_t(task)
+        status_ = task_pending(current_user.time_task)
+        if status: 
+            if status_:
                 elapsed_time = datetime.now() - task.updated_at
-                hours, minutes, seconds = f'{timedelta(days=1) - elapsed_time}'.split(':')
-                m = _('Hours left to receive solution')
-                flash(f'{m}  {hours}', category='info')
-                return status, "pending"
+                waiting_period = timedelta(hours=5)
+                if elapsed_time >= waiting_period:
+                    return True, "Not timely"
+                return status_, "pending"
+            else:
+                return True, "Not timely"  
         else:
-            flash(_('please request for the solution'), category='info')
-            return False, "request"
+            if status_:
+                return status_, "pending"
+            else:
+                return status_, 'request' 
 
 
 def vid_ids(rel_vid):
@@ -667,20 +617,24 @@ def vid_ids(rel_vid):
     return ids_list
 
 
-def task_pending(user_id):
-    user = User.query.get(user_id)
-    for tt in user.time_task:
-        elapsed_time = datetime.now() - tt.updated_at
-        waiting_period = timedelta(days=1)
+def task_pending(tasks):
+    for t in tasks:
+        elapsed_time = datetime.now() - t.updated_at
+        waiting_period = timedelta(hours=5)
         if elapsed_time <= waiting_period:
-            return False, tt.usertask
-    return True, None
+            hours, m, s = f'{waiting_period - elapsed_time}'.split(':')
+            m = _('Hours left to receive solution')
+            flash(f'{m}  {str(int(hours)+1)}', category='info')
+            return True
+    return False
+  
+
+def check_timeup(s):
+    pass    
 
 
 def verify_payment(ref):
-    '''
-    verify_payment:
-            this is where the payment is verified
+    '''this is where the payment is verified
     '''
     PAYSTACK_SK = os.getenv("PAYSTACK_SECRET_KEY")
     base_url = "https://api.paystack.co/"
@@ -701,9 +655,8 @@ def verify_payment(ref):
 
 
 def delete_byID(_id):
-    '''
-        Delete the field with the _id
-    '''
+    '''Delete the field with the _id'''
+
     db.ai_video_text.delete_one({'_id': ObjectId(_id)})
 
 
@@ -711,9 +664,7 @@ def text_data(course, subtopic, desc=None, en=None,
               ru=None, es=None, hi=None, ar=None, fr=None,
               ur=None, bn=None, pt=None, zh=None, tr=None,
               id=None):
-    '''
-    text_data:
-        structure of the reading text
+    '''structure of the reading text
     '''
     topic = Topic.query.get(subtopic.topic_id)
     file_details = {
@@ -737,8 +688,7 @@ def text_data(course, subtopic, desc=None, en=None,
 
 
 def live_display_text_content():
-    '''
-        Processes the text that will be displayed
+    '''Processes the text that will be displayed
     '''
     all_videos = []
     col_content = db.text_display.find()
@@ -749,16 +699,14 @@ def live_display_text_content():
 
 
 def get_display_text_byID(_id):
-    '''
-        Retrieve the text in the field with _id
+    '''Retrieve the text in the field with _id
     '''
     video_ = db.text_display.find_one({'_id': _id})
     return video_
 
 
 def tream(_id, text, lang=None):
-    '''
-        Edit the original text in the field
+    '''Edit the original text in the field
     '''
     update_fields = {}
     if lang is None:
@@ -775,8 +723,7 @@ def tream(_id, text, lang=None):
 
 
 def update_display_text(_id, desc):
-    '''
-        populate other fields with the described text
+    ''' populate other fields with the described text
     '''
     lang = session.get('lang')
     update_fields = {}
@@ -791,8 +738,7 @@ def update_display_text(_id, desc):
 
 
 def update_ai_text(_id, desc):
-    '''
-        populate other fields with the described text
+    '''populate other fields with the described text
     '''
     lang = session.get('lang')
     update_fields = {}
@@ -807,15 +753,13 @@ def update_ai_text(_id, desc):
 
 
 def delete_display_text_byID(_id):
-    '''
-        Delete the record with the _id
+    '''Delete the record with the _id
     '''
     db.text_display.delete_one({'_id': _id})
 
 
 def exchange_rate():
-    '''
-    gets the exchange rate for the course
+    '''gets the exchange rate for the course
     '''
     url = "https://openexchangerates.org/api/latest.json?app_id=72d8b9a87a934d46afb186e51fd18a8e&base=USD&symbols=GHS"
 
@@ -825,8 +769,7 @@ def exchange_rate():
 
 
 def time_():
-    '''
-    checks if the time is up to update the rate
+    '''checks if the time is up to update the rate
     '''
     courses = Course.query.all()
 
@@ -839,8 +782,7 @@ def time_():
 
 
 def completed_course(course):
-    '''
-    check if the user is ready to retrieve certificate
+    '''check if the user is ready to retrieve certificate
     '''
     ct = datetime.now()
     td = timedelta(days=course.duration)

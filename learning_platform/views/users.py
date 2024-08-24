@@ -2,14 +2,7 @@ import os
 from datetime import datetime, timedelta
 import requests
 from flask import (
-    Blueprint,
-    render_template,
-    redirect,
-    url_for,
-    request,
-    jsonify,
-    flash,
-    session)
+    Blueprint, render_template, redirect, url_for, request, jsonify, flash, session)
 from botocore.exceptions import ClientError
 from flask_babel import gettext as _
 from flask_limiter.errors import RateLimitExceeded
@@ -20,20 +13,9 @@ from learning_platform.forms.form import Registration, LoginForm, ResetForm, New
 from learning_platform.models.models import User, Course, SubTopic, TimeTask
 from learning_platform.google_translations import text_translator
 from learning_platform._helpers import (
-    c_and_topics,
-    cached,
-    task_pending,
-    free_trial,
-    validate_time_task,
-    get_ref,
-    get_lang,
-    presigned_url,
-    presigned_cert_url,
-    upload_certificate,
-    s3_client,
-    encryption,
-    verify_payment,
-    completed_course)
+    c_and_topics, cached, free_trial, validate_time_task, get_ref, 
+    get_lang, presigned_url, presigned_cert_url, upload_certificate, s3_client, encryption,
+    verify_payment, completed_course)
 from PIL import Image, ImageDraw, ImageFont
 
 user_bp = Blueprint('users', __name__, static_folder='static',
@@ -80,7 +62,7 @@ def completed_topics(c):
             if u.name_a == t.usertask:
                 some += 1
                 break
-    return int((some / all)*100)
+    return int((some / all) * 100)
 
 
 @user_bp.errorhandler(RateLimitExceeded)
@@ -151,9 +133,7 @@ def login():
 @user_bp.route("/logout", methods=['GET', 'POST'])
 @login_required
 def user_logout():
-    '''
-    user_logout:
-        the user will log out from here
+    '''the user will log out from here
     '''
     user = current_user
     user.authenticated = False
@@ -168,7 +148,6 @@ def forgot_password():
     form = ResetForm()
     if form.validate_on_submit():
         email = form.email.data
-        # check if password exists in the database first
         user = User.query.filter_by(email=email).first()
 
         lnk_ms = 'Click this link to reset your password'
@@ -217,13 +196,10 @@ def reset_password(token):
 @user_bp.route('/enrol/<string:course_id>', methods=['GET', 'POST'])
 @login_required
 def enroll_course(course_id):
+    '''the student will enroll in the course
     '''
-    the student will enroll in the course
-    '''
-
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
-
     status, result = verify_payment(ref[0])
 
     if status:
@@ -244,11 +220,6 @@ def enroll_course(course_id):
             else:
                 course.update_enrolled_at(datetime.now())
                 current_user.enrolling.append(course)
-                for subt in course.time_task.sub_topic:
-                    det_id = encryption(
-                        f'{course.course_creator}{subt.topic_id}{subt.id}')
-                    new_task = TimeTask(usertask=subt.name_a, id=det_id)
-                    db.session.add(new_task)
             db.session.commit()
 
             flash(
@@ -264,9 +235,7 @@ def enroll_course(course_id):
 
 @user_bp.route("/userprofile", methods=['GET', 'POST'])
 def userprofile():
-    '''
-    userprofile:
-        this will initiate the user profile setting
+    '''this will initiate the user profile setting
     '''
     if current_user.is_authenticated:
         _lis = []
@@ -274,13 +243,13 @@ def userprofile():
         for c in user_courses:
             st, v = completed_course(c)
             pct = completed_topics(c)
-           
+
             if v >= 0:
                 ms = text_translator(str(v) + ' days left', get_lang())
                 _lis.append([c, ms, pct])
             else:
                 _lis.append([c, ' ', pct])
-        
+
         return render_template(
             'user/profile.html',
             user_courses=_lis)
@@ -308,8 +277,7 @@ def paginate(page, fp, lp):
 
 @user_bp.route('/learns/<string:course_id>', methods=['GET', 'POST'])
 def learn_skills(course_id):
-    '''
-    the course and topics will be displayed for the
+    '''the course and topics will be displayed for the
     '''
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
@@ -353,23 +321,18 @@ def request_task_solution(topic_id):
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 
-    status, trash = task_pending(current_user.id)
-    if status:
-        usertask = TimeTask.query.get(topic_id)
-        user = User.query.get(current_user.id)
-        user.time_task.append(usertask)
-        db.session.commit()
-        flash(_('successfully requested for solution'), category='success')
-    else:
-        flash(_('There is already one task pending for solution'), category='warning')
+    topic = SubTopic.query.get(topic_id)
+    task = TimeTask(id=topic.id, usertask=topic.topic_id, updated_at=datetime.now())
+    current_user.time_task.append(task)
+    db.session.commit()
+    flash(_('successfully requested for solution'), category='success')
     return redirect(url_for('users.userprofile'))
 
 
 @user_bp.route('/trial/<string:course_id>/<string:topic_id>',
                methods=['GET', 'POST'])
 def free_test(course_id, topic_id):
-    '''
-    gets and displays the reading content for the user
+    '''gets and displays the reading content for the user
     '''
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
@@ -390,8 +353,7 @@ def free_test(course_id, topic_id):
 @user_bp.route('/mat/<string:course_id>/<string:topic_id>',
                methods=['GET', 'POST'])
 def topic_by_course(course_id, topic_id):
-    '''
-    gets and displays the reading content for the user
+    '''gets and displays the reading content for the user
     '''
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
@@ -403,7 +365,9 @@ def topic_by_course(course_id, topic_id):
 
     compl_c, n_ = completed_course(c)
     if compl_c:
-        flash(_('Your access time has elapsed, you can access your certificate'), category='warning')
+        flash(
+            _('Your access time has elapsed, you can access your certificate'),
+            category='warning')
         return redirect(url_for('users.userprofile'))
 
     course = Course.query.get(course_id).name
@@ -422,9 +386,7 @@ def topic_by_course(course_id, topic_id):
                methods=['GET', 'POST'])
 @login_required
 def gptplus_vid(course_id, topic_id):
-    '''
-    gptplus_vid:
-        this will get the video here straight away
+    '''this will get the video here straight away
     '''
     if not current_user.is_authenticated:
         return redirect(url_for('users.logn'))
@@ -435,8 +397,12 @@ def gptplus_vid(course_id, topic_id):
 
     file = encryption(_file) + '.mp4'
 
-    status, state = validate_time_task(current_user.id, topic_id, topic.name_a)
+    status, state = validate_time_task(course.time_task.sub_topic, topic)
+
+    print(f'status: {status} state: {state}')
+
     if status and state == "Not timely":
+
         url = presigned_url(file)
         not_time = state
         return render_template(
@@ -445,7 +411,8 @@ def gptplus_vid(course_id, topic_id):
             course_id=course_id,
             not_time=not_time)
 
-    elif not status and state == "pending":
+    elif status and state == "pending":
+        print('it is pending')
         name = "not yet ready"
         pending = state
         return render_template(
@@ -455,6 +422,7 @@ def gptplus_vid(course_id, topic_id):
             topic_id=topic_id,
             pending=pending)
     elif not status and state == 'request':
+        print('make request')
         name = "make request"
         ask = state
         flash(_('You can request for the solution'))
@@ -468,7 +436,8 @@ def gptplus_vid(course_id, topic_id):
 
 @user_bp.route('/payment/<string:course_id>', methods=['GET'])
 def make_payment(course_id):
-    '''This is where payment is made'''
+    '''This is where payment is made
+    '''
     if not current_user.is_authenticated:
         next_url = request.url
         return redirect(url_for('users.login', next_url=next_url))
@@ -515,9 +484,7 @@ def make_payment(course_id):
 
 @user_bp.route('/locale', methods=['GET', 'POST'])
 def user_locale():
-    '''
-    this will get the language of the client user
-    '''
+    '''this will get the language of the client user'''
     if request.method == "POST":
         session['lang'] = request.form.get('language')
         return redirect(url_for('home.home'))
@@ -527,8 +494,8 @@ def user_locale():
 
 @user_bp.route('/cert/<string:course_id>', methods=['GET', 'POST'])
 def cert_of_completion(course_id):
-    '''where the certificate will be previewed'''
-
+    '''where the certificate will be previewed
+    '''
     if not current_user.is_authenticated:
         next_url = request.url
         return redirect(url_for('users.login', next_url=next_url))
@@ -568,8 +535,8 @@ def cert_of_completion(course_id):
 
 @user_bp.route('/preview_cert/<string:course_id>', methods=['GET', 'POST'])
 def download_cert(course_id):
-    '''certificate will be downloaded here'''
-
+    '''certificate will be downloaded here
+    '''
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 
@@ -622,7 +589,8 @@ def download_cert(course_id):
 
 @user_bp.route('/dl_cert/<string:id>', methods=['GET', 'POST'])
 def download_your_cert(id):
-    '''where the certificate will be downloaded'''
+    '''where the certificate will be downloaded
+    '''
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 

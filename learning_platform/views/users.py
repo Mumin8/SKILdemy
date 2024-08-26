@@ -94,8 +94,7 @@ def register():
             user = User(fullname=fullname, username=username, email=email,
                         password=hashed_password, moderator=moderator)
             
-            solution = User_solution(user=user)
-            db.session.add(solution)
+            user.user_solu = User_solution(user=user)
             db.session.add(user)
             db.session.commit()
             if moderator:
@@ -324,10 +323,10 @@ def request_task_solution(topic_id):
         return redirect(url_for('users.login'))
 
     topic = SubTopic.query.get(topic_id)
-    topic.updated_at = datetime.now()
-    task = User_solution(user_id=current_user.id)
-    current_user.user_solu.sub_topic.append(topic)
-    # current_user.time_task.append(task)
+    print(topic.course_id)
+    # name_a = encryption(f'{topic.id}{topic.topic_id}{current_user.id}')
+    task = SubTopic(name=topic.name, name_a=topic.name_a, timetask_id=topic.timetask_id)
+    current_user.user_solu.sub_topics.append(task)
     db.session.commit()
     flash(_('successfully requested for solution'), category='success')
     return redirect(url_for('users.userprofile'))
@@ -612,3 +611,4 @@ def download_your_cert(id):
                 _('Certificate has been generated in your downloads folder'),
                 category="success")
     return redirect(url_for('users.userprofile'))
+

@@ -151,7 +151,7 @@ class SubTopic(db.Model):
             uuid.uuid4()))
     name = db.Column(db.String(80), nullable=False)
     desc = db.Column(db.String(250), nullable=True)
-    name_a = db.Column(db.String(250), nullable=True)
+    name_a = db.Column(db.String(80), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), default=func.now())
     topic_id = db.Column(db.String(36), db.ForeignKey('topic.id'))
@@ -185,11 +185,11 @@ class User_solution(db.Model):
         primary_key=True,
         default=lambda: str(
             uuid.uuid4()))
+    
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
     sub_topics = db.relationship('SubTopic', secondary=user_solution_subtopic, 
                                  backref='user_solutions', lazy='dynamic')
     updated_at = db.Column(db.DateTime(timezone=True), default=func.now())
-    # sub_topic = db.relationship('SubTopic', backref='user_solution', lazy='dynamic')
 
 
 with app.app_context():

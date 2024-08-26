@@ -26,6 +26,8 @@ load_dotenv()
 db = SQLAlchemy()
 app = Flask(__name__)
 
+
+# babel things
 babel = Babel(app, locale_selector=get_locale, default_locale='en')
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = pkg_path
 
@@ -81,5 +83,6 @@ mail = Mail(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+# login_manager.needs_refresh_message = 'Please log in again.'
 login_manager.needs_refresh_message_category = 'danger'
 login_manager.login_message = u'please login first'

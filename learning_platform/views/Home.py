@@ -15,13 +15,18 @@ home_bp = Blueprint(
 
 @home_bp.route('/')
 def home():
-    '''the page visited when the site is visited
     '''
+    home:
+        the page visited when the site is visited
+    '''
+   
+    print(f'{encryption("tr")[:16]}')
+    
     welc = gettext('Welcome to SKILdemy')
+
     courses = Course.query.all()
 
     status, t = time_()
-    
     if status:
         rate = exchange_rate()
         for c in courses:
@@ -30,8 +35,11 @@ def home():
         db.session.commit()
 
     auth = auth_()
+
+    # for getting locale flag
     lang = get_lang()
     lang = lang + '.jpg'
+
    
     return render_template(
         'home/home.html',
@@ -41,18 +49,29 @@ def home():
 
 @home_bp.route('/<string:course_id>/', methods=["GET"])
 def home_(course_id):
-    '''the page visited when a course is clicked'''
+    '''
+    home:
+        the page visited when a course is clicked
+    '''
+
     auth = auth_()
     lang = get_lang()
     lang = lang + '.jpg'
+
     course = Course.query.get(course_id)
+    
+    
+
     
     if course is not None:
         desc = course.description
         if get_lang() != 'en':
-            desc = text_translator(desc, get_lang())  
+            desc = text_translator(desc, get_lang()) 
+            
         trial = course.trial_topics
+
         free = free_trial(trial)
+
         topics = course.topics
         return render_template(
             'home/home.html',

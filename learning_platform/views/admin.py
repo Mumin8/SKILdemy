@@ -21,6 +21,7 @@ from learning_platform._helpers import (
     encryption,
     acceptable,
     insert_text,
+    presigned_url,
     course_topic,
     c_and_topics,
     file_,
@@ -93,7 +94,8 @@ def validate_subject(course_id, subject_id):
 
 
 def validate_list():
-    '''this will prepare the list for new  values
+    '''
+    this will prepare the list for new  values
     '''
     if len(v_id) > 0:
         v_id.pop()
@@ -241,12 +243,15 @@ def course_timely_asso(stop_id, c_id):
     _, fv = next(iter(c_and_t.items()))
     topic = SubTopic.query.get(stop_id)
 
+    n = encryption(
+        f'{course.course_creator}{topic.topic_id}{course.id}{topic.id}')
+
     for sub_topic in course.time_task.sub_topic:
-        if sub_topic.id == stop_id:
+        if sub_topic.name_a == n:
             flash('already associated', category='warning')
             break
     else:
-        # topic.update_name_a(n)
+        topic.update_name_a(n)
         course.time_task.sub_topic.append(topic)
         db.session.commit()
         flash('successfully added to delayed tasks', category='success')
@@ -288,15 +293,20 @@ def course_free_asso(stop_id, c_id):
 
 @admin_bp.route('/cs_avail', methods=['GET', 'POST'])
 def cs_avail():
-    '''this will get all the available courses
     '''
+    cs_avail:
+        this will get all the available courses
+    '''
+
     cst = Course.query.all()
     return render_template('content_management/delete_course.html', cst=cst)
 
 
 @admin_bp.route('/add_topic', methods=['GET', 'POST'])
 def add_topic():
-    '''this will add a topic to the topic table
+    '''
+    add_topic:
+        this will add a topic to the topic table
     '''
     form = TopicForm(request.form)
     if form.validate_on_submit():
@@ -310,7 +320,9 @@ def add_topic():
 
 @admin_bp.route('/ts_avail', methods=['GET'])
 def ts_avail():
-    '''this will get all the available topics
+    '''
+    ts_avail:
+        this will get all the available topics
     '''
     cst = Topic.query.all()
     return render_template('content_management/delete_topic.html', cst=cst)
@@ -318,7 +330,9 @@ def ts_avail():
 
 @admin_bp.route('/add_subtopic', methods=['GET', 'POST'])
 def add_sub_topic():
-    '''this will add a topic to the topic table
+    '''
+    add_sub_topic:
+        this will add a topic to the topic table
     '''
     form = SubTopicForm(request.form)
     if form.validate_on_submit():
@@ -342,7 +356,9 @@ def sts_avail():
 
 @admin_bp.route('/add_tc', methods=['GET', 'POST'])
 def add_tc():
-    '''this will add a particular topic to a particular course
+    '''
+    add_tc:
+        this will add a particular topic to a particular course
     '''
     courses = Course.query.all()
     topics = Topic.query.all()
@@ -375,8 +391,11 @@ def add_tc():
 
 @admin_bp.route('/add_subtt', methods=['GET', 'POST'])
 def add_subtt():
-    '''this will add a particular subtopic to a particular topic
     '''
+    add_tc:
+        this will add a particular subtopic to a particular topic
+    '''
+
     topics = Topic.query.all()
     subtopics = SubTopic.query.all()
     if request.method == "POST":
@@ -410,13 +429,17 @@ def add_subtt():
 
 @admin_bp.route('/c_s_st', methods=['GET', 'POST'])
 def add_c_s_st():
-    ''' this will add course, subject and sub topic to online ai content
-    '''
+    ''' this will add course, subject and sub topic to online ai content'''
     course = Course.query.all()
     subtopic = SubTopic.query.all()
     if request.method == "POST":
         session['course'] = request.form.get("course")
+        # session['subject'] = request.form.get("subject")
+        # instead of passing the subtopic name, i should pass the subtopic itself
         subtopic_id = request.form.get("subtopic")
+        print(subtopic_id)
+        print('--------------------------------------------------')
+        # this insert function will take subtopic so that i can retrieve the topic associated with it
         insert_text(subtopic_id)
         flash('successfully added content for ai video', category='success')
     return render_template(
@@ -427,7 +450,9 @@ def add_c_s_st():
 
 @admin_bp.route('/reading_text', methods=['GET', 'POST'])
 def add_reading_text():
-    '''this will add the skeleton of the reading text
+    '''
+    add_reading_text:
+        this will add the skeleton of the reading text
     '''
     courses = Course.query.all()
     subtopics = SubTopic.query.all()
@@ -444,14 +469,30 @@ def add_reading_text():
 
     return render_template('content_management/reading_text.html',
                            courses=courses,
-
+                           #  subjects=subjects,
                            topics=subtopics)
+
+
+# @admin_bp.route('/gpvid', methods=['GET'])
+# def get_published_Video():
+#     '''
+#     get_published_video:
+#         this will get all the published videos for visual display
+#     '''
+#     vid_content = live_vid_content()
+#     url = presigned_url('3957dc2fc92e347daa1d388e5b9b71eb.mp4')
+#     print(f'the url {vid_content}')
+#     return render_template(
+#         'content_management/preview_shared_videos.html',
+#         url=url)
 
 
 @admin_bp.route('/gtv', methods=['GET', 'POST'])
 @login_required
 def aud_vid(lang, subtopic):
-    '''this is where the audio video clip thing starts
+    '''
+    aud_vid:
+        this is where the audio video clip thing starts
     '''
     v = get_text_desc(subtopic)
     acc_v = recieve_displayed_text(v, lang, subtopic.name)
@@ -463,7 +504,9 @@ def aud_vid(lang, subtopic):
                 methods=['GET', 'POST'])
 @login_required
 def gptplus(language, course_id, topic_id):
-    '''this is where the ai video is processed
+    '''
+    gptplus:
+        this is where the ai video is processed
     '''
 
     if not current_user.is_authenticated:
@@ -493,7 +536,9 @@ def admin_all_course():
 
 @admin_bp.route('/gpai', methods=['GET'])
 def get_published_AI():
-    '''this will get the AI content for analysis
+    '''
+    get_published_AI:
+        this will get the AI content for analysis
     '''
     lang = session.get('lang')
     contents = live_text_Display_AI_content()
@@ -506,7 +551,9 @@ def get_published_AI():
 
 @admin_bp.route('/updatePAI/<string:_id>', methods=['GET', 'POST'])
 def update_published_AI(_id):
-    '''the text and code snippet will be updated here
+    '''
+    update_published_AI:
+        the text and code snippet will be updated here
     '''
     vid = get_byID(ObjectId(_id))
     if request.method == 'POST':
@@ -523,7 +570,9 @@ def update_published_AI(_id):
 
 @admin_bp.route('/del_course/<string:c_id>', methods=['GET'])
 def del_course(c_id):
-    '''this will delete the course with id = s_id from the database
+    '''
+    del_course:
+        this will delete the course with id = s_id from the database
     '''
     try:
         course = Course.query.filter_by(id=c_id).first()
@@ -536,7 +585,9 @@ def del_course(c_id):
 
 @admin_bp.route('/del_topic/<string:t_id>', methods=['GET'])
 def del_topic(t_id):
-    '''this will delete the topic with id = t_id from the database
+    '''
+    del_topic:
+        this will delete the topic with id = t_id from the database
     '''
     try:
         topic = Topic.query.filter_by(id=t_id).first()
@@ -549,7 +600,9 @@ def del_topic(t_id):
 
 @admin_bp.route('/del_subtopic/<string:st_id>', methods=['GET'])
 def del_subtopic(st_id):
-    '''this will delete the subtopic with id = st_id from the database
+    '''
+    del_subtopic:
+        this will delete the subtopic with id = st_id from the database
     '''
     try:
         subtopic = SubTopic.query.filter_by(id=st_id).first()
@@ -578,7 +631,9 @@ def delete_ai_image(_id):
 
 @admin_bp.route('/gptd', methods=['GET', 'POST'])
 def get_reading_text():
-    '''this will get the AI content for analysis
+    '''
+    get_published_AI:
+        this will get the AI content for analysis
     '''
     lang = request.form.get('language')
 
@@ -624,7 +679,8 @@ def edit_translation(_id):
 
 @admin_bp.route('/t_update/<string:_id>', methods=['GET', 'POST'])
 def update_text(_id):
-    '''It will update a particular field
+    '''
+        It will update a particular field
     '''
 
     if request.method == 'POST':
@@ -640,7 +696,8 @@ def update_text(_id):
 
 @admin_bp.route('/t_ai_update/<string:_id>', methods=['GET', 'POST'])
 def update_ai_translated_text(_id):
-    '''It will update a particular field
+    '''
+        It will update a particular field
     '''
 
     if request.method == 'POST':
@@ -660,7 +717,8 @@ def update_ai_translated_text(_id):
 
 @admin_bp.route('/ai_t_update/<string:_id>', methods=['GET', 'POST'])
 def translate_ai_text(_id):
-    '''It will update a particular field
+    '''
+        It will update a particular field
     '''
 
     desc = get_byID(ObjectId(_id))
@@ -671,7 +729,8 @@ def translate_ai_text(_id):
 
 @admin_bp.route('/del_txt_d/<string:_id>', methods=['GET'])
 def delete_display_text(_id):
-    '''It will delete the record for the reading
+    '''
+        It will delete the record for the reading
     '''
     delete_display_text_byID(ObjectId(_id))
     flash('successfully deleted the record', category='info')
@@ -680,7 +739,8 @@ def delete_display_text(_id):
 
 @admin_bp.route('/unenroll_user', methods=['GET', 'POST'])
 def unenroll_user():
-    '''Get user based on email
+    '''
+    Get user based on email
     '''
     if request.method == "POST":
         email = request.form.get('email')
@@ -699,7 +759,8 @@ def unenroll_user():
 @admin_bp.route('/unenroll/<string:u_id>/<string:c_id>',
                 methods=['GET', 'POST'])
 def unenroll(c_id, u_id):
-    '''user will be removed from here
+    '''
+    user will be removed from here
     '''
     user = User.query.get(u_id)
     course = Course.query.get(c_id)

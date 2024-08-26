@@ -27,6 +27,12 @@ course_topics = db.Table('course_topics',
                              'topic.id'), primary_key=True)
                          )
 
+user_solution_subtopic = db.Table('user_solution_subtopic',
+                                    db.Column('user_solution_id', db.String(36), 
+                                              db.ForeignKey('user_solution.id'), primary_key=True),
+                                    db.Column('subtopic_id', db.String(36), 
+                                              db.ForeignKey('subtopic.id'), primary_key=True)
+)
 
 class User(db.Model, UserMixin):
     __tablename__ = "user"
@@ -52,6 +58,7 @@ class User(db.Model, UserMixin):
         'Course', secondary='user_course', backref='enrollers')
 
     time_task = db.relationship('TimeTask', backref='user', lazy='dynamic')
+    user_solu = db.relationship('User_solution', backref='user', uselist=False)
 
     def is_active(self):
         """True, as all users are active."""
@@ -146,6 +153,7 @@ class SubTopic(db.Model):
     desc = db.Column(db.String(250), nullable=True)
     name_a = db.Column(db.String(250), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
+    updated_at = db.Column(db.DateTime(timezone=True), default=func.now())
     topic_id = db.Column(db.String(36), db.ForeignKey('topic.id'))
     course_id = db.Column(db.String(36), db.ForeignKey('course.id'))
     timetask_id = db.Column(db.String(36), db.ForeignKey('timetask.id'))
@@ -167,6 +175,21 @@ class TimeTask(db.Model):
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
     course_id = db.Column(db.String(36), db.ForeignKey('course.id'))
     sub_topic = db.relationship('SubTopic', backref='timetask', lazy='dynamic')
+
+
+
+class User_solution(db.Model):
+    __tablename__ = "user_solution"
+    id = db.Column(
+        db.String(36),
+        primary_key=True,
+        default=lambda: str(
+            uuid.uuid4()))
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
+    sub_topics = db.relationship('SubTopic', secondary=user_solution_subtopic, 
+                                 backref='user_solutions', lazy='dynamic')
+    updated_at = db.Column(db.DateTime(timezone=True), default=func.now())
+    # sub_topic = db.relationship('SubTopic', backref='user_solution', lazy='dynamic')
 
 
 with app.app_context():

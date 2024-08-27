@@ -12,7 +12,7 @@ from werkzeug.local import LocalProxy
 from flask_babel import gettext as _
 from flask import g, session, flash, redirect, url_for, request
 from flask_login import current_user
-from learning_platform import mongo, app, bcrypt
+from learning_platform import mongo, app
 from datetime import datetime, timedelta, date
 from moviepy.editor import (
     AudioFileClip,
@@ -25,7 +25,7 @@ from moviepy.video.tools.subtitles import SubtitlesClip
 from werkzeug.utils import secure_filename
 from learning_platform.google_translations import (
     text_translator, process_for_nonLatin, get_locale, get_duration)
-from learning_platform.models.models import Course, TimeTask, User, Topic, SubTopic
+from learning_platform.models.models import Course, Topic, SubTopic
 
 my_audio_video = 'output_folder/'
 
@@ -98,7 +98,7 @@ def timely_t(task):
         if task.name_a == t.name_a:
             return True, t
     return False, task
-    
+
 
 def durations_(l, r):
     start = 0
@@ -408,7 +408,7 @@ def get_text_desc(subtopic):
     '''this will query the mongodb collection for a match
     '''
     _course = session.get('course')
-    
+
     topic_name = Topic.query.get(subtopic.topic_id).name
     video_ = db.ai_video_text.find(
         {
@@ -445,7 +445,6 @@ def create_video_clip(img, output_path, duration, folder, subs, lang):
 
     video_clip = ImageClip(img, duration=duration)
     video_clip = video_clip.set_audio(AudioFileClip(path_aud))
-
 
     def generator(txt):
         return TextClip(txt, font='Arial', fontsize=30, color='aqua',
@@ -600,15 +599,17 @@ def validate_time_task(ctasks, task):
                 waiting_period = timedelta(hours=1)
                 if elapsed_time >= waiting_period:
                     return True, "Not timely"
-                flash('you can request another solution after this solution is delivered', category='success')
-                return status_, "pending"   
+                flash(
+                    'you can request another solution after this solution is delivered',
+                    category='success')
+                return status_, "pending"
             else:
-                return True, "Not timely"  
+                return True, "Not timely"
         else:
             if status_:
                 return status_, "pending"
             else:
-                return status_, 'request' 
+                return status_, 'request'
 
 
 def vid_ids(rel_vid):
@@ -624,16 +625,15 @@ def task_pending(tasks):
         elapsed_time = datetime.now() - t.updated_at
         waiting_period = timedelta(hours=1)
         if elapsed_time <= waiting_period:
-            print(t.id)
             h, m_, s = f'{waiting_period - elapsed_time}'.split(':')
             m = _('count down to next solution ')
             flash(f'{m}  {h}:{m_}', category='info')
             return True
     return False
-  
+
 
 def check_timeup(s):
-    pass    
+    pass
 
 
 def verify_payment(ref):

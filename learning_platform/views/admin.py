@@ -1,13 +1,8 @@
 from bson import ObjectId
-from flask import (
-    Blueprint,
-    render_template,
-    redirect,
-    url_for,
-    request,
-    flash,
-    session,
-    jsonify)
+from flask import (Blueprint, render_template, redirect, url_for, request,
+                   flash,
+                   session,
+                   jsonify)
 from flask_babel import gettext as _
 from flask_login import login_required, current_user
 from learning_platform import bcrypt, db
@@ -51,9 +46,7 @@ v_id = []
 
 
 def validate_subtopic_for_topic(topic_id, subtopic_id):
-    '''
-    validate_topic:
-        this ensures there is no topic with the same name
+    '''this ensures there is no topic with the same name
     '''
 
     topics = Topic.query.get(topic_id)
@@ -64,9 +57,7 @@ def validate_subtopic_for_topic(topic_id, subtopic_id):
 
 
 def validate_topic_for_course(course_id, topic_id):
-    '''
-    validate_topic:
-        this ensures there is no topic with the same name
+    '''this ensures there is no topic with the same name
     '''
 
     course = Course.query.get(course_id)
@@ -78,12 +69,7 @@ def validate_topic_for_course(course_id, topic_id):
 
 
 def validate_subject(course_id, subject_id):
-    '''
-    validate_subject:
-        this ensures there is no subject with the same name
-
-    return
-            True if no such subject exists and False otherwise
+    '''this ensures there is no subject with the same name
     '''
     course = Course.query.get(course_id)
     for s in course.subjects:
@@ -102,6 +88,8 @@ def validate_list():
 def admin_required(f):
     @wraps(f)
     def dec_func(*args, **kwargs):
+        '''this will authenticated a user
+        '''
         if not current_user.is_authenticated or current_user.moderator != True:
             flash('Only admins allowed here', category='danger')
             return redirect(url_for('users.login'))
@@ -111,6 +99,8 @@ def admin_required(f):
 
 @admin_bp.route('/reg_admin')
 def reg_admin():
+    '''the admin will be registered here
+    '''
     username = 'Mumin8'
     fullname = 'Alhassan Mumin'
     email = 'alhassanmumin@gmail.com'
@@ -128,6 +118,8 @@ def reg_admin():
 @admin_bp.route('/admin')
 @admin_required
 def admin():
+    '''an admin route
+    '''
     return render_template('admin/index.html')
 
 
@@ -135,15 +127,15 @@ def admin():
 @login_required
 @admin_required
 def create_user():
+    '''the creation of admin will start here
+    '''
     form = Registration(request.form)
     return render_template('user/register.html', form=form)
 
 
 @admin_bp.route('/admin_av', methods=['GET', 'POST'])
 def admin_add_vid():
-    '''
-    admin_add_vid:
-        the video to add will be added to session here
+    '''the video to add will be added to session here
     '''
     courses = Course.query.all()
     topics = SubTopic.query.all()
@@ -162,8 +154,9 @@ def admin_add_vid():
 @admin_bp.route('/upload/<string:language>/<string:course_id>/<string:topic_id>',
                 methods=['GET', 'POST'])
 def upload(language, course_id, topic_id):
+    '''a file will be uploaded here
+    '''
     validate_list()
-
     if request.method == 'POST':
         if 'file' not in request.files:
             flash('No file part')
@@ -187,9 +180,7 @@ def upload(language, course_id, topic_id):
 
 @admin_bp.route('/reg_course', methods=['GET', 'POST'])
 def register_course():
-    '''
-    register_course:
-        this will add a course to the course table
+    '''this will add a course to the course table
     '''
     form = CourseForm(request.form)
     if form.validate_on_submit():
@@ -246,7 +237,8 @@ def course_timely_asso(stop_id, c_id):
             flash('already associated', category='warning')
             break
     else:
-        # topic.update_name_a(n)
+        # incase i cought an error this will be looked into critically
+        topic.update_name_a(encryption(f'{c_id}{stop_id}{topic.topic_id}'))
         course.time_task.sub_topic.append(topic)
         db.session.commit()
         flash('successfully added to delayed tasks', category='success')
@@ -256,6 +248,8 @@ def course_timely_asso(stop_id, c_id):
 @admin_bp.route('/t/')
 @admin_bp.route('/t/<string:c_id>')
 def free_topics(c_id):
+    '''the topics to be allowed for free
+    '''
     if c_id != ' ':
         course = Course.query.get(c_id)
         c_and_t = c_and_topics(course)

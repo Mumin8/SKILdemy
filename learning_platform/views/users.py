@@ -1,8 +1,10 @@
 import os
 from datetime import datetime, timedelta
 import requests
-from flask import (
-    Blueprint, render_template, redirect, url_for, request, jsonify, flash, session)
+from flask import (Blueprint, render_template, redirect, url_for, request,
+                   jsonify,
+                   flash,
+                   session)
 from botocore.exceptions import ClientError
 from flask_babel import gettext as _
 from flask_limiter.errors import RateLimitExceeded
@@ -10,12 +12,22 @@ from flask_login import login_required, current_user, logout_user, login_user
 from flask_mail import Message
 from learning_platform import bcrypt, db, app, mail, limiter
 from learning_platform.forms.form import Registration, LoginForm, ResetForm, NewPasswordForm
-from learning_platform.models.models import User, Course, SubTopic, TimeTask, User_solution
+from learning_platform.models.models import User, Course, SubTopic, User_solution
 from learning_platform.google_translations import text_translator
 from learning_platform._helpers import (
-    c_and_topics, cached, free_trial, validate_time_task, get_ref, 
-    get_lang, presigned_url, presigned_cert_url, upload_certificate, s3_client, encryption,
-    verify_payment, completed_course)
+    c_and_topics,
+    cached,
+    free_trial,
+    validate_time_task,
+    get_ref,
+    get_lang,
+    presigned_url,
+    presigned_cert_url,
+    upload_certificate,
+    s3_client,
+    encryption,
+    verify_payment,
+    completed_course)
 from PIL import Image, ImageDraw, ImageFont
 
 user_bp = Blueprint('users', __name__, static_folder='static',
@@ -89,11 +101,11 @@ def register():
         email = form.email.data
         moderator = False
         hashed_password = bcrypt.generate_password_hash(form.password.data)
-        
+
         if not User.query.filter_by(email=email).first():
             user = User(fullname=fullname, username=username, email=email,
                         password=hashed_password, moderator=moderator)
-            
+
             user.user_solu = User_solution(user=user)
             db.session.add(user)
             db.session.commit()
@@ -261,6 +273,8 @@ def userprofile():
 @user_bp.route('/next_page/<int:page>/<int:fp>/<int:lp>',
                methods=['GET', 'POST'])
 def paginate(page, fp, lp):
+    '''the topics will be paginated here
+    '''
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 
@@ -319,13 +333,16 @@ def learn_skills(course_id):
 
 @user_bp.route('/request/<string:topic_id>', methods=['GET', 'POST'])
 def request_task_solution(topic_id):
+    '''A task will be marked for release
+    '''
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 
     topic = SubTopic.query.get(topic_id)
-    print(topic.course_id)
-    # name_a = encryption(f'{topic.id}{topic.topic_id}{current_user.id}')
-    task = SubTopic(name=topic.name, name_a=topic.name_a, timetask_id=topic.timetask_id)
+    task = SubTopic(
+        name=topic.name,
+        name_a=topic.name_a,
+        timetask_id=topic.timetask_id)
     current_user.user_solu.sub_topics.append(task)
     db.session.commit()
     flash(_('successfully requested for solution'), category='success')
@@ -611,4 +628,3 @@ def download_your_cert(id):
                 _('Certificate has been generated in your downloads folder'),
                 category="success")
     return redirect(url_for('users.userprofile'))
-

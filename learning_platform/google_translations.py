@@ -6,8 +6,10 @@ from googletrans import Translator
 
 translator = Translator()
 
+
 def get_locale():
-    '''get the user locale'''
+    '''get the user locale
+    '''
     lang = session.get('lang')
     if lang:
         return lang
@@ -19,10 +21,8 @@ def get_locale():
     return request.accept_languages.best_match(
         ['ar', 'bn', 'zh', 'en', 'es', 'fr', 'hi', 'id', 'pt', 'ru', 'tr', 'ur']
     )
-
-
-def lang_detector(text):
-    return translator.detect(text).lang
+# def lang_detector(text):
+#     return translator.detect(text).lang
 
 
 def find_matched_words(text):
@@ -40,15 +40,18 @@ def text_translator(text, lang):
     print(text)
     return text
 
+
 def get_duration(audio_path, text, lang):
+    '''assist to get duration of audio
+    '''
     with open(audio_path, 'wb') as f:
         if lang == "pt":
             speech = gTTS(text, lang=lang, tld='com.br')
         else:
             speech = gTTS(text, lang=lang)
         speech.write_to_fp(f)
-    
-    
+
+
 def process_for_nonLatin(text, audio_path, lang):
     '''processes the text to another language
     '''

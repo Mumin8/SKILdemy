@@ -177,7 +177,7 @@ class TimeTask(db.Model):
         default=lambda: str(
             uuid.uuid4()))
     usertask = db.Column(db.String(80), nullable=True)
-    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+    # updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
     course_id = db.Column(db.String(36), db.ForeignKey('course.id'))
     sub_topic = db.relationship('SubTopic', backref='timetask', lazy='dynamic')
@@ -190,11 +190,10 @@ class User_solution(db.Model):
         primary_key=True,
         default=lambda: str(
             uuid.uuid4()))
-
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
     sub_topics = db.relationship('SubTopic', secondary=user_solution_subtopic,
                                  backref='user_solutions', lazy='dynamic')
-    updated_at = db.Column(db.DateTime(timezone=True), default=func.now())
+    # updated_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
 
 with app.app_context():

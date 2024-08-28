@@ -70,8 +70,8 @@ def completed_topics(c):
     some = 0
     for u in c.time_task.sub_topic:
         all += 1
-        for t in user.time_task:
-            if u.name_a == t.usertask:
+        for t in user.user_solu.sub_topics:
+            if u.name_a == t.name_a:
                 some += 1
                 break
     return int((some / all) * 100)

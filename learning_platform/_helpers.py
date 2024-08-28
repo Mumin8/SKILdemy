@@ -789,11 +789,11 @@ def completed_course(course):
     '''
     ct = datetime.now()
     td = timedelta(days=course.duration)
-    e = course.enrolled_at
 
+    e = course.enrolled_at
+    
     sd = date(e.year, e.month, e.day)
     cd = date(ct.year, ct.month, ct.day)
-
     elapsed_time = ct - e
     et = sd - cd
 

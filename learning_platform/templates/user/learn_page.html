@@ -130,9 +130,7 @@
                 </p>
                 <div class="col-md-4">
                   
-                  <video controls  class="col-md-12">
-                    <source src="" type="video/mp4">
-                  </video>
+                  <img src="{{ url_for('static', filename='thumbnail/ai.png') }}" alt="thumbnail" height="280" width="autp">
                   <div class="text-end ">
                     <a class="btn btn-success text-info fs-3" 
                     href="{{ url_for('users.request_task_solution', topic_id=topic_id) }}">

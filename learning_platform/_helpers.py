@@ -65,15 +65,13 @@ db = LocalProxy(get_db)
 
 def acceptable(filename):
     ALLOWED_EXT = {'mp4'}
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
 
 
 def allowed_file(filename):
     '''this will validate the allowed files'''
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def _voices(language):
@@ -257,6 +255,8 @@ def course_topic(course):
 
 
 def c_and_topics(course):
+    '''this will create a list of topics and ids
+    '''
     c_dict = {}
     c_dict[course.name] = [[t.name, course.id, t.id]
                            for topics in course.topics for t in topics.sub_topics]
@@ -265,6 +265,8 @@ def c_and_topics(course):
 
 
 def deque_dict(orig_dic, first):
+    '''this will rearrange the dictionary structure
+    '''
     mod_dic = {}
     mod_dic[first] = orig_dic[first]
     l = list(orig_dic)
@@ -297,8 +299,8 @@ def cached(course, topic):
     if course not in cache.keys():
         cache[course] = {}
         cache[course][get_lang()] = {}
-        cache[course][get_lang()][topic] = {}
-        cache[course][get_lang()][topic]['desc'] = read_content(course, topic)
+        cache[course][get_lang()][topic.name] = {}
+        cache[course][get_lang()][topic.name]['desc'] = read_content(course, topic)
 
         if len(cache) > 10:
             idx = list(cache)[-1]
@@ -307,29 +309,28 @@ def cached(course, topic):
         cache = deque_dict(cache, course)
         if get_lang() not in cache[course].keys():
             cache[course][get_lang()] = {}
-            cache[course][get_lang()][topic] = {}
-            cache[course][get_lang()][topic]['desc'] = read_content(course, topic)
+            cache[course][get_lang()][topic.name] = {}
+            cache[course][get_lang()][topic.name]['desc'] = read_content(course, topic)
 
-            if len(cache[course]) > 10:
+            if len(cache[course]) > 8:
                 idx = list(cache[course])[-1]
                 cache[course].pop(idx)
         else:
             cache[course] = deque_dict(cache[course], get_lang())
-            if topic not in cache[course][get_lang()].keys():
-                cache[course][get_lang()][topic] = {}
-                cache[course][get_lang()][topic]['desc'] = read_content(
+            if topic.name not in cache[course][get_lang()].keys():
+                cache[course][get_lang()][topic.name] = {}
+                cache[course][get_lang()][topic.name]['desc'] = read_content(
                     course, topic)
 
-                if len(cache[course][get_lang()]) > 10:
+                if len(cache[course][get_lang()]) > 8:
                     idx = list(cache[course][get_lang()])[-1]
                     cache[course][get_lang()].pop(idx)
 
             else:
                 cache[course][get_lang()] = deque_dict(
-                    cache[course][get_lang()], topic)
+                    cache[course][get_lang()], topic.name)
 
-    # update_dict(cache)
-    text = cache[course][get_lang()][topic]['desc']
+    text = cache[course][get_lang()][topic.name]['desc']
     _text, iframes = vid_iframes(text)
 
     return _text, iframes

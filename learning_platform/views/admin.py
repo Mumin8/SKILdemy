@@ -12,30 +12,11 @@ from learning_platform.models.models import (
     User, Course, SubTopic, Topic, TimeTask)
 from functools import wraps
 from learning_platform._helpers import (
-    upload_s3vid_languages,
-    encryption,
-    acceptable,
-    insert_text,
-    course_topic,
-    c_and_topics,
-    file_,
-    delete_byID,
-    exchange_rate,
-    unlink_file,
-    update_ai_text,
-    update_by_id,
-    update_trans_by_id,
-    live_text_Display_AI_content,
-    user_courses,
-    get_text_desc,
-    recieve_displayed_text,
-    get_byID,
-    text_data,
-    update_display_text,
-    live_display_text_content,
-    get_display_text_byID,
-    delete_display_text_byID,
-    tream)
+    upload_s3vid_languages, encryption, acceptable, insert_text, course_topic, c_and_topics, tream,
+    file_, delete_byID, exchange_rate, unlink_file,update_ai_text, update_by_id, update_trans_by_id,
+    live_text_Display_AI_content, user_courses, get_text_desc, recieve_displayed_text, get_byID, text_data,
+    update_display_text, live_display_text_content, get_display_text_byID, delete_display_text_byID
+    )
 
 
 admin_bp = Blueprint(
@@ -237,7 +218,6 @@ def course_timely_asso(stop_id, c_id):
             flash('already associated', category='warning')
             break
     else:
-        # incase i cought an error this will be looked into critically
         topic.update_name_a(encryption(f'{c_id}{stop_id}{topic.topic_id}'))
         course.time_task.sub_topic.append(topic)
         db.session.commit()
@@ -459,7 +439,6 @@ def aud_vid(lang, subtopic):
 def gptplus(language, course_id, topic_id):
     '''this is where the ai video is processed
     '''
-
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 
@@ -656,7 +635,6 @@ def update_ai_translated_text(_id):
 def translate_ai_text(_id):
     '''It will update a particular field
     '''
-
     desc = get_byID(ObjectId(_id))
     update_trans_by_id(ObjectId(_id), desc['desc'])
     flash('text updated successfully', category='success')

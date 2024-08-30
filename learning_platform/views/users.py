@@ -1,10 +1,8 @@
 import os
 from datetime import datetime, timedelta
 import requests
-from flask import (Blueprint, render_template, redirect, url_for, request,
-                   jsonify,
-                   flash,
-                   session)
+from flask import (
+    Blueprint, render_template, redirect, url_for, request, jsonify, flash, session)
 from botocore.exceptions import ClientError
 from flask_babel import gettext as _
 from flask_limiter.errors import RateLimitExceeded
@@ -15,19 +13,8 @@ from learning_platform.forms.form import Registration, LoginForm, ResetForm, New
 from learning_platform.models.models import User, Course, SubTopic, User_solution
 from learning_platform.google_translations import text_translator
 from learning_platform._helpers import (
-    c_and_topics,
-    cached,
-    free_trial,
-    validate_time_task,
-    get_ref,
-    get_lang,
-    presigned_url,
-    presigned_cert_url,
-    upload_certificate,
-    s3_client,
-    encryption,
-    verify_payment,
-    completed_course)
+    c_and_topics, cached, validate_time_task, get_ref, get_lang, presigned_url,
+    presigned_cert_url, upload_certificate, s3_client, encryption, verify_payment, completed_course)
 from PIL import Image, ImageDraw, ImageFont
 
 user_bp = Blueprint('users', __name__, static_folder='static',
@@ -359,10 +346,9 @@ def free_test(course_id, topic_id):
 
     course = Course.query.get(course_id)
     topic = SubTopic.query.get(topic_id)
-    trial = free_trial(course.trial_topics)
-    if topic in trial:
-        mat, iframes = cached(course.name, topic)
-        return render_template(
+    mat, iframes = cached(course.name, topic)
+
+    return render_template(
             'user/free_trial.html',
             mat=mat,
             path=iframes,

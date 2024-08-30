@@ -27,18 +27,12 @@ course_topics = db.Table('course_topics',
                              'topic.id'), primary_key=True)
                          )
 
-user_solution_subtopic = db.Table(
-    'user_solution_subtopic',
-    db.Column(
-        'user_solution_id',
-        db.String(36),
-        db.ForeignKey('user_solution.id'),
-        primary_key=True),
-    db.Column(
-        'subtopic_id',
-        db.String(36),
-        db.ForeignKey('subtopic.id'),
-        primary_key=True))
+user_solution_subtopic = db.Table('user_solution_subtopic',
+                                  db.Column('user_solution_id', db.String(36), db.ForeignKey(
+                                      'user_solution.id'), primary_key=True),
+                                  db.Column('subtopic_id', db.String(36), db.ForeignKey(
+                                      'subtopic.id'), primary_key=True)
+                                )
 
 
 class User(db.Model, UserMixin):
@@ -193,7 +187,6 @@ class User_solution(db.Model):
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
     sub_topics = db.relationship('SubTopic', secondary=user_solution_subtopic,
                                  backref='user_solutions', lazy='dynamic')
-    # updated_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
 
 with app.app_context():

@@ -12,10 +12,13 @@
 </head>
 <body>
     {% block main %}
-
-    <p class="text-success">{{_('Thank you for choosing SKILdemy')}}</p>
+    <a style="text-decoration: none; padding: 1rem;" href="{{url_for('users.download_cert')}}" class="btn btn-info">
+        Go to course
+    </a>
+    <div style="background-color: white;">
+        <p class="text-success">{{_('Thank you for choosing SKILdemy')}}</p>
     <p class="text-success" >{{_('You can now access the course content')}}</p>
-
+    </div>
     {% endblock %}
 </body>
 </html>

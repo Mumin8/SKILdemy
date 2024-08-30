@@ -405,8 +405,6 @@ def gptplus_vid(course_id, topic_id):
 
     status, state = validate_time_task(course.time_task.sub_topic, topic)
 
-    print(f'status: {status} state: {state}')
-
     if status and state == "Not timely":
 
         url = presigned_url(file)

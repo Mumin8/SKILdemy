@@ -213,9 +213,7 @@ def enroll_course(course_id):
             for c in current_user.enrolling:
                 if c == course:
                     c.update_enrolled_at(datetime.now())
-                    mes = _(
-                        'You have successfully updated your course',
-                        category='success')
+                    mes = _('You have successfully updated your course')
                     break
             else:
                 course.update_enrolled_at(datetime.now())
@@ -223,8 +221,7 @@ def enroll_course(course_id):
             db.session.commit()
 
             flash(
-                f'{mes} {course.name}',
-                category='info')
+                f'{mes} {course.name}', category='info')
             return render_template('payment/success.html')
     else:
         flash(
@@ -293,7 +290,7 @@ def learn_skills(course_id):
                     _('Please your time period to access this course has elapsed'),
                     category='warning')
                 flash(
-                    _('Your can always enroll again'),
+                    _('You can always extend the time without losing your current records'),
                     category='info')
                 return redirect(url_for('users.userprofile'))
     if user_c:
@@ -372,7 +369,7 @@ def topic_by_course(course_id, topic_id):
     compl_c, n_ = completed_course(c)
     if compl_c:
         flash(
-            _('Your access time has elapsed, you can access your certificate'),
+            _('You can access your certificate'),
             category='warning')
         return redirect(url_for('users.userprofile'))
 
@@ -416,7 +413,6 @@ def gptplus_vid(course_id, topic_id):
             not_time=not_time)
 
     elif status and state == "pending":
-        print('it is pending')
         name = "not yet ready"
         pending = state
         return render_template(
@@ -426,10 +422,9 @@ def gptplus_vid(course_id, topic_id):
             topic_id=topic_id,
             pending=pending)
     elif not status and state == 'request':
-        print('make request')
         name = "make request"
         ask = state
-        flash(_('You can request for the solution'))
+        flash(_('You can request for the solution'), category='info')
         return render_template(
             'user/learn_page.html',
             path=name,
@@ -505,7 +500,6 @@ def cert_of_completion(course_id):
         return redirect(url_for('users.login', next_url=next_url))
 
     cert_name = f'{current_user.id}{course_id}' + ".jpg"
-
     course = Course.query.get(course_id)
 
     for c in current_user.enrolling:

@@ -601,8 +601,8 @@ def validate_time_task(ctasks, task):
                 if elapsed_time >= waiting_period:
                     return True, "Not timely"
                 flash(
-                    'you can request another solution after this solution is delivered',
-                    category='success')
+                    _('Request for solution after you receive answers to previous requests'),
+                    category='info')
                 return status_, "pending"
             else:
                 return True, "Not timely"
@@ -627,7 +627,7 @@ def task_pending(tasks):
         waiting_period = timedelta(hours=1)
         if elapsed_time <= waiting_period:
             h, m_, s = f'{waiting_period - elapsed_time}'.split(':')
-            m = _('count down to next solution ')
+            m = _('countdown to next solution ')
             flash(f'{m}  {h}:{m_}', category='info')
             return True
     return False

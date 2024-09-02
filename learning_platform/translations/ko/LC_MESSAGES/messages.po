@@ -1,4 +1,4 @@
-# Indonesian translations for PROJECT.
+# Korean translations for PROJECT.
 # Copyright (C) 2024 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2024-09-01 08:38+0000\n"
-"PO-Revision-Date: 2024-05-24 04:47+0000\n"
+"PO-Revision-Date: 2024-08-31 08:01+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: id\n"
-"Language-Team: id <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: ko\n"
+"Language-Team: ko <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,322 +20,318 @@ msgstr ""
 
 #: _helpers.py:577
 msgid "Please login to access this page"
-msgstr "Silakan login untuk mengakses halaman ini"
+msgstr "이 페이지에 접근하려면 로그인하세요"
 
 #: _helpers.py:604
 msgid "Request for solution after you receive answers to previous requests"
-msgstr "Permintaan solusi setelah Anda menerima jawaban atas permintaan sebelumnya"
+msgstr "이전 요청에 대한 답변을 받은 후 솔루션 요청하기"
 
 #: _helpers.py:630
 msgid "countdown to next solution "
-msgstr "Waktu tersisa untuk solusi berikutnya"
+msgstr "다음 솔루션으로 카운트다운"
 
 #: forms/form.py:64
 msgid "Passwords must match"
-msgstr "Kata sandi harus cocok"
+msgstr "비밀번호는 일치해야 합니다."
 
 #: forms/form.py:68 templates/home/home.html:35 templates/user/register.html:32
 msgid "Register"
-msgstr "Daftar"
+msgstr "등록하다"
 
 #: forms/form.py:72
 msgid "This username is already taken"
-msgstr "Nama pengguna ini sudah digunakan"
+msgstr "이 사용자 이름은 이미 사용 중입니다."
 
 #: forms/form.py:76
 msgid "This email is already taken"
-msgstr "Email ini sudah diambil"
+msgstr "이 이메일은 이미 사용 중입니다."
 
 #: templates/home/home.html:20
 msgid "Dashboard"
-msgstr "Dasbor"
+msgstr "대시보드"
 
 #: templates/home/home.html:42 templates/user/login.html:14
 msgid "login"
-msgstr "Masuk"
+msgstr "로그인"
 
 #: templates/home/home.html:69
 msgid "course content"
-msgstr "Konten kursus"
+msgstr "코스 콘텐츠"
 
 #: templates/home/home.html:80
 msgid "Try this for free"
-msgstr "Cobalah ini secara gratis"
+msgstr "이것을 무료로 사용해 보세요"
 
 #: templates/home/home.html:102
 msgid "click on course for more information"
-msgstr "klik kursus untuk informasi lebih lanjut"
+msgstr "자세한 내용을 보려면 코스를 클릭하세요."
 
 #: templates/home/home.html:113
 msgid "Enroll now"
-msgstr "Daftar sekarang"
+msgstr "지금 등록하세요"
 
 #: templates/payment/payment.html:17
 msgid "You are about to make a payment to enroll in"
-msgstr "Anda akan melakukan pembayaran untuk mendaftar"
+msgstr "등록을 위해 결제하려고 합니다."
 
 #: templates/payment/payment.html:29
 msgid "click here to proceed to payment page"
-msgstr "klik di sini untuk melanjutkan ke halaman pembayaran"
+msgstr "결제 페이지로 이동하려면 여기를 클릭하세요."
 
 #: templates/payment/success.html:19
 msgid "Thank you for choosing SKILdemy"
-msgstr "Terima kasih telah memilih SKILdemy"
+msgstr "SKILdemy를 선택해 주셔서 감사합니다."
 
 #: templates/payment/success.html:20
 msgid "You can now access the course content"
-msgstr "Anda sekarang dapat mengakses konten kursus"
+msgstr "이제 코스 콘텐츠에 액세스할 수 있습니다."
 
 #: templates/payment/unsuccessful.html:16
 msgid "payment is unsuccessful"
-msgstr "pembayaran tidak berhasil"
+msgstr "결제가 실패했습니다"
 
 #: templates/payment/unsuccessful.html:17
 msgid "Verify your details or contact paystack"
-msgstr "Verifikasi detail Anda atau hubungi paystack"
+msgstr "귀하의 세부 정보를 확인하거나 Paystack에 문의하세요"
 
 #: templates/user/certificate.html:7
 msgid "certificate"
-msgstr "sertifikat"
+msgstr "증명서"
 
 #: templates/user/certificate.html:12
 msgid "congratulations"
-msgstr "selamat"
+msgstr "축하합니다"
 
 #: templates/user/certificate.html:16
 msgid "proceed for certificate"
-msgstr "lanjutkan untuk mendapatkan sertifikat"
+msgstr "인증서를 받기 위해 진행하다"
 
 #: templates/user/free_trial.html:11 templates/user/learn_page.html:11
 #: templates/user/profile.html:21
 msgid "Home"
-msgstr "Halaman beranda"
+msgstr "홈페이지"
 
 #: templates/user/free_trial.html:33 templates/user/learn_page.html:55
 msgid "Back"
-msgstr "Kembali"
+msgstr "뒤로 가기"
 
 #: templates/user/free_trial.html:39 templates/user/learn_page.html:61
 msgid "SKILdemy guide"
-msgstr "Panduan SKILdemy"
+msgstr "SKILdemy 가이드"
 
 #: templates/user/free_trial.html:44 templates/user/learn_page.html:67
 msgid "Suggested Videos"
-msgstr "Video yang Disarankan"
+msgstr "추천 동영상"
 
 #: templates/user/free_trial.html:99 templates/user/learn_page.html:122
 msgid "Cancel Request"
-msgstr "Batalkan Permintaan"
+msgstr "요청 취소"
 
 #: templates/user/free_trial.html:106 templates/user/learn_page.html:129
 msgid "keep learning while we prepare the answers for you"
-msgstr "Teruslah belajar sementara kami menyiapkan jawaban untuk Anda."
+msgstr "저희가 답을 준비하는 동안 계속 학습하세요"
 
 #: templates/user/free_trial.html:116 templates/user/learn_page.html:137
 msgid "Request Solution"
-msgstr "Minta solusi"
+msgstr "솔루션 요청"
 
 #: templates/user/learn_page.html:16
 msgid "PROGRESS"
-msgstr "KEMAJUAN"
+msgstr "진전"
 
 #: templates/user/learn_page.html:38
 msgid "PREVIOUS"
-msgstr "SEBELUMNYA"
+msgstr "이전의"
 
 #: templates/user/learn_page.html:44
 msgid "NEXT"
-msgstr "BERIKUTNYA"
+msgstr "다음"
 
 #: templates/user/locale.html:20
 msgid "Choose a language:"
-msgstr "Pilih bahasa:"
+msgstr "언어를 선택하세요:"
 
 #: templates/user/locale.html:22
 msgid "select Language"
-msgstr "pilih Bahasa"
+msgstr "언어 선택"
 
 #: templates/user/locale.html:23
 msgid "Arabic"
-msgstr "Arab"
+msgstr "아랍어"
 
 #: templates/user/locale.html:24
 msgid "Bengali"
-msgstr "Bengali"
+msgstr "벵골어"
 
 #: templates/user/locale.html:25
 msgid "English"
-msgstr "Inggris"
+msgstr "영어"
 
 #: templates/user/locale.html:26
 msgid "French"
-msgstr "Prancis"
+msgstr "프랑스어"
 
 #: templates/user/locale.html:27
 msgid "Hindi"
-msgstr "Hindi"
+msgstr "힌디어"
 
 #: templates/user/locale.html:28
 msgid "Indonesian"
-msgstr "Indonesia"
+msgstr "인도네시아어"
 
 #: templates/user/locale.html:29
 msgid "Portuguese"
-msgstr "Portugis"
+msgstr "포르투갈어"
 
 #: templates/user/locale.html:30
 msgid "Russia"
-msgstr "Rusia"
+msgstr "러시아어"
 
 #: templates/user/locale.html:31
 msgid "Spanish"
-msgstr "Spanyol"
+msgstr "스페인어"
 
 #: templates/user/locale.html:32
 msgid "Turkish"
-msgstr "Turki"
+msgstr "터키어"
 
 #: templates/user/locale.html:33
 msgid "Urdu"
-msgstr "Urdu"
+msgstr "우르두어"
 
 #: templates/user/login.html:27
 msgid "Login"
-msgstr "Masuk"
+msgstr "로그인"
 
 #: templates/user/login.html:31
 msgid "Forgot Password"
-msgstr "Lupa Kata Sandi"
+msgstr "비밀번호를 잊으셨나요"
 
 #: templates/user/profile.html:27
 msgid "logout"
-msgstr "Keluar"
+msgstr "로그아웃"
 
 #: templates/user/profile.html:34
 msgid "You will need at least 70 to pass this course for a certificate"
-msgstr ""
-"Anda memerlukan setidaknya 70% untuk lulus kursus ini untuk mendapatkan "
-"sertifikat"
+msgstr "이 과정을 통과하여 인증서를 취득하려면 최소 70점이 필요합니다."
 
 #: templates/user/profile.html:36
 msgid "My courses"
-msgstr "Kursus Saya"
+msgstr "내 강좌"
 
 #: templates/user/profile.html:51
 msgid "Get certificate"
-msgstr "Dapatkan Sertifikat"
+msgstr "인증서 받기"
 
 #: templates/user/profile.html:54
 msgid "current score:"
-msgstr "skor saat ini:"
+msgstr "현재 학년:"
 
 #: templates/user/register.html:13
 msgid "Sign up"
-msgstr "Daftar"
+msgstr "가입하기"
 
 #: templates/user/reset_password.html:22
 msgid "submit email"
-msgstr "kirim email"
+msgstr "이메일 제출"
 
 #: templates/user/view_cert.html:19
 msgid "download"
-msgstr "unduh"
+msgstr "다운로드"
 
 #: views/home.py:20
 msgid "Welcome to SKILdemy"
-msgstr "Selamat datang di SKILdemy"
+msgstr "SKILdemy에 오신 것을 환영합니다."
 
 #: views/users.py:45
 msgid "please login first"
-msgstr "silakan masuk terlebih dahulu"
+msgstr "먼저 로그인하세요"
 
 #: views/users.py:104
 msgid "Thank you for Registering"
-msgstr "Terima kasih telah mendaftar"
+msgstr "등록해 주셔서 감사합니다"
 
 #: views/users.py:123
 msgid "Happy Coding!  😊"
-msgstr "Selamat Coding! 😊"
+msgstr "행복한 코딩! 😊"
 
 #: views/users.py:125
 msgid "Invalid Credentials"
-msgstr "Kredensial Tidak Valid"
+msgstr "유효하지 않은 자격증명"
 
 #: views/users.py:161
 msgid "Password Reset Request"
-msgstr "permintaan pengaturan ulang kata sandi"
+msgstr "비밀번호 재설정 요청"
 
 #: views/users.py:170
 msgid "Check your email for the password reset link."
-msgstr "Periksa email Anda untuk tautan pengaturan ulang kata sandi."
+msgstr "이메일에서 비밀번호 재설정 링크를 확인하세요."
 
 #: views/users.py:173
 msgid "Email not found"
-msgstr "Email tidak ditemukan"
+msgstr "이메일을 찾을 수 없습니다"
 
 #: views/users.py:191
 msgid "successfully reset password"
-msgstr "berhasil mengatur ulang kata sandi"
+msgstr "성공적으로 비밀번호를 재설정했습니다"
 
 #: views/users.py:212
 msgid "You have successfully enrolled in"
-msgstr "Anda telah berhasil mendaftar di"
+msgstr "귀하는 성공적으로 등록했습니다"
 
 #: views/users.py:216
 msgid "You have successfully updated your course"
-msgstr "Anda telah berhasil memperbarui kursus Anda"
+msgstr "귀하의 코스가 성공적으로 업데이트되었습니다."
 
 #: views/users.py:228
 msgid "unsuccessful, please check your details or contact SKILdemy support"
-msgstr "tidak berhasil, silakan periksa detail Anda atau hubungi dukungan SKILdemy"
+msgstr "실패했습니다. 세부 정보를 확인하거나 SKILdemy 지원팀에 문의하세요."
 
 #: views/users.py:290
 msgid "Please your time period to access this course has elapsed"
-msgstr "Harap waktu Anda untuk mengakses kursus ini telah habis"
+msgstr "이 강좌에 액세스할 수 있는 기간이 경과되었습니다."
 
 #: views/users.py:293
 msgid "You can always extend the time without losing your current records"
-msgstr "Anda selalu dapat memperpanjang waktu tanpa kehilangan catatan Anda saat ini"
+msgstr "현재 기록을 잃지 않고도 항상 시간을 연장할 수 있습니다."
 
 #: views/users.py:332
 msgid "successfully requested for solution"
-msgstr "berhasil meminta solusi"
+msgstr "성공적으로 솔루션을 요청했습니다."
 
 #: views/users.py:366
 msgid "You have not enrolled in this course"
-msgstr "Anda belum mendaftar di kursus ini"
+msgstr "이 과정에 등록하지 않았습니다."
 
 #: views/users.py:372
 msgid "You can access your certificate"
-msgstr "Anda dapat mengakses sertifikat Anda"
+msgstr "귀하의 인증서에 접근할 수 있습니다"
 
 #: views/users.py:427
 msgid "You can request for the solution"
-msgstr "Anda dapat meminta solusi"
+msgstr "솔루션을 요청하실 수 있습니다"
 
 #: views/users.py:449
 msgid "Already enrolled, You can still access this course"
-msgstr "Anda sudah terdaftar, Anda masih dapat mengakses kursus ini"
+msgstr "이미 등록되어 있습니다. 이 강좌에 계속 액세스할 수 있습니다."
 
 #: views/users.py:454
 msgid "Your time expired for this course and you are trying to enroll again"
-msgstr "Waktu Anda telah habis untuk kursus ini dan Anda mencoba mendaftar lagi"
+msgstr "이 과정의 시간이 만료되어 다시 등록하려고 합니다."
 
 #: views/users.py:512
 msgid "Your certificate is ready for download"
-msgstr "Sertifikat Anda siap untuk diunduh"
+msgstr "귀하의 인증서를 다운로드할 준비가 되었습니다."
 
 #: views/users.py:518
 msgid "Your mark is below 70%. You can enroll again to improve your marks"
-msgstr ""
-"Nilai Anda di bawah 70%. Anda dapat mendaftar lagi untuk meningkatkan "
-"nilai Anda"
+msgstr "귀하의 성적은 70% 미만입니다. 다시 등록하여 성적을 향상시킬 수 있습니다"
 
 #: views/users.py:528
 msgid "The certificate will be ready after you complete the course"
-msgstr "Sertifikat akan siap setelah Anda menyelesaikan kursus"
+msgstr "수료증은 과정을 마친 후 준비됩니다."
 
 #: views/users.py:606
 msgid "Certificate has been generated in your downloads folder"
-msgstr "Sertifikat telah dibuat di folder unduhan Anda"
+msgstr "인증서가 다운로드 폴더에 생성되었습니다"
 

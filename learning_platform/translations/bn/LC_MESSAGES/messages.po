@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-08-17 08:11+0000\n"
+"POT-Creation-Date: 2024-09-01 08:38+0000\n"
 "PO-Revision-Date: 2024-05-24 05:02+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: bn\n"
@@ -18,17 +18,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
-#: _helpers.py:618
+#: _helpers.py:577
 msgid "Please login to access this page"
 msgstr "এই পৃষ্ঠা অ্যাক্সেস করতে লগইন করুন"
 
-#: _helpers.py:646
-msgid "Hours left to receive solution"
-msgstr "সমাধান পেতে ঘন্টা বাকি"
+#: _helpers.py:604
+msgid "Request for solution after you receive answers to previous requests"
+msgstr "আপনি পূর্ববর্তী অনুরোধের উত্তর পাওয়ার পরে সমাধানের জন্য অনুরোধ করুন"
 
-#: _helpers.py:650
-msgid "please request for the solution"
-msgstr "সমাধানের জন্য অনুরোধ করুন"
+#: _helpers.py:630
+msgid "countdown to next solution "
+msgstr "পরবর্তী সমাধানের জন্য বাকি সময়"
 
 #: forms/form.py:64
 msgid "Passwords must match"
@@ -78,11 +78,11 @@ msgstr "আপনি নথিভুক্ত করার জন্য এক�
 msgid "click here to proceed to payment page"
 msgstr "পেমেন্ট পৃষ্ঠায় এগিয়ে যেতে এখানে ক্লিক করুন"
 
-#: templates/payment/success.html:16
+#: templates/payment/success.html:19
 msgid "Thank you for choosing SKILdemy"
 msgstr "SKILdemy বেছে নেওয়ার জন্য আপনাকে ধন্যবাদ"
 
-#: templates/payment/success.html:17
+#: templates/payment/success.html:20
 msgid "You can now access the course content"
 msgstr "আপনি এখন কোর্স বিষয়বস্তু অ্যাক্সেস করতে পারেন"
 
@@ -131,7 +131,7 @@ msgstr "অনুরোধ বাতিল করুন"
 msgid "keep learning while we prepare the answers for you"
 msgstr "আমরা আপনার জন্য উত্তর প্রস্তুত করার সময় শিখতে থাকুন"
 
-#: templates/user/free_trial.html:116 templates/user/learn_page.html:139
+#: templates/user/free_trial.html:116 templates/user/learn_page.html:137
 msgid "Request Solution"
 msgstr "সমাধানের অনুরোধ"
 
@@ -212,7 +212,7 @@ msgid "logout"
 msgstr "লগ আউট"
 
 #: templates/user/profile.html:34
-msgid "You will need at least 70% to pass this course for a certificate"
+msgid "You will need at least 70 to pass this course for a certificate"
 msgstr "একটি শংসাপত্রের জন্য এই কোর্সটি পাস করতে আপনার কমপক্ষে 70% প্রয়োজন হবে"
 
 #: templates/user/profile.html:36
@@ -224,7 +224,6 @@ msgid "Get certificate"
 msgstr "সার্টিফিকেট পান"
 
 #: templates/user/profile.html:54
-#, fuzzy
 msgid "current score:"
 msgstr "বর্তমান স্কোর:"
 
@@ -240,109 +239,108 @@ msgstr "ইমেইল পাঠান"
 msgid "download"
 msgstr "ডাউনলোড"
 
-#: views/home.py:25
+#: views/home.py:20
 msgid "Welcome to SKILdemy"
 msgstr "SKILdemy এ স্বাগতম"
 
-#: views/users.py:64
+#: views/users.py:45
 msgid "please login first"
 msgstr "দয়া করে প্রথমে লগ ইন করুন"
 
-#: views/users.py:122
+#: views/users.py:104
 msgid "Thank you for Registering"
 msgstr "নিবন্ধন করার জন্য আপনাকে ধন্যবাদ"
 
-#: views/users.py:141
+#: views/users.py:123
 msgid "Happy Coding!  😊"
 msgstr "শুভ কোডিং! 😊"
 
-#: views/users.py:143
+#: views/users.py:125
 msgid "Invalid Credentials"
 msgstr "অবৈধ পরিচয়পত্র"
 
-#: views/users.py:182
+#: views/users.py:161
 msgid "Password Reset Request"
 msgstr "পাসওয়ার্ড রিসেট অনুরোধ"
 
-#: views/users.py:191
+#: views/users.py:170
 msgid "Check your email for the password reset link."
 msgstr "পাসওয়ার্ড রিসেট লিঙ্কের জন্য আপনার ইমেল চেক করুন."
 
-#: views/users.py:194
+#: views/users.py:173
 msgid "Email not found"
 msgstr "ইমেইল পাওয়া যায়নি"
 
-#: views/users.py:212
+#: views/users.py:191
 msgid "successfully reset password"
 msgstr "পাসওয়ার্ড সফলভাবে রিসেট করা হয়েছে"
 
-#: views/users.py:236
+#: views/users.py:212
 msgid "You have successfully enrolled in"
 msgstr "আপনি সফলভাবে ভর্তি হয়েছেন"
 
-#: views/users.py:240
+#: views/users.py:216
 msgid "You have successfully updated your course"
 msgstr "আপনি সফলভাবে আপনার কোর্স পুনর্নবীকরণ করেছেন"
 
-#: views/users.py:260
+#: views/users.py:228
 msgid "unsuccessful, please check your details or contact SKILdemy support"
 msgstr ""
 "অসফল, অনুগ্রহ করে আপনার বিশদ বিবরণ পরীক্ষা করুন বা SKILdemy সহায়তার সাথে"
 " যোগাযোগ করুন"
 
-#: views/users.py:323
+#: views/users.py:290
 msgid "Please your time period to access this course has elapsed"
 msgstr "এই কোর্সটি অ্যাক্সেস করার জন্য আপনার সময়কাল অতিবাহিত হয়েছে"
 
-#: views/users.py:326
-msgid "Your can always enroll again"
-msgstr "আপনি সবসময় আবার নথিভুক্ত করতে পারেন"
+#: views/users.py:293
+msgid "You can always extend the time without losing your current records"
+msgstr ""
 
-#: views/users.py:362
+#: views/users.py:332
 msgid "successfully requested for solution"
 msgstr "সমাধানের জন্য সফলভাবে অনুরোধ করা হয়েছে"
 
-#: views/users.py:364
-msgid "There is already one task pending for solution"
-msgstr "সমাধানের জন্য ইতিমধ্যে একটি কাজ মুলতুবি আছে"
-
-#: views/users.py:401
+#: views/users.py:366
 msgid "You have not enrolled in this course"
 msgstr "আপনি এই কোর্সে ভর্তি হননি"
 
-#: views/users.py:406
-msgid "Your access time has elapsed, you can access your certificate"
-msgstr ""
+#: views/users.py:372
+msgid "You can access your certificate"
+msgstr "আপনি আপনার সার্টিফিকেট অ্যাক্সেস করতে পারেন"
 
-#: views/users.py:460
+#: views/users.py:427
 msgid "You can request for the solution"
 msgstr "আপনি সমাধানের জন্য অনুরোধ করতে পারেন"
 
-#: views/users.py:483
+#: views/users.py:449
 msgid "Already enrolled, You can still access this course"
 msgstr "ইতিমধ্যে নথিভুক্ত, আপনি এখনও এই কোর্স অ্যাক্সেস করতে পারেন"
 
-#: views/users.py:488
+#: views/users.py:454
 msgid "Your time expired for this course and you are trying to enroll again"
 msgstr ""
 "এই কোর্সের জন্য আপনার সময় শেষ হয়ে গেছে এবং আপনি আবার নথিভুক্ত করার "
 "চেষ্টা করছেন"
 
-#: views/users.py:553
+#: views/users.py:512
 msgid "Your certificate is ready for download"
 msgstr "আপনার শংসাপত্র ডাউনলোডের জন্য প্রস্তুত"
 
-#: views/users.py:559
+#: views/users.py:518
 msgid "Your mark is below 70%. You can enroll again to improve your marks"
 msgstr ""
 "আপনার মার্ক 70% এর নিচে। আপনি আপনার নম্বর উন্নত করতে আবার নথিভুক্ত করতে "
 "পারেন"
 
-#: views/users.py:569
+#: views/users.py:528
 msgid "The certificate will be ready after you complete the course"
 msgstr "আপনি কোর্স শেষ করার পরে সার্টিফিকেট প্রস্তুত হবে"
 
-#: views/users.py:648
+#: views/users.py:606
 msgid "Certificate has been generated in your downloads folder"
 msgstr "আপনার ডাউনলোড ফোল্ডারে সার্টিফিকেট তৈরি করা হয়েছে"
+
+#~ msgid "You can always enroll again"
+#~ msgstr "আপনি সবসময় আবার নথিভুক্ত করতে পারেন"
 

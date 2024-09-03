@@ -20,14 +20,11 @@
                     {{ _('Dashboard') }}
                 </a>
             </div>
-
             <div>
                 <a class="" href="{{ url_for('users.user_locale')}}"> 
                     <img src="{{ url_for('static', filename='flags/' + lang)}}" alt="">   
                 </a>
             </div>
-
-            
             {% else %}
             <div >
                 <div class="" id="register">
@@ -51,8 +48,7 @@
        <div class="row ">
         {% if topics %} 
         
-        <div class="col" style="background-color: rgb(240, 240, 241);">
-            
+        <div class="col" style="background-color: rgb(240, 240, 241);">           
             <nav aria-label="...">
                 <ul class="pagination">
                   <li class="page-item active">
@@ -60,9 +56,7 @@
                   </li>
                 </ul>
               </nav>
-
               <div class="fs-2 text-center text-info"> {{ course.name }}</div>
-
               <p class="desc">{{desc}}</p>
             <p>
                 <ul>   
@@ -103,9 +97,7 @@
         </h2>
       <div class="parent"> 
         
-    {% for course in courses %}  
-        
-      
+    {% for course in courses %}        
     <div class="text-light" id="course">
         <div class="d-flex justify-content-end bg-dark">
             <a class="btn btn-info m-2" id="enrol" 
@@ -127,20 +119,15 @@
                 </span>
                 </div>
             <div class="fs-3 text-center text-dark"> $ <span class="fs-3 text-success">{{ course.price }}
-
-            </span></div>
-            
+            </span></div>            
         </div>
     </a>
     </div>
-
     {% endfor %}
 </div>
     {% endif %}
        </div>
       </div>
-
-    {% endblock %}
-    
+    {% endblock %}   
 </body>
 </html>

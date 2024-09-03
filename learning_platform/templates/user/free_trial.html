@@ -11,22 +11,17 @@
   <nav><a class="btn btn-primary" href="{{url_for('home.home')}}">{{_('Home')}}</a></nav>
         <div class="container-fluid">
             <div class="row">
-                {% if fk %}
-                
-                        
+                {% if fk %}                   
                 <div class="col" style="display: flex; flex-direction: column;">
                   <div>
                     <p class=""><h1 class="btn btn-secondary fs-2 ">{{fk}}</h1></p>
-
                     <p class="m-3">
                       <a style="text-decoration: none; font-size: xx-large;" class="fs-2 btn btn-info"
                       href="{{ url_for('users.topic_by_course', course_id=fv[page][1], topic_id=fv[page][2]) }}">
                         {{ fv[page][0] }}
                       </a>
-                    </p>
-                   
-                  </div>  
-                                
+                    </p>               
+                  </div>                              
                 </div>
                 {% elif mat %}
                 <div class="col fs-3" style="background-color: rgb(214, 255, 159);">

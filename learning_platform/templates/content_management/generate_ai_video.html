@@ -35,31 +35,21 @@
                   </a>
                   <div style="background-color: antiquewhite;">
                     <form action="{{ url_for('admin.upload', language=language,  course_id=_t[1], topic_id=_t[2]) }}" method="post" enctype=multipart/form-data>
-                      <input  type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                        
+                      <input  type="hidden" name="csrf_token" value="{{ csrf_token() }}">       
                     <div class="col-4 fs-5 bg-info">
                       <label for="file">Select video</label><br>
                       <input type="file" id="file" name="file">
-                    </div>
-                    
+                    </div>               
                     <input type="submit" value="Upload video">
                   </form>
-                  </div>
-                 
+                  </div>              
                 </li>
-            {% endfor %}
-                 
+            {% endfor %}                 
             {% endfor %}
                     </div>
-                </ul>
-               
-              </div>
-
-              
-           
-            
-        </div>
-      
+                </ul>            
+              </div>           
+        </div>     
 {% endblock %}
 </body>
 </html>

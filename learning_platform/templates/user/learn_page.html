@@ -30,8 +30,6 @@
                     </p>
                    
                   </div>
-                    
-
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                       {% if page | int > fp   %}
                    <p> <a href="{{ url_for('users.paginate', page= (page | int - 1), fp=fp, lp=lp) }}">
@@ -44,12 +42,8 @@
                     {{_('NEXT')}}
                   </a></p>
                    {% endif %}
-                    </div>
-                    
-                                
+                    </div>                               
                 </div>
-
-
                 {% elif mat %}
                 <div class="col fs-3" style="background-color: rgb(214, 255, 159);">
                     <a class="btn btn-primary" href="{{ url_for('users.learn_skills', course_id=course_id) }}">{{_('Back')}}</a>
@@ -71,34 +65,27 @@
                           
                             {% for idx in path %}
 			                      <p class="fs-3 text-info text-center" style="background-color: rgb(43, 43, 61);">SKILdemy</p>
-                            <li>
-                              
+                            <li>                             
                                 <iframe width="560" height="315" 
                                 src="https://www.youtube.com/embed/{{ idx }}"
                                 title="YouTube video player" 
                                 frameborder="0" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                                 referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                                </iframe>
-                              
+                                </iframe>                             
                             </li>
                             {% endfor %}
-
                           </ul>
-                        </div>
-                        
-                        
+                        </div>                      
                        </nav>  
                     <div class="txtdsp">
                 {% for line in mat.split('\n') %}
-
                 {% if line.startswith('http') %}
                   <a href="{{line}}">
                     {{line}}
                   </a>
                 {% else %}
                   {{ line }}
-
                 {% endif %}
                <br>
                {% endfor %}
@@ -111,7 +98,6 @@
                     <source src="{{ path }}" type="video/mp4">
                   </video>
                 </div>
-
                 {% elif path and pending %}
                 <div style="max-width: fit-content;" class="text-center">
                   <video controls style="min-width: fit-content;">
@@ -123,13 +109,11 @@
                     </a>
                   </div>
                 </div>
-
                 {% elif path and ask %}
                 <p class="fs-3 text-light">
                   {{_('keep learning while we prepare the answers for you')}}
                 </p>
-                <div class="col-md-4">
-                  
+                <div class="col-md-4">                 
                   <img src="{{ url_for('static', filename='thumbnail/ai.png') }}" alt="thumbnail" height="280" width="autp">
                   <div class="text-end ">
                     <a class="btn btn-success text-info fs-3" 
@@ -140,8 +124,7 @@
                 </div>
                 {% endif %}
             </div>
-        </div>
-  
+        </div> 
 {% endblock %}
 </body>
 </html>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-01 08:38+0000\n"
+"POT-Creation-Date: 2024-09-03 07:04+0000\n"
 "PO-Revision-Date: 2024-05-22 10:27+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
-#: _helpers.py:577
+#: _helpers.py:580
 msgid "Please login to access this page"
 msgstr "Veuillez vous connecter pour accéder à cette page"
 
-#: _helpers.py:604
+#: _helpers.py:607
 msgid "Request for solution after you receive answers to previous requests"
 msgstr "Demande de solution après avoir reçu des réponses aux demandes précédentes"
 
-#: _helpers.py:630
+#: _helpers.py:633
 msgid "countdown to next solution "
 msgstr "temps restant pour la prochaine solution "
 
@@ -34,7 +34,7 @@ msgstr "temps restant pour la prochaine solution "
 msgid "Passwords must match"
 msgstr "Les mots de passe doivent correspondre"
 
-#: forms/form.py:68 templates/home/home.html:35 templates/user/register.html:32
+#: forms/form.py:68 templates/home/home.html:32 templates/user/register.html:32
 msgid "Register"
 msgstr "S’inscrire"
 
@@ -50,23 +50,23 @@ msgstr "Cet e-mail est déjà pris"
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
-#: templates/home/home.html:42 templates/user/login.html:14
+#: templates/home/home.html:39 templates/user/login.html:14
 msgid "login"
 msgstr "connexion"
 
-#: templates/home/home.html:69
+#: templates/home/home.html:63
 msgid "course content"
 msgstr "Contenu du cours"
 
-#: templates/home/home.html:80
+#: templates/home/home.html:74
 msgid "Try this for free"
 msgstr "Essayez ceci gratuitement"
 
-#: templates/home/home.html:102
+#: templates/home/home.html:96
 msgid "click on course for more information"
 msgstr "Cliquez sur le cours pour plus d’informations"
 
-#: templates/home/home.html:113
+#: templates/home/home.html:105
 msgid "Enroll now"
 msgstr "Inscrivez-vous maintenant"
 
@@ -111,27 +111,27 @@ msgstr "Obtenir un certificat"
 msgid "Home"
 msgstr "Page d'accueil"
 
-#: templates/user/free_trial.html:33 templates/user/learn_page.html:55
+#: templates/user/free_trial.html:28 templates/user/learn_page.html:49
 msgid "Back"
 msgstr "Retour"
 
-#: templates/user/free_trial.html:39 templates/user/learn_page.html:61
+#: templates/user/free_trial.html:34 templates/user/learn_page.html:55
 msgid "SKILdemy guide"
 msgstr "Guide SKILdemy"
 
-#: templates/user/free_trial.html:44 templates/user/learn_page.html:67
+#: templates/user/free_trial.html:39 templates/user/learn_page.html:61
 msgid "Suggested Videos"
 msgstr "Vidéos suggérées"
 
-#: templates/user/free_trial.html:99 templates/user/learn_page.html:122
+#: templates/user/free_trial.html:94 templates/user/learn_page.html:108
 msgid "Cancel Request"
 msgstr "Annuler la demande"
 
-#: templates/user/free_trial.html:106 templates/user/learn_page.html:129
+#: templates/user/free_trial.html:101 templates/user/learn_page.html:114
 msgid "keep learning while we prepare the answers for you"
 msgstr "continuez à apprendre pendant que nous préparons les réponses pour vous"
 
-#: templates/user/free_trial.html:116 templates/user/learn_page.html:137
+#: templates/user/free_trial.html:111 templates/user/learn_page.html:121
 msgid "Request Solution"
 msgstr "Vous pouvez demander la solution"
 
@@ -139,11 +139,11 @@ msgstr "Vous pouvez demander la solution"
 msgid "PROGRESS"
 msgstr "PROGRÈS"
 
-#: templates/user/learn_page.html:38
+#: templates/user/learn_page.html:36
 msgid "PREVIOUS"
 msgstr "Précédent"
 
-#: templates/user/learn_page.html:44
+#: templates/user/learn_page.html:42
 msgid "NEXT"
 msgstr "Suivant"
 
@@ -172,30 +172,42 @@ msgid "French"
 msgstr "Français"
 
 #: templates/user/locale.html:27
+msgid "German"
+msgstr "Allemand"
+
+#: templates/user/locale.html:28
 msgid "Hindi"
 msgstr "Hindi"
 
-#: templates/user/locale.html:28
+#: templates/user/locale.html:29
 msgid "Indonesian"
 msgstr "Indonésien"
 
-#: templates/user/locale.html:29
+#: templates/user/locale.html:30
+msgid "Japanese"
+msgstr "Japonais"
+
+#: templates/user/locale.html:31
+msgid "Korean"
+msgstr "Coréen"
+
+#: templates/user/locale.html:32
 msgid "Portuguese"
 msgstr "Portugais"
 
-#: templates/user/locale.html:30
+#: templates/user/locale.html:33
 msgid "Russia"
 msgstr "Russe"
 
-#: templates/user/locale.html:31
+#: templates/user/locale.html:34
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: templates/user/locale.html:32
+#: templates/user/locale.html:35
 msgid "Turkish"
 msgstr "Turc"
 
-#: templates/user/locale.html:33
+#: templates/user/locale.html:36
 msgid "Urdu"
 msgstr "Urdu"
 
@@ -295,7 +307,9 @@ msgstr "Veuillez noter que votre période d'accès à ce cours est écoulée."
 
 #: views/users.py:293
 msgid "You can always extend the time without losing your current records"
-msgstr "Vous pouvez toujours prolonger le temps sans perdre votre progression actuelle"
+msgstr ""
+"Vous pouvez toujours prolonger le temps sans perdre votre progression "
+"actuelle"
 
 #: views/users.py:332
 msgid "successfully requested for solution"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-01 08:38+0000\n"
+"POT-Creation-Date: 2024-09-03 07:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
-#: _helpers.py:577
+#: _helpers.py:580
 msgid "Please login to access this page"
 msgstr ""
 
-#: _helpers.py:604
+#: _helpers.py:607
 msgid "Request for solution after you receive answers to previous requests"
 msgstr ""
 
-#: _helpers.py:630
+#: _helpers.py:633
 msgid "countdown to next solution "
 msgstr ""
 
@@ -33,7 +33,7 @@ msgstr ""
 msgid "Passwords must match"
 msgstr ""
 
-#: forms/form.py:68 templates/home/home.html:35 templates/user/register.html:32
+#: forms/form.py:68 templates/home/home.html:32 templates/user/register.html:32
 msgid "Register"
 msgstr ""
 
@@ -49,23 +49,23 @@ msgstr ""
 msgid "Dashboard"
 msgstr ""
 
-#: templates/home/home.html:42 templates/user/login.html:14
+#: templates/home/home.html:39 templates/user/login.html:14
 msgid "login"
 msgstr ""
 
-#: templates/home/home.html:69
+#: templates/home/home.html:63
 msgid "course content"
 msgstr ""
 
-#: templates/home/home.html:80
+#: templates/home/home.html:74
 msgid "Try this for free"
 msgstr ""
 
-#: templates/home/home.html:102
+#: templates/home/home.html:96
 msgid "click on course for more information"
 msgstr ""
 
-#: templates/home/home.html:113
+#: templates/home/home.html:105
 msgid "Enroll now"
 msgstr ""
 
@@ -110,27 +110,27 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: templates/user/free_trial.html:33 templates/user/learn_page.html:55
+#: templates/user/free_trial.html:28 templates/user/learn_page.html:49
 msgid "Back"
 msgstr ""
 
-#: templates/user/free_trial.html:39 templates/user/learn_page.html:61
+#: templates/user/free_trial.html:34 templates/user/learn_page.html:55
 msgid "SKILdemy guide"
 msgstr ""
 
-#: templates/user/free_trial.html:44 templates/user/learn_page.html:67
+#: templates/user/free_trial.html:39 templates/user/learn_page.html:61
 msgid "Suggested Videos"
 msgstr ""
 
-#: templates/user/free_trial.html:99 templates/user/learn_page.html:122
+#: templates/user/free_trial.html:94 templates/user/learn_page.html:108
 msgid "Cancel Request"
 msgstr ""
 
-#: templates/user/free_trial.html:106 templates/user/learn_page.html:129
+#: templates/user/free_trial.html:101 templates/user/learn_page.html:114
 msgid "keep learning while we prepare the answers for you"
 msgstr ""
 
-#: templates/user/free_trial.html:116 templates/user/learn_page.html:137
+#: templates/user/free_trial.html:111 templates/user/learn_page.html:121
 msgid "Request Solution"
 msgstr ""
 
@@ -138,11 +138,11 @@ msgstr ""
 msgid "PROGRESS"
 msgstr ""
 
-#: templates/user/learn_page.html:38
+#: templates/user/learn_page.html:36
 msgid "PREVIOUS"
 msgstr ""
 
-#: templates/user/learn_page.html:44
+#: templates/user/learn_page.html:42
 msgid "NEXT"
 msgstr ""
 
@@ -171,30 +171,42 @@ msgid "French"
 msgstr ""
 
 #: templates/user/locale.html:27
-msgid "Hindi"
+msgid "German"
 msgstr ""
 
 #: templates/user/locale.html:28
-msgid "Indonesian"
+msgid "Hindi"
 msgstr ""
 
 #: templates/user/locale.html:29
-msgid "Portuguese"
+msgid "Indonesian"
 msgstr ""
 
 #: templates/user/locale.html:30
-msgid "Russia"
+msgid "Japanese"
 msgstr ""
 
 #: templates/user/locale.html:31
-msgid "Spanish"
+msgid "Korean"
 msgstr ""
 
 #: templates/user/locale.html:32
-msgid "Turkish"
+msgid "Portuguese"
 msgstr ""
 
 #: templates/user/locale.html:33
+msgid "Russia"
+msgstr ""
+
+#: templates/user/locale.html:34
+msgid "Spanish"
+msgstr ""
+
+#: templates/user/locale.html:35
+msgid "Turkish"
+msgstr ""
+
+#: templates/user/locale.html:36
 msgid "Urdu"
 msgstr ""
 

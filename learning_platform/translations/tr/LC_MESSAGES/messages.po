@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-01 08:38+0000\n"
+"POT-Creation-Date: 2024-09-03 07:04+0000\n"
 "PO-Revision-Date: 2024-05-24 04:46+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: tr\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
-#: _helpers.py:577
+#: _helpers.py:580
 msgid "Please login to access this page"
 msgstr "Bu sayfaya erişmek için lütfen giriş yapın"
 
-#: _helpers.py:604
+#: _helpers.py:607
 msgid "Request for solution after you receive answers to previous requests"
 msgstr "Önceki taleplerinize yanıt aldıktan sonra çözüm talebinde bulunun"
 
-#: _helpers.py:630
+#: _helpers.py:633
 msgid "countdown to next solution "
 msgstr "bir sonraki çözüme geri sayım"
 
@@ -34,7 +34,7 @@ msgstr "bir sonraki çözüme geri sayım"
 msgid "Passwords must match"
 msgstr "Şifreler aynı olmalıdır"
 
-#: forms/form.py:68 templates/home/home.html:35 templates/user/register.html:32
+#: forms/form.py:68 templates/home/home.html:32 templates/user/register.html:32
 msgid "Register"
 msgstr "Kayıt Ol"
 
@@ -50,23 +50,23 @@ msgstr "Bu e-posta zaten alınmış"
 msgid "Dashboard"
 msgstr "Gösterge Paneli"
 
-#: templates/home/home.html:42 templates/user/login.html:14
+#: templates/home/home.html:39 templates/user/login.html:14
 msgid "login"
 msgstr "giriş"
 
-#: templates/home/home.html:69
+#: templates/home/home.html:63
 msgid "course content"
 msgstr "kurs içeriği"
 
-#: templates/home/home.html:80
+#: templates/home/home.html:74
 msgid "Try this for free"
 msgstr "Bunu ücretsiz deneyin"
 
-#: templates/home/home.html:102
+#: templates/home/home.html:96
 msgid "click on course for more information"
 msgstr "daha fazla bilgi için kursa tıklayın"
 
-#: templates/home/home.html:113
+#: templates/home/home.html:105
 msgid "Enroll now"
 msgstr "Şimdi kaydolun"
 
@@ -111,27 +111,27 @@ msgstr "sertifika için ilerleyin"
 msgid "Home"
 msgstr "Ana Sayfa"
 
-#: templates/user/free_trial.html:33 templates/user/learn_page.html:55
+#: templates/user/free_trial.html:28 templates/user/learn_page.html:49
 msgid "Back"
 msgstr "Geri"
 
-#: templates/user/free_trial.html:39 templates/user/learn_page.html:61
+#: templates/user/free_trial.html:34 templates/user/learn_page.html:55
 msgid "SKILdemy guide"
 msgstr "SKILdemy kılavuzu"
 
-#: templates/user/free_trial.html:44 templates/user/learn_page.html:67
+#: templates/user/free_trial.html:39 templates/user/learn_page.html:61
 msgid "Suggested Videos"
 msgstr "Önerilen Videolar"
 
-#: templates/user/free_trial.html:99 templates/user/learn_page.html:122
+#: templates/user/free_trial.html:94 templates/user/learn_page.html:108
 msgid "Cancel Request"
 msgstr "Talebi İptal Et"
 
-#: templates/user/free_trial.html:106 templates/user/learn_page.html:129
+#: templates/user/free_trial.html:101 templates/user/learn_page.html:114
 msgid "keep learning while we prepare the answers for you"
 msgstr "Cevapları sizin için hazırlarken öğrenmeye devam edin"
 
-#: templates/user/free_trial.html:116 templates/user/learn_page.html:137
+#: templates/user/free_trial.html:111 templates/user/learn_page.html:121
 msgid "Request Solution"
 msgstr "Çözüm talebinde bulunabilirsiniz"
 
@@ -139,11 +139,11 @@ msgstr "Çözüm talebinde bulunabilirsiniz"
 msgid "PROGRESS"
 msgstr "İLERLEME"
 
-#: templates/user/learn_page.html:38
+#: templates/user/learn_page.html:36
 msgid "PREVIOUS"
 msgstr "ÖNCEKİ"
 
-#: templates/user/learn_page.html:44
+#: templates/user/learn_page.html:42
 msgid "NEXT"
 msgstr "SONRAKİ"
 
@@ -172,30 +172,42 @@ msgid "French"
 msgstr "Fransızca"
 
 #: templates/user/locale.html:27
+msgid "German"
+msgstr "Alman"
+
+#: templates/user/locale.html:28
 msgid "Hindi"
 msgstr "Hintçe"
 
-#: templates/user/locale.html:28
+#: templates/user/locale.html:29
 msgid "Indonesian"
 msgstr "Endonezce"
 
-#: templates/user/locale.html:29
+#: templates/user/locale.html:30
+msgid "Japanese"
+msgstr "Japonca"
+
+#: templates/user/locale.html:31
+msgid "Korean"
+msgstr "Korece"
+
+#: templates/user/locale.html:32
 msgid "Portuguese"
 msgstr "Portekizce"
 
-#: templates/user/locale.html:30
+#: templates/user/locale.html:33
 msgid "Russia"
 msgstr "Rusça"
 
-#: templates/user/locale.html:31
+#: templates/user/locale.html:34
 msgid "Spanish"
 msgstr "İspanyolca"
 
-#: templates/user/locale.html:32
+#: templates/user/locale.html:35
 msgid "Turkish"
 msgstr "Türkçe"
 
-#: templates/user/locale.html:33
+#: templates/user/locale.html:36
 msgid "Urdu"
 msgstr "Urduca"
 

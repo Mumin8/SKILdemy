@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-01 08:38+0000\n"
+"POT-Creation-Date: 2024-09-03 07:04+0000\n"
 "PO-Revision-Date: 2024-05-24 04:47+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: hi\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
-#: _helpers.py:577
+#: _helpers.py:580
 msgid "Please login to access this page"
 msgstr "इस पृष्ठ का प्रयोग करने केलिए लॉगिन करें"
 
-#: _helpers.py:604
+#: _helpers.py:607
 msgid "Request for solution after you receive answers to previous requests"
 msgstr "पिछले अनुरोधों के उत्तर प्राप्त होने के बाद समाधान के लिए अनुरोध करें"
 
-#: _helpers.py:630
+#: _helpers.py:633
 msgid "countdown to next solution "
 msgstr "अगले समाधान के लिए समय बचा है"
 
@@ -34,7 +34,7 @@ msgstr "अगले समाधान के लिए समय बचा ह
 msgid "Passwords must match"
 msgstr "पासवर्ड अवश्य मेल खाना चाहिए"
 
-#: forms/form.py:68 templates/home/home.html:35 templates/user/register.html:32
+#: forms/form.py:68 templates/home/home.html:32 templates/user/register.html:32
 msgid "Register"
 msgstr "रजिस्टर करें"
 
@@ -50,23 +50,23 @@ msgstr "यह ई - मेल पहले ही लिया जा चुक
 msgid "Dashboard"
 msgstr "डैशबोर्ड"
 
-#: templates/home/home.html:42 templates/user/login.html:14
+#: templates/home/home.html:39 templates/user/login.html:14
 msgid "login"
 msgstr "लॉगिन"
 
-#: templates/home/home.html:69
+#: templates/home/home.html:63
 msgid "course content"
 msgstr "पाठ्यक्रम सामग्री"
 
-#: templates/home/home.html:80
+#: templates/home/home.html:74
 msgid "Try this for free"
 msgstr "इसे निःशुल्क आज़माएँ"
 
-#: templates/home/home.html:102
+#: templates/home/home.html:96
 msgid "click on course for more information"
 msgstr "अधिक जानकारी के लिए पाठ्यक्रम पर क्लिक करें"
 
-#: templates/home/home.html:113
+#: templates/home/home.html:105
 msgid "Enroll now"
 msgstr "अभी नामांकन करें"
 
@@ -111,27 +111,27 @@ msgstr "प्रमाण पत्र के लिए आगे बढ़े�
 msgid "Home"
 msgstr "मुख्य पृष्ठ"
 
-#: templates/user/free_trial.html:33 templates/user/learn_page.html:55
+#: templates/user/free_trial.html:28 templates/user/learn_page.html:49
 msgid "Back"
 msgstr "वापस"
 
-#: templates/user/free_trial.html:39 templates/user/learn_page.html:61
+#: templates/user/free_trial.html:34 templates/user/learn_page.html:55
 msgid "SKILdemy guide"
 msgstr "SKILdemy मार्गदर्शिका"
 
-#: templates/user/free_trial.html:44 templates/user/learn_page.html:67
+#: templates/user/free_trial.html:39 templates/user/learn_page.html:61
 msgid "Suggested Videos"
 msgstr "सुझाए गए वीडियो"
 
-#: templates/user/free_trial.html:99 templates/user/learn_page.html:122
+#: templates/user/free_trial.html:94 templates/user/learn_page.html:108
 msgid "Cancel Request"
 msgstr "अनुरोध को रद्द करें"
 
-#: templates/user/free_trial.html:106 templates/user/learn_page.html:129
+#: templates/user/free_trial.html:101 templates/user/learn_page.html:114
 msgid "keep learning while we prepare the answers for you"
 msgstr "सीखते रहिए, हम आपके लिए उत्तर तैयार करते हैं"
 
-#: templates/user/free_trial.html:116 templates/user/learn_page.html:137
+#: templates/user/free_trial.html:111 templates/user/learn_page.html:121
 msgid "Request Solution"
 msgstr "समाधान का अनुरोध करें"
 
@@ -139,11 +139,11 @@ msgstr "समाधान का अनुरोध करें"
 msgid "PROGRESS"
 msgstr "प्रगति"
 
-#: templates/user/learn_page.html:38
+#: templates/user/learn_page.html:36
 msgid "PREVIOUS"
 msgstr "पिछला"
 
-#: templates/user/learn_page.html:44
+#: templates/user/learn_page.html:42
 msgid "NEXT"
 msgstr "अगला"
 
@@ -172,30 +172,42 @@ msgid "French"
 msgstr "फ़्रेंच"
 
 #: templates/user/locale.html:27
+msgid "German"
+msgstr "जर्मन"
+
+#: templates/user/locale.html:28
 msgid "Hindi"
 msgstr "हिंदी"
 
-#: templates/user/locale.html:28
+#: templates/user/locale.html:29
 msgid "Indonesian"
 msgstr "इंडोनेशियाई"
 
-#: templates/user/locale.html:29
+#: templates/user/locale.html:30
+msgid "Japanese"
+msgstr "जापानी"
+
+#: templates/user/locale.html:31
+msgid "Korean"
+msgstr "कोरियाई"
+
+#: templates/user/locale.html:32
 msgid "Portuguese"
 msgstr "पुर्तगाली"
 
-#: templates/user/locale.html:30
+#: templates/user/locale.html:33
 msgid "Russia"
 msgstr "रूसी"
 
-#: templates/user/locale.html:31
+#: templates/user/locale.html:34
 msgid "Spanish"
 msgstr "स्पेनिश"
 
-#: templates/user/locale.html:32
+#: templates/user/locale.html:35
 msgid "Turkish"
 msgstr "तुर्की"
 
-#: templates/user/locale.html:33
+#: templates/user/locale.html:36
 msgid "Urdu"
 msgstr "उर्दू"
 

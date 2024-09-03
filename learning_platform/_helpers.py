@@ -375,7 +375,7 @@ def auth_():
 def insert_text(topic_id, code='f.PNG', desc=None, en=None,
                 ru=None, es=None, hi=None, ar=None, fr=None,
                 ur=None, bn=None, pt=None, zh=None, tr=None,
-                id=None):
+                id=None, ko=None, ja=None, de=None):
     '''this will insert text to a collection
     '''
     course = session.get('course')
@@ -399,7 +399,10 @@ def insert_text(topic_id, code='f.PNG', desc=None, en=None,
         "ru": ru,
         "hi": hi,
         "zh": zh,
-        "id": id
+        "id": id,
+        "ko": ko,
+        "ja": ja,
+        "de": de
     }
 
     db.ai_video_text.insert_one(text_details)
@@ -667,7 +670,7 @@ def delete_byID(_id):
 def text_data(course, subtopic, desc=None, en=None,
               ru=None, es=None, hi=None, ar=None, fr=None,
               ur=None, bn=None, pt=None, zh=None, tr=None,
-              id=None):
+              id=None, ko=None, ja=None, de=None):
     '''structure of the reading text
     '''
     topic = Topic.query.get(subtopic.topic_id)
@@ -687,7 +690,10 @@ def text_data(course, subtopic, desc=None, en=None,
         "ru": ru,
         "hi": hi,
         "zh": zh,
-        "id": id}
+        "id": id,
+        "ko": ko,
+        "ja": ja,
+        "de": de}
     db.text_display.insert_one(file_details)
 
 

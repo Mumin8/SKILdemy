@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-01 08:38+0000\n"
+"POT-Creation-Date: 2024-09-03 07:04+0000\n"
 "PO-Revision-Date: 2024-08-31 14:59+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ja\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
-#: _helpers.py:577
+#: _helpers.py:580
 msgid "Please login to access this page"
 msgstr "このページにアクセスするにはログインしてください"
 
-#: _helpers.py:604
+#: _helpers.py:607
 msgid "Request for solution after you receive answers to previous requests"
 msgstr "Request a solution after receiving a response to a previous request."
 
-#: _helpers.py:630
+#: _helpers.py:633
 msgid "countdown to next solution "
 msgstr "次の解決策までのカウントダウン"
 
@@ -34,7 +34,7 @@ msgstr "次の解決策までのカウントダウン"
 msgid "Passwords must match"
 msgstr "パスワードは一致しなければならない"
 
-#: forms/form.py:68 templates/home/home.html:35 templates/user/register.html:32
+#: forms/form.py:68 templates/home/home.html:32 templates/user/register.html:32
 msgid "Register"
 msgstr "登録する"
 
@@ -50,23 +50,23 @@ msgstr "このメールはすでに使用されています"
 msgid "Dashboard"
 msgstr "ダッシュボード"
 
-#: templates/home/home.html:42 templates/user/login.html:14
+#: templates/home/home.html:39 templates/user/login.html:14
 msgid "login"
 msgstr "ログイン"
 
-#: templates/home/home.html:69
+#: templates/home/home.html:63
 msgid "course content"
 msgstr "コース内容"
 
-#: templates/home/home.html:80
+#: templates/home/home.html:74
 msgid "Try this for free"
 msgstr "これを無料で試してみましょう"
 
-#: templates/home/home.html:102
+#: templates/home/home.html:96
 msgid "click on course for more information"
 msgstr "コースをクリックすると詳細が表示されます"
 
-#: templates/home/home.html:113
+#: templates/home/home.html:105
 msgid "Enroll now"
 msgstr "今すぐ登録"
 
@@ -111,27 +111,27 @@ msgstr "証明書の取得に進みます"
 msgid "Home"
 msgstr "ホームページ"
 
-#: templates/user/free_trial.html:33 templates/user/learn_page.html:55
+#: templates/user/free_trial.html:28 templates/user/learn_page.html:49
 msgid "Back"
 msgstr "戻る"
 
-#: templates/user/free_trial.html:39 templates/user/learn_page.html:61
+#: templates/user/free_trial.html:34 templates/user/learn_page.html:55
 msgid "SKILdemy guide"
 msgstr ""
 
-#: templates/user/free_trial.html:44 templates/user/learn_page.html:67
+#: templates/user/free_trial.html:39 templates/user/learn_page.html:61
 msgid "Suggested Videos"
 msgstr "おすすめの動画"
 
-#: templates/user/free_trial.html:99 templates/user/learn_page.html:122
+#: templates/user/free_trial.html:94 templates/user/learn_page.html:108
 msgid "Cancel Request"
 msgstr "リクエストをキャンセル"
 
-#: templates/user/free_trial.html:106 templates/user/learn_page.html:129
+#: templates/user/free_trial.html:101 templates/user/learn_page.html:114
 msgid "keep learning while we prepare the answers for you"
 msgstr "私たちが答えを用意している間、学び続けてください"
 
-#: templates/user/free_trial.html:116 templates/user/learn_page.html:137
+#: templates/user/free_trial.html:111 templates/user/learn_page.html:121
 msgid "Request Solution"
 msgstr "ソリューションのリクエスト"
 
@@ -139,11 +139,11 @@ msgstr "ソリューションのリクエスト"
 msgid "PROGRESS"
 msgstr "進捗"
 
-#: templates/user/learn_page.html:38
+#: templates/user/learn_page.html:36
 msgid "PREVIOUS"
 msgstr "前の"
 
-#: templates/user/learn_page.html:44
+#: templates/user/learn_page.html:42
 msgid "NEXT"
 msgstr "次へ"
 
@@ -172,30 +172,42 @@ msgid "French"
 msgstr "프랑스어"
 
 #: templates/user/locale.html:27
+msgid "German"
+msgstr "ドイツ語"
+
+#: templates/user/locale.html:28
 msgid "Hindi"
 msgstr "힌디어"
 
-#: templates/user/locale.html:28
+#: templates/user/locale.html:29
 msgid "Indonesian"
 msgstr "인도네시아어"
 
-#: templates/user/locale.html:29
+#: templates/user/locale.html:30
+msgid "Japanese"
+msgstr "日本語"
+
+#: templates/user/locale.html:31
+msgid "Korean"
+msgstr "韓国語"
+
+#: templates/user/locale.html:32
 msgid "Portuguese"
 msgstr "포르투갈어"
 
-#: templates/user/locale.html:30
+#: templates/user/locale.html:33
 msgid "Russia"
 msgstr "러시아어"
 
-#: templates/user/locale.html:31
+#: templates/user/locale.html:34
 msgid "Spanish"
 msgstr "스페인어"
 
-#: templates/user/locale.html:32
+#: templates/user/locale.html:35
 msgid "Turkish"
 msgstr "터키어"
 
-#: templates/user/locale.html:33
+#: templates/user/locale.html:36
 msgid "Urdu"
 msgstr "우르두어"
 

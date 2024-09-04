@@ -69,11 +69,6 @@ def rateLimit_handler(e):
     return jsonify(error='something went wrong. try again')
 
 
-@user_bp.route("/auth")
-def register_auth():
-    return render_template('user/home_page.html')
-
-
 @user_bp.route('/register', methods=['GET', 'POST'])
 def register():
     l = 'This name will appear on your certificate when you enroll in a course'
@@ -102,7 +97,7 @@ def register():
                     category='success')
             else:
                 flash(_("Thank you for Registering"), category='success')
-        return redirect(url_for('users.register_auth'))
+        return redirect(url_for('users.login'))
     return render_template('user/register.html', form=form, l=l)
 
 

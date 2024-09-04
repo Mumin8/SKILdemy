@@ -310,7 +310,7 @@ msgstr "Por favor, seu prazo para acessar este curso expirou"
 
 #: views/users.py:293
 msgid "You can always extend the time without losing your current records"
-msgstr ""
+msgstr "Você sempre pode estender o tempo sem perder seus registros atuais"
 
 #: views/users.py:332
 msgid "successfully requested for solution"

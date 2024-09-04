@@ -226,7 +226,7 @@ msgstr "تسجيل خروج"
 
 #: templates/user/profile.html:34
 msgid "You will need at least 70 to pass this course for a certificate"
-msgstr "سوف تحتاج إلى 70% على الأقل لاجتياز هذه الدورة للحصول على الشهادة"
+msgstr "سوف تحتاج إلى 70 على الأقل لاجتياز هذه الدورة للحصول على الشهادة"
 
 #: templates/user/profile.html:36
 msgid "My courses"

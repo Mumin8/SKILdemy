@@ -226,7 +226,7 @@ msgstr "Keluar"
 #: templates/user/profile.html:34
 msgid "You will need at least 70 to pass this course for a certificate"
 msgstr ""
-"Anda memerlukan setidaknya 70% untuk lulus kursus ini untuk mendapatkan "
+"Anda memerlukan setidaknya 70 untuk lulus kursus ini untuk mendapatkan "
 "sertifikat"
 
 #: templates/user/profile.html:36

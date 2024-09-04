@@ -229,7 +229,7 @@ msgstr "cerrar la sesión"
 #, fuzzy
 msgid "You will need at least 70 to pass this course for a certificate"
 msgstr ""
-"Necesitará al menos el 70% para aprobar este curso y obtener un "
+"Necesitará al menos el 70 para aprobar este curso y obtener un "
 "certificado."
 
 #: templates/user/profile.html:36

@@ -226,7 +226,7 @@ msgstr "लॉगआउट"
 #: templates/user/profile.html:34
 msgid "You will need at least 70 to pass this course for a certificate"
 msgstr ""
-"प्रमाण पत्र के लिए आपको इस कोर्स को पास करने के लिए कम से कम 70% अंक की "
+"प्रमाण पत्र के लिए आपको इस कोर्स को पास करने के लिए कम से कम 70 अंक की "
 "आवश्यकता होगी"
 
 #: templates/user/profile.html:36

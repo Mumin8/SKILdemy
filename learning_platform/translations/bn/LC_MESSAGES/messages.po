@@ -225,7 +225,7 @@ msgstr "লগ আউট"
 
 #: templates/user/profile.html:34
 msgid "You will need at least 70 to pass this course for a certificate"
-msgstr "একটি শংসাপত্রের জন্য এই কোর্সটি পাস করতে আপনার কমপক্ষে 70% প্রয়োজন হবে"
+msgstr "একটি শংসাপত্রের জন্য এই কোর্সটি পাস করতে আপনার কমপক্ষে 70 প্রয়োজন হবে"
 
 #: templates/user/profile.html:36
 msgid "My courses"

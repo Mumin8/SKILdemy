@@ -2,7 +2,7 @@ import os
 from datetime import datetime, timedelta
 import requests
 from flask import (
-    Blueprint, render_template, redirect, url_for, request, jsonify, flash, session)
+    Blueprint, render_template, redirect, url_for, request, jsonify, flash, session, send_file)
 from botocore.exceptions import ClientError
 from flask_babel import gettext as _
 from flask_limiter.errors import RateLimitExceeded
@@ -550,7 +550,7 @@ def download_cert(course_id):
         img = img.convert('RGB')
 
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype('arial.ttf', 32)
+        font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 32)
 
         student_name_pos = (218, 410)
         course_name_pos = (218, 514)
@@ -590,14 +590,12 @@ def download_your_cert(id):
     course = Course.query.get(id)
     cert_name = f'{current_user.id}{course.id}' + ".jpg"
     url = presigned_cert_url(cert_name)
-    downloads_path = os.path.join(os.path.expanduser('~'), 'Downloads')
     filename = 'certificate.jpg'
-    local_file_path = os.path.join(downloads_path, filename)
     r = requests.get(url)
     if r.status_code == 200:
-        with open(local_file_path, 'wb') as file:
-            file.write(r.content)
-            flash(
-                _('Certificate has been generated in your downloads folder'),
-                category="success")
+        file_buffer = io.BytesIO(response.content)
+        flash(
+            _('Certificate has been generated in your downloads folder'),
+            category="success")
+        return send_file(file_buffer, as_attachment=True, download_name=filename, mimetype='image/jpeg')
     return redirect(url_for('users.userprofile'))

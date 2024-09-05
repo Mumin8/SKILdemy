@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-03 07:04+0000\n"
+"POT-Creation-Date: 2024-09-05 23:30+0000\n"
 "PO-Revision-Date: 2024-05-22 10:27+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -257,101 +257,97 @@ msgstr "télécharger"
 msgid "Welcome to SKILdemy"
 msgstr "Bienvenue sur SKILdemy"
 
-#: views/users.py:45
+#: views/users.py:46
 msgid "please login first"
 msgstr "Veuillez vous connecter d’abord"
 
-#: views/users.py:104
+#: views/users.py:100
 msgid "Thank you for Registering"
 msgstr "Merci de vous être inscrit(e)"
 
-#: views/users.py:123
+#: views/users.py:119
 msgid "Happy Coding!  😊"
 msgstr "Bon codage ! 😊"
 
-#: views/users.py:125
+#: views/users.py:121
 msgid "Invalid Credentials"
 msgstr "Identifiants invalides"
 
-#: views/users.py:161
+#: views/users.py:157
 msgid "Password Reset Request"
 msgstr "Demande de réinitialisation du mot de passe"
 
-#: views/users.py:170
+#: views/users.py:166
 msgid "Check your email for the password reset link."
 msgstr "Vérifiez votre e-mail pour le lien de réinitialisation du mot de passe"
 
-#: views/users.py:173
+#: views/users.py:169
 msgid "Email not found"
 msgstr "Email non trouvé"
 
-#: views/users.py:191
+#: views/users.py:187
 msgid "successfully reset password"
 msgstr "Réinitialisation du mot de passe réussie"
 
-#: views/users.py:212
+#: views/users.py:208
 msgid "You have successfully enrolled in"
 msgstr "Vous vous êtes inscrit(e) avec succès à"
 
-#: views/users.py:216
+#: views/users.py:212
 msgid "You have successfully updated your course"
 msgstr "Vous avez mis à jour votre cours avec succès"
 
-#: views/users.py:228
+#: views/users.py:224
 msgid "unsuccessful, please check your details or contact SKILdemy support"
 msgstr "Échec, veuillez vérifier vos détails ou contacter le support Paystack"
 
-#: views/users.py:290
+#: views/users.py:286
 msgid "Please your time period to access this course has elapsed"
 msgstr "Veuillez noter que votre période d'accès à ce cours est écoulée."
 
-#: views/users.py:293
+#: views/users.py:289
 msgid "You can always extend the time without losing your current records"
 msgstr ""
 "Vous pouvez toujours prolonger le temps sans perdre votre progression "
 "actuelle"
 
-#: views/users.py:332
+#: views/users.py:328
 msgid "successfully requested for solution"
 msgstr "Vous pouvez demander la solution"
 
-#: views/users.py:366
+#: views/users.py:362
 msgid "You have not enrolled in this course"
 msgstr "Vous n'êtes pas inscrit à ce cours"
 
-#: views/users.py:372
+#: views/users.py:368
 msgid "You can access your certificate"
 msgstr "Vous pouvez accéder à votre certificat"
 
-#: views/users.py:427
+#: views/users.py:423
 msgid "You can request for the solution"
 msgstr "Vous pouvez demander la solution"
 
-#: views/users.py:449
+#: views/users.py:445
 msgid "Already enrolled, You can still access this course"
 msgstr "Déjà inscrit, vous pouvez encore accéder à ce cours"
 
-#: views/users.py:454
+#: views/users.py:450
 msgid "Your time expired for this course and you are trying to enroll again"
 msgstr ""
 "Votre temps a expiré pour ce cours et vous essayez de vous inscrire à "
 "nouveau"
 
-#: views/users.py:512
+#: views/users.py:508
 msgid "Your certificate is ready for download"
 msgstr "Votre certificat est prêt pour le téléchargement"
 
-#: views/users.py:518
+#: views/users.py:514
 msgid "Your mark is below 70%. You can enroll again to improve your marks"
 msgstr ""
 "Votre note est inférieure à 70%. Vous pouvez vous réinscrire pour "
 "améliorer vos notes"
 
-#: views/users.py:528
+#: views/users.py:524
 msgid "The certificate will be ready after you complete the course"
 msgstr "Le certificat sera prêt une fois le cours terminé"
-
-#: views/users.py:606
-msgid "Certificate has been generated in your downloads folder"
-msgstr "Le certificat a été généré dans votre dossier de téléchargements"
 

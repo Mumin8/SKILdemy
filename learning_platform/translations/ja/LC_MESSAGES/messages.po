@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-03 07:04+0000\n"
+"POT-Creation-Date: 2024-09-05 23:30+0000\n"
 "PO-Revision-Date: 2024-08-31 14:59+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ja\n"
@@ -255,95 +255,91 @@ msgstr "ダウンロード"
 msgid "Welcome to SKILdemy"
 msgstr "SKILdemyへようこそ"
 
-#: views/users.py:45
+#: views/users.py:46
 msgid "please login first"
 msgstr "まずログインしてください"
 
-#: views/users.py:104
+#: views/users.py:100
 msgid "Thank you for Registering"
 msgstr "ご登録いただきありがとうございます"
 
-#: views/users.py:123
+#: views/users.py:119
 msgid "Happy Coding!  😊"
 msgstr "楽しいコーディングを！😊"
 
-#: views/users.py:125
+#: views/users.py:121
 msgid "Invalid Credentials"
 msgstr "無効な資格情報"
 
-#: views/users.py:161
+#: views/users.py:157
 msgid "Password Reset Request"
 msgstr "パスワード再設定リクエスト"
 
-#: views/users.py:170
+#: views/users.py:166
 msgid "Check your email for the password reset link."
 msgstr "パスワードリセットリンクが記載されたメールを確認してください。"
 
-#: views/users.py:173
+#: views/users.py:169
 msgid "Email not found"
 msgstr "メールが見つかりません"
 
-#: views/users.py:191
+#: views/users.py:187
 msgid "successfully reset password"
 msgstr "パスワードが正常にリセットされました"
 
-#: views/users.py:212
+#: views/users.py:208
 msgid "You have successfully enrolled in"
 msgstr "無事に登録が完了しました"
 
-#: views/users.py:216
+#: views/users.py:212
 msgid "You have successfully updated your course"
 msgstr "コースが正常に更新されました"
 
-#: views/users.py:228
+#: views/users.py:224
 msgid "unsuccessful, please check your details or contact SKILdemy support"
 msgstr "失敗しました。詳細を確認するか、SKILdemyサポートにお問い合わせください。"
 
-#: views/users.py:290
+#: views/users.py:286
 msgid "Please your time period to access this course has elapsed"
 msgstr "このコースにアクセスできる期間が経過しました"
 
-#: views/users.py:293
+#: views/users.py:289
 msgid "You can always extend the time without losing your current records"
 msgstr "現在の記録を失うことなく、いつでも時間を延長できます"
 
-#: views/users.py:332
+#: views/users.py:328
 msgid "successfully requested for solution"
 msgstr "解決策のリクエストが正常に完了しました"
 
-#: views/users.py:366
+#: views/users.py:362
 msgid "You have not enrolled in this course"
 msgstr "このコースに登録していません"
 
-#: views/users.py:372
+#: views/users.py:368
 msgid "You can access your certificate"
 msgstr "証明書にアクセスできます"
 
-#: views/users.py:427
+#: views/users.py:423
 msgid "You can request for the solution"
 msgstr "解決策をリクエストできます"
 
-#: views/users.py:449
+#: views/users.py:445
 msgid "Already enrolled, You can still access this course"
 msgstr "すでに登録済みですが、このコースには引き続きアクセスできます"
 
-#: views/users.py:454
+#: views/users.py:450
 msgid "Your time expired for this course and you are trying to enroll again"
 msgstr "このコースの受講期限が切れたため、再度登録しようとしています"
 
-#: views/users.py:512
+#: views/users.py:508
 msgid "Your certificate is ready for download"
 msgstr "証明書をダウンロードする準備ができました"
 
-#: views/users.py:518
+#: views/users.py:514
 msgid "Your mark is below 70%. You can enroll again to improve your marks"
 msgstr "あなたの成績は70%未満です。成績を上げるために再度登録することができます。"
 
-#: views/users.py:528
+#: views/users.py:524
 msgid "The certificate will be ready after you complete the course"
 msgstr "コース修了後に証明書が発行されます"
-
-#: views/users.py:606
-msgid "Certificate has been generated in your downloads folder"
-msgstr "証明書はダウンロードフォルダに生成されました"
 

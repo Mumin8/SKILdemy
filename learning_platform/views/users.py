@@ -551,6 +551,7 @@ def download_cert(course_id):
         img = img.convert('RGB')
 
         draw = ImageDraw.Draw(img)
+        # if the path below does not work for windows i will simply use 'arial.ttf'
         font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 32)
 
         student_name_pos = (218, 410)
@@ -595,8 +596,5 @@ def download_your_cert(id):
     r = requests.get(url)
     if r.status_code == 200:
         file_buffer = io.BytesIO(r.content)
-        flash(
-            _('Certificate has been generated in your downloads folder'),
-            category="success")
         return send_file(file_buffer, as_attachment=True, download_name=filename, mimetype='image/jpeg')
     return redirect(url_for('users.userprofile'))

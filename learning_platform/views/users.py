@@ -1,4 +1,5 @@
 import os
+import io
 from datetime import datetime, timedelta
 import requests
 from flask import (
@@ -593,7 +594,7 @@ def download_your_cert(id):
     filename = 'certificate.jpg'
     r = requests.get(url)
     if r.status_code == 200:
-        file_buffer = io.BytesIO(response.content)
+        file_buffer = io.BytesIO(r.content)
         flash(
             _('Certificate has been generated in your downloads folder'),
             category="success")

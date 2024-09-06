@@ -44,7 +44,7 @@ def home_(course_id):
     '''the page visited when a course is clicked'''
     auth = auth_()
     lang = get_lang()
-    lang = lang + '.jpg'
+    lang = f'{lang}.jpg'
     course = Course.query.get(course_id)
     
     if course is not None:

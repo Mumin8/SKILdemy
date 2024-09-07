@@ -551,7 +551,7 @@ def download_cert(course_id):
         img = img.convert('RGB')
 
         draw = ImageDraw.Draw(img)
-        # if the path below does not work for windows i will simply use 'arial.ttf'
+        # font = ImageFont.truetype('arial.ttf', 32)
         font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 32)
 
         student_name_pos = (218, 410)

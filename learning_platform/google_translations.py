@@ -36,8 +36,10 @@ def find_matched_words(text):
 def text_translator(text, lang):
     '''translates the text to a language specified as lang
     '''
-    text = translator.translate(text=text, src='en', dest=lang).text
-    print(text)
+    try:
+        text = translator.translate(text=text, src='en', dest=lang).text
+    except TypeError:
+        return text
     return text
 
 

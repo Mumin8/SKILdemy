@@ -1,8 +1,6 @@
 from bson import ObjectId
-from flask import (Blueprint, render_template, redirect, url_for, request,
-                   flash,
-                   session,
-                   jsonify)
+from flask import (Blueprint, render_template, redirect, url_for, request, 
+                   flash, session, jsonify)
 from flask_babel import gettext as _
 from flask_login import login_required, current_user
 from learning_platform import bcrypt, db
@@ -21,9 +19,6 @@ from learning_platform._helpers import (
 
 admin_bp = Blueprint(
     'admin', __name__, static_folder='static', template_folder='templates')
-
-
-v_id = []
 
 
 def validate_subtopic_for_topic(topic_id, subtopic_id):
@@ -57,13 +52,6 @@ def validate_subject(course_id, subject_id):
         if s.id == subject_id:
             return False
     return True
-
-
-def validate_list():
-    '''this will prepare the list for new  values
-    '''
-    if len(v_id) > 0:
-        v_id.pop()
 
 
 def admin_required(f):
@@ -137,7 +125,7 @@ def admin_add_vid():
 def upload(language, course_id, topic_id):
     '''a file will be uploaded here
     '''
-    validate_list()
+    # validate_list()
     if request.method == 'POST':
         if 'file' not in request.files:
             flash('No file part')

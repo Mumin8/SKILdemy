@@ -1,7 +1,6 @@
 /* the home page */
 
 a img{
-    /* margin: 12px; */
     width: 70px;
 }
 
@@ -55,13 +54,6 @@ nav #auth {
     text-wrap: wrap;
     align-self: center;
 }
-
-
-
-/* #editor {
-    height: 400px; 
-} */
-
 
 
 body{

@@ -52,13 +52,17 @@
             <nav aria-label="...">
                 <ul class="pagination">
                   <li class="page-item active">
-                    <a class="page-link" href="{{ url_for('home.home') }}">Back</a>
+                    <a class="page-link" href="{{ url_for('home.home') }}">{{_('Back')}}</a>
                   </li>
                 </ul>
               </nav>
               <div class="fs-2 text-center text-info"> {{ course.name }}</div>
-              <p class="text-center fs-3">{{desc}}</p>
+              
+                <p style="background-color: black; max-width: fit-content; color: white;"
+                class="text-center fs-3">{{desc}}</p>
             <p>
+              
+              
                 <ul>   
                         <h3 class="text-info">{{_('course content')}}</h3>
                         {% for topic in topics|sort(attribute='created_at') %}

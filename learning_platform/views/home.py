@@ -31,6 +31,8 @@ def home():
 
     auth = auth_()
     lang = get_lang()
+    if lang == None:
+        lang = 'en'
     lang = lang + '.jpg'
    
     return render_template(
@@ -44,6 +46,8 @@ def home_(course_id):
     '''the page visited when a course is clicked'''
     auth = auth_()
     lang = get_lang()
+    if lang == None:
+        lang =  'en'
     lang = f'{lang}.jpg'
     course = Course.query.get(course_id)
     

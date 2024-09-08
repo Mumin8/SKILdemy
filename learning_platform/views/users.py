@@ -230,24 +230,25 @@ def enroll_course(course_id):
 def userprofile():
     '''this will initiate the user profile setting
     '''
-    if current_user.is_authenticated:
-        _lis = []
-        user_courses = current_user.enrolling
-        for c in user_courses:
-            st, v = completed_course(c)
-            pct = completed_topics(c)
+    if not current_user.is_authenticated:
+        next_url = request.url
+        return redirect(url_for('users.login', next_url=next_url))
+    
 
-            if v >= 0:
-                ms = text_translator(str(v) + ' days left', get_lang())
-                _lis.append([c, ms, pct])
-            else:
-                _lis.append([c, ' ', pct])
+    _lis = []
+    user_courses = current_user.enrolling
+    for c in user_courses:
+        st, v = completed_course(c)
+        pct = completed_topics(c)
 
-        return render_template(
-            'user/profile.html',
+        if v >= 0:
+            ms = text_translator(str(v) + ' days left', get_lang())
+            _lis.append([c, ms, pct])
+        else:
+            _lis.append([c, ' ', pct])
+
+    return render_template('user/profile.html',
             user_courses=_lis)
-    next_url = request.url
-    return redirect(url_for('home.home', next_url=next_url))
 
 
 @user_bp.route('/next_page/<int:page>/<int:fp>/<int:lp>',
@@ -277,11 +278,12 @@ def learn_skills(course_id):
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 
-    user_c = Course.query.get(course_id)
-    for c in current_user.enrolling:
-        if c == user_c:
-            compl_c, n_ = completed_course(c)
-            if compl_c:
+    status, course = user_enrolled_courses(course_id)
+    if not status:
+        return redirect(url_for('users.login'))
+    
+    compl_c, n_ = completed_course(course)
+    if compl_c:
                 flash(
                     _('Please your time period to access this course has elapsed'),
                     category='warning')
@@ -289,26 +291,21 @@ def learn_skills(course_id):
                     _('You can always extend the time without losing your current records'),
                     category='info')
                 return redirect(url_for('users.userprofile'))
-    if user_c:
-        c_and_t = c_and_topics(user_c)
-        first_key, first_value = next(iter(c_and_t.items()))
-        dict_val = {}
-        for i, j in enumerate(first_value):
-            dict_val[str(i)] = j
+   
+    c_and_t = c_and_topics(course)
+    first_key, first_value = next(iter(c_and_t.items()))
+    dict_val = {}
+    for i, j in enumerate(first_value):
+        dict_val[str(i)] = j
 
-        session['dict'] = dict_val
-        session['c'] = first_key
-        page = '0'
-        first_page = 0
-        last_page = len(first_value) - 1
-        return render_template(
-            'user/learn_page.html',
-            fk=first_key,
-            fv=dict_val,
-            page=page,
-            fp=first_page,
-            lp=last_page)
-    return render_template('user/learn_page.html')
+    session['dict'] = dict_val
+    session['c'] = first_key
+    page = '0'
+    first_page = 0
+    last_page = len(first_value) - 1
+    return render_template(
+        'user/learn_page.html', fk=first_key, fv=dict_val,
+        page=page, fp=first_page, lp=last_page)
 
 
 @user_bp.route('/request/<string:topic_id>', methods=['GET', 'POST'])
@@ -356,18 +353,6 @@ def topic_by_course(course_id, topic_id):
     '''
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
-
-    stat, c = user_enrolled_courses(course_id)
-    if not stat:
-        flash(_('You have not enrolled in this course'), category='warning')
-        return redirect(url_for('home.home'))
-
-    compl_c, n_ = completed_course(c)
-    if compl_c:
-        flash(
-            _('You can access your certificate'),
-            category='warning')
-        return redirect(url_for('users.userprofile'))
 
     course = Course.query.get(course_id).name
     topic = SubTopic.query.get(topic_id)

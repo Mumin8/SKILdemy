@@ -1,4 +1,5 @@
 from flask import Flask
+from datetime import timedelta
 from dotenv import load_dotenv
 from flask_babel import Babel
 from flask_bcrypt import Bcrypt
@@ -41,12 +42,7 @@ app.config["MONGO_URI"] = 'mongodb+srv://alhassanmumin8:Mumin2121@cluster0.tmjnu
 mongo = PyMongo(app)
 
 
-# r = redis.StrictRedis(host='localhost', port=6379, db=0)
-
-
-# for encryption of password
 bcrypt = Bcrypt(app)
-
 
 migrate = Migrate(app, db, render_as_batch=True)
 
@@ -56,7 +52,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///mydb.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
-# app.permanent_session_lifetime = timedelta(minutes=60)
+app.permanent_session_lifetime = timedelta(minutes=120)
 # the csrf attack
 
 app.config['SECRET_KEY'] = os.urandom(24)

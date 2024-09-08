@@ -131,6 +131,8 @@ def login():
 def user_logout():
     '''the user will log out from here
     '''
+    if not current_user.is_authenticated:
+        return redirect(url_for('home.home'))
     user = current_user
     user.authenticated = False
     db.session.add(user)

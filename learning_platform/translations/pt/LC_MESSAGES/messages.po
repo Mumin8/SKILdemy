@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-05 23:30+0000\n"
+"POT-Creation-Date: 2024-09-08 01:38+0000\n"
 "PO-Revision-Date: 2024-05-24 04:48+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt\n"
@@ -53,6 +53,11 @@ msgstr "Painel"
 #: templates/home/home.html:39 templates/user/login.html:14
 msgid "login"
 msgstr "login"
+
+#: templates/home/home.html:55 templates/user/free_trial.html:28
+#: templates/user/learn_page.html:49
+msgid "Back"
+msgstr "Voltar"
 
 #: templates/home/home.html:63
 msgid "course content"
@@ -110,10 +115,6 @@ msgstr "Proceder para obter o certificado"
 #: templates/user/profile.html:21
 msgid "Home"
 msgstr "Pagina inicial"
-
-#: templates/user/free_trial.html:28 templates/user/learn_page.html:49
-msgid "Back"
-msgstr "Voltar"
 
 #: templates/user/free_trial.html:34 templates/user/learn_page.html:55
 msgid "SKILdemy guide"
@@ -351,4 +352,7 @@ msgstr ""
 #: views/users.py:524
 msgid "The certificate will be ready after you complete the course"
 msgstr "Seu certificado está pronto para download"
+
+#~ msgid "Return"
+#~ msgstr ""
 

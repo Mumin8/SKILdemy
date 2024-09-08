@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-05 23:30+0000\n"
+"POT-Creation-Date: 2024-09-08 01:38+0000\n"
 "PO-Revision-Date: 2024-05-24 05:01+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_Hans_CN\n"
@@ -52,6 +52,11 @@ msgstr ""
 
 #: templates/home/home.html:39 templates/user/login.html:14
 msgid "login"
+msgstr ""
+
+#: templates/home/home.html:55 templates/user/free_trial.html:28
+#: templates/user/learn_page.html:49
+msgid "Back"
 msgstr ""
 
 #: templates/home/home.html:63
@@ -109,10 +114,6 @@ msgstr ""
 #: templates/user/free_trial.html:11 templates/user/learn_page.html:11
 #: templates/user/profile.html:21
 msgid "Home"
-msgstr ""
-
-#: templates/user/free_trial.html:28 templates/user/learn_page.html:49
-msgid "Back"
 msgstr ""
 
 #: templates/user/free_trial.html:34 templates/user/learn_page.html:55
@@ -455,5 +456,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Certificate has been generated in your downloads folder"
+#~ msgstr ""
+
+#~ msgid "Return"
 #~ msgstr ""
 

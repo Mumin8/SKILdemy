@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-05 23:30+0000\n"
+"POT-Creation-Date: 2024-09-08 01:38+0000\n"
 "PO-Revision-Date: 2024-05-24 04:46+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ur\n"
@@ -53,6 +53,11 @@ msgstr "ڈیش بورڈ"
 #: templates/home/home.html:39 templates/user/login.html:14
 msgid "login"
 msgstr "لاگ ان"
+
+#: templates/home/home.html:55 templates/user/free_trial.html:28
+#: templates/user/learn_page.html:49
+msgid "Back"
+msgstr "واپس"
 
 #: templates/home/home.html:63
 msgid "course content"
@@ -110,10 +115,6 @@ msgstr "سرٹیفکیٹ کے لیے آگے بڑھیں۔"
 #: templates/user/profile.html:21
 msgid "Home"
 msgstr "ہوم پیج"
-
-#: templates/user/free_trial.html:28 templates/user/learn_page.html:49
-msgid "Back"
-msgstr "واپس"
 
 #: templates/user/free_trial.html:34 templates/user/learn_page.html:55
 msgid "SKILdemy guide"
@@ -348,4 +349,7 @@ msgstr ""
 #: views/users.py:524
 msgid "The certificate will be ready after you complete the course"
 msgstr "کورس مکمل کرنے کے بعد سرٹیفکیٹ تیار ہو جائے گا۔"
+
+#~ msgid "Return"
+#~ msgstr ""
 

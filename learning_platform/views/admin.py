@@ -1,3 +1,4 @@
+import os
 from bson import ObjectId
 from flask import (Blueprint, render_template, redirect, url_for, request, 
                    flash, session, jsonify)
@@ -70,10 +71,10 @@ def admin_required(f):
 def reg_admin():
     '''the admin will be registered here
     '''
-    username = 'Mumin8'
-    fullname = 'Alhassan Mumin'
-    email = 'alhassanmumin@gmail.com'
-    admin_password = "my_pass_word"
+    username = os.getenv("ADMIN_USERNAME")
+    fullname = os.getenv("ADMIN_FULLNAME")
+    email = os.getenv("ADMIN_EMAIL")
+    admin_password = os.getenv("ADMIN_PASSWORD")
     hashed = bcrypt.generate_password_hash(admin_password)
     moderator = True
     main_admin = User(fullname=fullname, username=username, email=email,

@@ -7,6 +7,7 @@
     <title>{% block title %} learn {% endblock %}</title>
 </head>
 <body>
+	
   {% block main %}
   <nav><a class="btn btn-primary" href="{{url_for('home.home')}}">{{_('Home')}}</a></nav>
         <div class="container-fluid">
@@ -25,38 +26,41 @@
                 </div>
                 {% elif mat %}
                 <div class="col fs-3" style="background-color: rgb(214, 255, 159);">
-                    <a class="btn btn-primary m-3" href="{{ url_for('home.home', course_id=course_id) }}">{{_('Back')}}</a>
+                    <a class="btn btn-primary" href="{{ url_for('home.home', course_id=course_id) }}">{{_('Back')}}</a>
                     <div class="row">
                        <nav id="ai-yt">
                         <div class="col text-success">
                           <a class="btn btn-primary" 
                           href="{{ url_for('users.gptplus_vid', course_id=course_id, topic_id=topic_id) }}">
                           {{_('SKILdemy guide')}}
-                          <img src="{{ url_for('static', filename='thumbnail/thumbnail.png') }}" alt="thumbnail">
                         </a>
                         </div>
                         <div class="btn-group">
                           <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                             {{_('Suggested Videos')}}
-                            <img src="{{ url_for('static', filename='thumbnail/youtube.png') }}" alt="thumbnail">
                           </button>
                           <ul class="dropdown-menu" style="background-color: rgb(58, 37, 37);">
                           
                             {% for idx in path %}
 			                      <p class="fs-3 text-info text-center"
                              style="background-color: rgb(43, 43, 61);">SKILdemy</p>
-                            <li>                             
+                            <li>
+                              
                                 <iframe width="560" height="315" 
                                 src="https://www.youtube.com/embed/{{ idx }}"
                                 title="YouTube video player" 
                                 frameborder="0" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                                 referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                                </iframe>                             
+                                </iframe>
+                              
                             </li>
                             {% endfor %}
+
                           </ul>
-                        </div>                       
+                        </div>
+                        
+                        
                        </nav>  
                     <div>
                 {% for line in mat.split('\n') %}

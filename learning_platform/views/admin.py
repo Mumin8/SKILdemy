@@ -103,22 +103,21 @@ def create_user():
     return render_template('user/register.html', form=form)
 
 
-@admin_bp.route('/admin_av', methods=['GET', 'POST'])
-def admin_add_vid():
-    '''the video to add will be added to session here
-    '''
-    courses = Course.query.all()
-    topics = SubTopic.query.all()
-    if request.method == "POST":
-        session['course'] = request.form.get('course')
-        session['topic'] = request.form.get('topic')
-        print(
-            f'course {request.form.get("course")} topic {request.form.get("topic")}')
-        return redirect(url_for('admin.upload'))
-    return render_template(
-        'admin/add_video.html',
-        courses=courses,
-        topics=topics)
+# @admin_bp.route('/admin_av', methods=['GET', 'POST'])
+# def admin_add_vid():
+#     '''the video to add will be added to session here
+#     '''
+#     courses = Course.query.all()
+#     topics = SubTopic.query.all()
+#     if request.method == "POST":
+#         session['course'] = request.form.get('course')
+#         session['topic'] = request.form.get('topic')
+       
+#         return redirect(url_for('admin.upload'))
+#     return render_template(
+#         'admin/add_video.html',
+#         courses=courses,
+#         topics=topics)
 
 
 @admin_bp.route('/upload/<string:language>/<string:course_id>/<string:topic_id>',

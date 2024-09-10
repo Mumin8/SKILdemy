@@ -172,7 +172,7 @@ def register_course():
         db.session.commit()
         return jsonify({'message': 'Course created successfully'}), 201
     return render_template(
-        'content_management/Register_course.html',
+        'content_management/register_course.html',
         form=form)
 
 

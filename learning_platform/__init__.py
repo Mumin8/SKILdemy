@@ -38,7 +38,7 @@ limiter = Limiter(get_remote_address,
                   default_limits=['7 per second'],
                   storage_uri="memory://")
 
-app.config["MONGO_URI"] = 'mongodb+srv://alhassanmumin8:Mumin2121@cluster0.tmjnuoz.mongodb.net/video_names?retryWrites=true&w=majority'
+app.config["MONGO_URI"] = 'mongodb url'
 mongo = PyMongo(app)
 
 
@@ -63,14 +63,10 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-# app.config['MAIL_USERNAME'] = 'masschusse@gmail.com'
-# app.config['MAIL_PASSWORD'] = 'wgnmflqcikprmseo'
 
-# app.config['MAIL_USERNAME'] = 'skildemymailreset@gmail.com'
-# app.config['MAIL_PASSWORD'] = 'qbhukbawmcxpncum'
 
 app.config['MAIL_USERNAME'] = 'skildemycontact@gmail.com'
-app.config['MAIL_PASSWORD'] = 'alfppmgjnsrbpzwl'
+app.config['MAIL_PASSWORD'] = 'mailpassword'
 
 mail = Mail(app)
 
